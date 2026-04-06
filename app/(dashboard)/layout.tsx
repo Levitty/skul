@@ -18,7 +18,6 @@ export default async function DashboardLayout({
     redirect("/login")
   }
 
-  // Fetch user role and branch from user_schools
   const { data: userSchool } = await supabase
     .from("user_schools" as any)
     .select("role, branch_id, school_id")
@@ -30,13 +29,11 @@ export default async function DashboardLayout({
   const userBranchId = us?.branch_id || null
   const schoolId = us?.school_id || null
 
-  // Determine if user has all-branches access
   const hasAllBranchesAccess =
     userRole === "super_admin" ||
     userRole === "school_admin" ||
     !userBranchId
 
-  // Fetch branches for this school
   let branches: { id: string; name: string; address: string | null }[] = []
   if (schoolId) {
     const { data: branchData } = await supabase
@@ -62,8 +59,8 @@ export default async function DashboardLayout({
         }}
       >
         <DashboardNav userRole={userRole} />
-        <main className="flex-1 overflow-auto">
-          <div className="max-w-[1280px] mx-auto px-6 py-6">{children}</div>
+        <main className="flex-1 overflow-auto p-6 lg:p-8">
+          <div className="max-w-[1200px] mx-auto">{children}</div>
         </main>
         <IntelligenceBot />
       </div>

@@ -61,7 +61,7 @@ export function FinanceDashboardClient({
   overduePayables,
 }: FinanceDashboardClientProps) {
   return (
-    <div className="p-6 lg:p-8 space-y-8 max-w-[1400px] mx-auto">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>

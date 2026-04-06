@@ -69,7 +69,7 @@ export function StrategicDashboardClient({
   })
 
   return (
-    <div className="p-8 lg:p-10 max-w-[1200px]">
+    <div className="space-y-6">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-[22px] font-bold text-neutral-900 tracking-tight">

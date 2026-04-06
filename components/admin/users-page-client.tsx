@@ -214,7 +214,7 @@ export function UsersPageClient({
   ).sort()
 
   return (
-    <div className="p-8 lg:p-10 max-w-[1400px]">
+    <div className="space-y-6">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-start justify-between">
