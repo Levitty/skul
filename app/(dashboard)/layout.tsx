@@ -4,6 +4,8 @@ import { DashboardNav } from "@/components/dashboard/nav"
 import { IntelligenceBot } from "@/components/dashboard/intelligence-bot"
 import { BranchProvider } from "@/components/dashboard/branch-context"
 
+export const dynamic = "force-dynamic"
+
 export default async function DashboardLayout({
   children,
 }: {
@@ -18,11 +20,13 @@ export default async function DashboardLayout({
     redirect("/login")
   }
 
-  const { data: userSchool } = await supabase
-    .from("user_schools" as any)
-    .select("role, branch_id, school_id")
-    .eq("user_id", user.id)
-    .single()
+  const [{ data: userSchool }] = await Promise.all([
+    supabase
+      .from("user_schools" as any)
+      .select("role, branch_id, school_id")
+      .eq("user_id", user.id)
+      .single(),
+  ])
 
   const us = userSchool as any
   const userRole = us?.role || "teacher"

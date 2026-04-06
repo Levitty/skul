@@ -55,7 +55,9 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  // Only refresh the session token — don't make a full getUser() call
+  // The layout handles auth checking, so this just keeps cookies fresh
+  await supabase.auth.getSession()
 
   return response
 }
