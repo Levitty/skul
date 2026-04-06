@@ -1,0 +1,51 @@
+import { createClient } from "@/lib/supabase/server"
+import { requireTenantContext } from "@/lib/supabase/tenant-context"
+import { redirect } from "next/navigation"
+import { BulkGenerateInvoiceForm } from "@/components/fees/bulk-generate-invoice-form"
+
+export default async function BulkGenerateInvoicePage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect("/login")
+  }
+
+  const context = await requireTenantContext(user.id)
+  if (!context) {
+    redirect("/login")
+  }
+
+  const [{ data: classes }, { data: terms }, { data: transportRoutes }] = await Promise.all([
+    supabase
+      .from("classes")
+      .select("id, name, level")
+      .eq("school_id", context.schoolId)
+      .order("level", { ascending: true }),
+    supabase
+      .from("terms")
+      .select("id, name, due_date, is_current")
+      .eq("school_id", context.schoolId)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("transport_routes")
+      .select("id, name, route_number, start_location, end_location, fee_amount")
+      .eq("school_id", context.schoolId)
+      .eq("is_active", true)
+      .order("name"),
+  ])
+
+  return (
+    <BulkGenerateInvoiceForm
+      classes={classes || []}
+      terms={terms || []}
+      transportRoutes={transportRoutes || []}
+    />
+  )
+}
+
+
+
+
