@@ -5,7 +5,7 @@ import { Mark, BRAND } from "./logo"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
-const SLOGAN = "Manage your school with confidence."
+const SLOGAN = "Most systems show you numbers. Tutagora acts on them."
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -155,8 +155,8 @@ export default function HomePage() {
           </h1>
           <div className="foot">
             <p className="sub">
-              One record for the whole school. Built for Kenya. Fees on M-Pesa, parents on
-              WhatsApp, and a truth that adds up.
+              School management for school leaders in Kenya. One record for the whole
+              school: fees on M-Pesa, parents on WhatsApp, and a truth that adds up.
             </p>
             <Link href="/signup" className="arrow">
               Start with your school <Arrow />
@@ -236,8 +236,9 @@ export default function HomePage() {
               <h2>It does not show you the school. It tells you.</h2>
               <p>
                 A dashboard waits to be read. The Advisor reads the record itself, on a schedule,
-                and says what it found in plain language on WhatsApp. Ask it a question and it
-                answers from the same single truth.
+                and says what it found in plain language on WhatsApp. It makes the invisible
+                visible, then it acts: a briefing sent, an alert raised, a question answered from
+                the same single truth.
               </p>
             </div>
             <div className="art wide">
@@ -253,7 +254,7 @@ export default function HomePage() {
                   <span className="k num">−12%</span>
                   <span>
                     <strong>Grade 7 does not pay for itself.</strong> Fee income per class
-                    against the direct cost of teaching it.
+                    against the direct cost of teaching it. In most schools today, nobody knows.
                   </span>
                 </li>
                 <li>
@@ -318,11 +319,18 @@ export default function HomePage() {
             school, complete and current, so the software can do what a great head teacher does:
             hold the entire school in mind at once, and know what to do next.
           </p>
+          <p>
+            It begins in the classroom, where the main event happens: a teacher and a learner.
+            The record exists to serve them. What comes next is a learning guide that knows what
+            each child has mastered and what they have not, so no one is left behind and no one
+            is held back.
+          </p>
           <p>Not a dashboard to admire. A school that knows itself.</p>
         </section>
 
         <section className="close">
           <div className="wrap">
+            <div className="label">Now taking set-ups for 2027</div>
             <h2>Bring your school into one record.</h2>
             <div className="actions">
               <Link href="/signup" className="arrow">

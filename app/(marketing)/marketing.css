@@ -916,3 +916,7 @@
 .mk .card:hover .arrow svg {
   transform: translateX(0.25em);
 }
+
+.mk .close .label {
+  margin-bottom: 1.5rem;
+}
