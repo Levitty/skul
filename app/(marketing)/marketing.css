@@ -1660,3 +1660,259 @@
     margin-bottom: 1.5rem;
   }
 }
+
+/* ---------- class: the board fills the screen, cards ride over it ---------- */
+
+.mk .timetable {
+  position: sticky;
+}
+
+.mk .progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 120ms linear;
+}
+
+.mk .class .door {
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.mk .class .door h1 {
+  font-size: clamp(2.5rem, 6vw, 6.5rem);
+}
+
+.mk .lesson {
+  display: block;
+  position: relative;
+}
+
+.mk .lesson-board {
+  position: sticky;
+  top: 4.6rem;
+  height: calc(100svh - 4.6rem);
+  padding: 0;
+  z-index: 1;
+}
+
+.mk .lesson-board .chalkboard {
+  height: 100%;
+  border-left: 0;
+  border-right: 0;
+  outline: none;
+  border-top: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  padding: 0;
+  display: block;
+}
+
+/* the writing sits on the right half, clear of the cards */
+.mk .lesson-board .chalk {
+  position: absolute;
+  left: calc(416px + var(--gutter) * 2);
+  right: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: none;
+  font-size: clamp(1.5rem, 2.3vw, 2.5rem);
+}
+
+/* lines arrive one at a time as cards pass; leave the same way */
+.mk .lesson-board .chalk p {
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.mk .lesson-board .chalkboard.on .chalk p.out {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.mk .lesson-board .chalkboard.on .chalk p.in {
+  opacity: 1;
+  transform: none;
+}
+
+.mk .lesson-board .chalkboard.on .chalk p:nth-child(1) { transition-delay: 0.1s; }
+.mk .lesson-board .chalkboard.on .chalk p:nth-child(2) { transition-delay: 0.45s; }
+.mk .lesson-board .chalkboard.on .chalk p:nth-child(3) { transition-delay: 0.45s; }
+.mk .lesson-board .chalkboard.on .chalk p:nth-child(4) { transition-delay: 0.45s; }
+
+/* the cards */
+.mk .lesson-steps {
+  position: relative;
+  z-index: 2;
+  width: 416px;
+  margin-left: var(--gutter);
+  margin-top: calc(-100svh + 4.6rem);
+  padding-bottom: 20svh;
+}
+
+.mk .slot {
+  min-height: 112svh;
+  display: flex;
+  align-items: center;
+}
+
+.mk .note {
+  width: 100%;
+  background: #141513;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  padding: 1.5rem 1.6rem 1.6rem;
+}
+
+.mk .note .label {
+  margin-bottom: 0.9rem;
+}
+
+.mk .note h2 {
+  margin: 0 0 0.9rem;
+  font-weight: 500;
+  font-size: 1.65rem;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.mk .note h3 {
+  margin: 0 0 0.7rem;
+  font-weight: 500;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.mk .note p {
+  margin: 0 0 0.8rem;
+  color: var(--mute);
+  font-size: 0.9875rem;
+  line-height: 1.45;
+}
+
+.mk .note p:last-child {
+  margin-bottom: 0;
+}
+
+.mk .note .index {
+  columns: 1;
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+}
+
+.mk .note .index li {
+  padding: 0.45rem 0;
+}
+
+.mk .note .phone {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.mk .note .screen {
+  min-height: 380px;
+}
+
+.mk .note .register {
+  margin-top: 0.75rem;
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.mk .note .register table {
+  font-size: 0.8125rem;
+}
+
+.mk .note .register th,
+.mk .note .register td {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.mk .note .register th:first-child,
+.mk .note .register td:first-child {
+  padding-left: 0;
+}
+
+.mk .note .runway {
+  margin-top: 1rem;
+}
+
+.mk .note .runway .big {
+  font-size: 4.5rem;
+}
+
+.mk .note .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  margin-top: 1.25rem;
+}
+
+/* a teacher's record */
+.mk .staff {
+  border: 1px solid var(--line);
+  padding: 1rem 1.1rem 1.1rem;
+  margin-top: 0.75rem;
+}
+
+.mk .staff .hd {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.mk .staff dl {
+  margin: 0;
+}
+
+.mk .staff dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.mk .staff dt {
+  color: var(--mute);
+}
+
+.mk .staff dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .mk .lesson-board {
+    top: 3.6rem;
+    height: 40svh;
+    z-index: 4;
+  }
+  .mk .lesson-board .chalk {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    top: 50%;
+    font-size: clamp(1.05rem, 4.2vw, 1.35rem);
+  }
+  .mk .lesson-steps {
+    width: auto;
+    margin: 0 var(--gutter);
+    padding-bottom: 4rem;
+  }
+  .mk .slot {
+    min-height: 0;
+    padding: 1.25rem 0;
+  }
+  .mk .note {
+    box-shadow: none;
+  }
+}
