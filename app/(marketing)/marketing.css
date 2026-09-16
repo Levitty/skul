@@ -888,3 +888,31 @@
   height: auto;
   display: block;
 }
+
+/* ---------- brand ---------- */
+/* The balloon is the only thing in colour. Its orange is spent in three
+   places: the mark, the arrow on every call to action, and the endpoint of
+   the Advisor's rising line. Nowhere else. */
+
+.mk {
+  --accent: #f4a21d;
+}
+
+.mk .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mk .mark {
+  display: block;
+  flex: none;
+}
+
+.mk .arrow svg {
+  color: var(--accent);
+}
+
+.mk .card:hover .arrow svg {
+  transform: translateX(0.25em);
+}

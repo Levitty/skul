@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning } from "./sketches"
+import { Mark, BRAND } from "./logo"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -24,7 +25,7 @@ const ArtAdvisor = () => (
       strokeLinejoin="round"
       points="16,118 60,112 104,98 148,96 192,74 236,70 280,62 324,48 368,44 412,30 464,18"
     />
-    <circle cx="464" cy="18" r="3.5" fill="#f2f2f0" />
+    <circle cx="464" cy="18" r="4" fill={BRAND.orange} />
   </svg>
 )
 
@@ -120,8 +121,9 @@ export default function HomePage() {
         <section className="hero wrap">
           <Board />
           <header className="nav wrap">
-            <Link href="/" className="wordmark" aria-label="Tutagora home">
-              Tutagora
+            <Link href="/" className="brand" aria-label="Tutagora home">
+              <Mark size={30} title="" reverse />
+              <span className="wordmark">Tutagora</span>
             </Link>
             <nav aria-label="Primary">
               <ul>
@@ -336,7 +338,10 @@ export default function HomePage() {
 
       <footer>
         <div className="wrap">
-          <span className="wordmark">Tutagora</span>
+          <span className="brand">
+            <Mark size={26} title="" reverse />
+            <span className="wordmark">Tutagora</span>
+          </span>
           <ul>
             <li>
               <a className="quiet" href="#smis">
