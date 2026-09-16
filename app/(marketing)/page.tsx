@@ -11,15 +11,92 @@ const Arrow = () => (
   </svg>
 )
 
+
+// Card visuals. Monochrome, deterministic, drawn from what each system holds.
+const ROLL = [
+  3, 5, 4, 6, 3, 5, 6, 4, 3, 5, 4, 6, 5, 3, 6, 4, 5, 3, 4, 6, 3, 5, 4, 6, 5, 4, 3, 6, 4, 5, 3, 6, 5, 4, 6, 3,
+  4, 6, 3, 5, 6, 4, 5, 3, 6, 4, 3, 5, 6, 3, 5, 4, 3, 6, 4, 5, 3, 5, 6, 4, 5, 3, 6, 4, 6, 4, 5, 3, 4, 6, 3, 5,
+  5, 3, 6, 4, 3, 5, 4, 6, 4, 6, 5, 3, 6, 4, 3, 5, 3, 5, 4, 6, 5, 3, 6, 4,
+]
+
+// Every learner: a roll of dots, no two quite alike.
+const ArtRoll = () => (
+  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
+    {ROLL.map((v, i) => (
+      <circle
+        key={i}
+        cx={15 + (i % 12) * 19}
+        cy={15 + Math.floor(i / 12) * 24}
+        r={2.4}
+        fill="#f2f2f0"
+        opacity={v / 6}
+      />
+    ))}
+  </svg>
+)
+
+// Every teacher: the load each one carries, as bars.
+const LOADS = [26, 31, 18, 34, 22, 29, 12]
+const ArtLoad = () => (
+  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
+    {LOADS.map((v, i) => (
+      <g key={i}>
+        <rect x="16" y={14 + i * 19} width="208" height="7" fill="rgba(242,242,240,0.1)" />
+        <rect x="16" y={14 + i * 19} width={(v / 36) * 208} height="7" fill="#f2f2f0" opacity={v > 30 ? 1 : 0.55} />
+      </g>
+    ))}
+  </svg>
+)
+
+// What was learned: a gradebook, marks as squares.
+const MARKS = [
+  4, 3, 5, 5, 2, 4, 5, 3, 4, 5, 3, 4, 5, 5, 3, 2, 4, 5, 4, 3, 5, 4, 3, 5, 5, 4, 2, 3, 4, 5, 3, 5, 4, 4, 5, 3,
+  2, 4, 5, 5, 3, 4, 4, 5, 3, 5, 4, 2, 5, 3, 4, 5, 4, 3, 5, 4, 5, 2, 3, 4,
+]
+const ArtMarks = () => (
+  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
+    {MARKS.map((v, i) => (
+      <rect
+        key={i}
+        x={14 + (i % 12) * 18}
+        y={16 + Math.floor(i / 12) * 24}
+        width="12"
+        height="12"
+        rx="1.5"
+        fill="#f2f2f0"
+        opacity={0.12 + (v / 5) * 0.88}
+      />
+    ))}
+  </svg>
+)
+
+// The school thinking: runway, rising.
+const ArtAdvisor = () => (
+  <svg viewBox="0 0 480 150" preserveAspectRatio="xMidYMid meet">
+    <line x1="16" y1="134" x2="464" y2="134" stroke="rgba(242,242,240,0.18)" />
+    <polyline
+      fill="none"
+      stroke="#f2f2f0"
+      strokeWidth="1.75"
+      strokeLinejoin="round"
+      points="16,118 60,112 104,98 148,96 192,74 236,70 280,62 324,48 368,44 412,30 464,18"
+    />
+    <circle cx="464" cy="18" r="3.5" fill="#f2f2f0" />
+  </svg>
+)
+
 // The three systems, and what each one actually holds. Every item here is a
 // record the product keeps today; nothing is aspirational.
 const SYSTEMS = [
   {
     id: "smis",
+    art: <ArtRoll />,
     name: "Tutagora SMIS",
-    title: "Every learner, from application to alumni.",
+    tagline: "Every learner, known completely.",
+    blurb: "The memory of the school. From first enquiry to final report, one truth about every child.",
+    title: "One child. One record. The whole story.",
     lede:
-      "The school information system. One record per learner that follows them from the first enquiry to the day they leave, with everything the office needs attached to it.",
+      "A learner arrives as an enquiry and leaves as an alumnus. In between are fees, buses, clinic visits, library books, absences and achievements. Tutagora SMIS holds all of it on a single record, so nothing is asked twice and nothing is lost.",
     holds: [
       "Enquiries and applications",
       "Admission rules",
@@ -41,10 +118,13 @@ const SYSTEMS = [
   },
   {
     id: "hr",
+    art: <ArtLoad />,
     name: "Tutagora HR",
-    title: "Every teacher, and the load they carry.",
+    tagline: "The people who make the school.",
+    blurb: "Who teaches, what they carry, and who needs help, seen before it is felt.",
+    title: "Every teacher, and the weight they carry.",
     lede:
-      "Staff records, roles and the work itself. Who teaches what, how many periods, whether the schemes are in, when marks were last entered, and who is quietly running on empty.",
+      "A school is only ever as good as the people standing in front of the class. Tutagora HR knows who teaches what, how many periods, whether the schemes are in and the marks are entered, and it notices who is quietly running on empty before they hand in a letter.",
     holds: [
       "Staff records",
       "Roles and permissions",
@@ -59,10 +139,13 @@ const SYSTEMS = [
   },
   {
     id: "learning",
+    art: <ArtMarks />,
     name: "Tutagora Learning",
-    title: "What is taught, and what was learned.",
+    tagline: "What is taught becomes what is known.",
+    blurb: "From the term's plan to a single mark, in one unbroken line.",
+    title: "From the scheme of work to the report card, unbroken.",
     lede:
-      "From the term's scheme of work down to a single mark. Lessons, homework, assignments and quizzes on one side; exams, gradebook and report cards on the other. Entered once.",
+      "The plan for the term, the lesson on Tuesday, the homework that came back, the quiz, the exam, the mark, the report card in a parent's hand. Tutagora Learning keeps that line whole, so a mark is entered once and every document downstream is already true.",
     holds: [
       "Schemes of work, week by week",
       "Lesson plans",
@@ -127,8 +210,8 @@ export default function HomePage() {
           </h1>
           <div className="foot">
             <p className="sub">
-              School management software for schools in Kenya. Fees on M-Pesa. Parents on
-              WhatsApp. One record that adds up.
+              One record for the whole school. Built for Kenya. Fees on M-Pesa, parents on
+              WhatsApp, and a truth that adds up.
             </p>
             <Link href="/signup" className="arrow">
               Start with your school <Arrow />
@@ -138,13 +221,46 @@ export default function HomePage() {
 
         <section className="thesis wrap" id="systems">
           <div className="label">Not a dashboard</div>
-          <h2>
-            A school is learners, teachers, lessons and money, all connected. Tutagora runs the
-            whole unit as one record.
-          </h2>
+          <h2>A school is one living thing. We built the software to match.</h2>
           <p>
-            Three systems share that record. A fourth layer reads it and tells you what to do.
+            Learners, teachers, lessons and money are not four products. They are one body, and
+            every part of it should know the rest. Three systems share a single record of the
+            school. A fourth reads that record and thinks.
           </p>
+
+          <div className="cards">
+            {SYSTEMS.map((c) => (
+              <a className="card" href={`#${c.id}`} key={c.id}>
+                <div className="card-art" aria-hidden="true">
+                  {c.art}
+                </div>
+                <div className="card-body">
+                  <div className="label">{c.name}</div>
+                  <h3>{c.tagline}</h3>
+                  <p>{c.blurb}</p>
+                  <span className="arrow">
+                    Explore <Arrow />
+                  </span>
+                </div>
+              </a>
+            ))}
+            <a className="card card-wide" href="#advisor">
+              <div className="card-art" aria-hidden="true">
+                <ArtAdvisor />
+              </div>
+              <div className="card-body">
+                <div className="label">Tutagora Advisor</div>
+                <h3>The school, thinking about itself.</h3>
+                <p>
+                  Runway, margin, risk and drift, computed from the record and delivered to your
+                  phone before the first bell.
+                </p>
+                <span className="arrow">
+                  Explore <Arrow />
+                </span>
+              </div>
+            </a>
+          </div>
         </section>
 
         {SYSTEMS.map((s, i) => (
@@ -172,11 +288,11 @@ export default function HomePage() {
           <div className="wrap">
             <div className="text">
               <div className="label">04 &nbsp;·&nbsp; Tutagora Advisor</div>
-              <h2>It doesn&rsquo;t show you the school. It tells you.</h2>
+              <h2>It does not show you the school. It tells you.</h2>
               <p>
-                Because every record is related to every other, the Advisor can compute what a
-                dashboard cannot. It runs on a schedule, sends the answer to WhatsApp, and answers
-                questions in plain language.
+                A dashboard waits to be read. The Advisor reads the record itself, on a schedule,
+                and says what it found in plain language on WhatsApp. Ask it a question and it
+                answers from the same single truth.
               </p>
             </div>
             <div className="art wide">
@@ -224,11 +340,12 @@ export default function HomePage() {
 
         <section className="onto wrap" id="ontology">
           <div className="label">One ontology</div>
-          <h2>Every record knows every other.</h2>
+          <h2>One model of the whole school. Every record knows every other.</h2>
           <p>
             A learner belongs to a class, which has a teacher, who teaches a subject, which is
             examined in a term, which is invoiced, which is paid on a phone. More than a hundred
-            related tables in one schema, per school, with every row locked to that school.
+            related tables in one schema, every row locked to its school. Nothing is copied.
+            Nothing disagrees.
           </p>
           <div className="onto-grid">
             {ONTOLOGY.map((g) => (
@@ -247,25 +364,24 @@ export default function HomePage() {
         <section className="vision wrap" id="vision">
           <div className="label">Vision</div>
           <p>
-            Schools have been sold software one piece at a time. A fees system. A gradebook. A
-            messaging app. The head teacher is left as the integration layer, carrying the whole
-            picture in their head.
+            Every school has a second body: the record. The register, the ledger, the receipt
+            book, the marks. Today it is scattered across paper and memory, and it never quite
+            agrees with itself. The head teacher carries the difference.
           </p>
           <p>
-            Tutagora is built on a single model of the school. Learners, staff, learning and
-            money are one record, so the system can do more than display. It can reason about
-            the school as a unit: what it costs, what it earns, who is struggling, what is
-            stuck.
+            We are building that second body to be worthy of the first. One model of the whole
+            school, complete and current, so the software can do what a great head teacher does:
+            hold the entire school in mind at once, and know what to do next.
           </p>
           <p>Not a dashboard to admire. A school that knows itself.</p>
         </section>
 
         <section className="close">
           <div className="wrap">
-            <h2>See it with your own school&rsquo;s numbers.</h2>
+            <h2>Bring your school into one record.</h2>
             <div className="actions">
               <Link href="/signup" className="arrow">
-                Start with your school <Arrow />
+                Begin with your school <Arrow />
               </Link>
               <Link className="quiet" href="/login">
                 Sign in
