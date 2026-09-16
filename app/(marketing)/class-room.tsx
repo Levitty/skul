@@ -1,16 +1,17 @@
 "use client"
 
 // Welcome to class. The chalkboard fills the screen and stays put for the
-// whole lesson. Short cards scroll over it on the left, each one in a slot
-// taller than the screen. When a card reaches the middle of the screen the
-// board takes a step: a new period is rubbed out and rewritten, a new card
-// within the same period adds a line. Steps run on a timer, about a second,
+// whole lesson. Short cards scroll over it on the left, each in a slot taller
+// than the screen. When a card reaches the middle of the screen the board
+// takes a step: a new period is rubbed out and rewritten, a new card within
+// the same period adds a line or a layer of the drawing. Steps run on a timer
 // and reverse when you scroll back. Ordinary scrolling throughout.
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { Board } from "./board"
 import { Mark } from "./logo"
+import { SketchOnto } from "./sketches"
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -20,12 +21,14 @@ const Arrow = () => (
 
 const PERIODS = [
   { id: "period-1", time: "8:00", n: 1, name: "One record" },
-  { id: "period-2", time: "8:40", n: 2, name: "The learner" },
-  { id: "period-3", time: "9:20", n: 3, name: "The academic line" },
-  { id: "period-4", time: "10:00", n: 4, name: "The staff" },
-  { id: "period-5", time: "10:40", n: 5, name: "Management" },
-  { id: "period-6", time: "11:20", n: 6, name: "2027" },
-  { id: "homework", time: "12:00", n: 0, name: "Homework" },
+  { id: "period-2", time: "8:40", n: 2, name: "The people" },
+  { id: "period-3", time: "9:20", n: 3, name: "The learner" },
+  { id: "period-4", time: "10:00", n: 4, name: "The school" },
+  { id: "period-5", time: "10:40", n: 5, name: "Fees" },
+  { id: "period-6", time: "11:20", n: 6, name: "Parents" },
+  { id: "period-7", time: "12:00", n: 7, name: "The staff" },
+  { id: "period-8", time: "12:40", n: 8, name: "Management" },
+  { id: "homework", time: "13:20", n: 0, name: "Homework" },
 ]
 
 const num = (n: number) => Math.round(n).toLocaleString("en-KE")
@@ -57,14 +60,31 @@ function Slot({
   )
 }
 
+// The ontology, drawn on the board in six layers. Layers 1 to 3 are the
+// learner's own ring (Period 3); 4 to 6 are the school around her (Period 4).
+// Layers up to `seen` were drawn in an earlier period and are shown at once.
+function OntologyFigure({ upto, seen = 0 }: { upto: number; seen?: number }) {
+  return (
+    <div className="chalk-figure" aria-label="The school's records, drawn around one learner">
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <div className="chalk-layer" key={n}>
+          <SketchOnto layer={n} play={upto >= n} instant={n <= seen} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // ---------- the board ----------
 
 function Chalkboard({
   at,
   lines,
+  figure,
 }: {
   at: Step
   lines: (period: string) => ReactNode[]
+  figure: (period: string, step: number) => ReactNode
 }) {
   const [shown, setShown] = useState(at.period)
   const [phase, setPhase] = useState<"on" | "wipe">("on")
@@ -89,6 +109,7 @@ function Chalkboard({
             {l}
           </p>
         ))}
+        {figure(shown, shown === at.period ? at.step : 9)}
       </div>
     </div>
   )
@@ -102,8 +123,7 @@ export function ClassRoom() {
   const [at, setAt] = useState<Step>({ period: "door", step: 9 })
   const [progress, setProgress] = useState(0)
 
-  // Only what is on the gate: the school's name and its size. Everything on
-  // the board follows from those two. No fees, no arrears, no costs.
+  // Only what is on the gate: the school's name and its size.
   const m = useMemo(() => {
     const learners = parse(learnersIn, 420)
     return {
@@ -117,8 +137,7 @@ export function ClassRoom() {
   const NAME = (school.trim() || "YOUR SCHOOL").toUpperCase()
 
   // What the teacher writes, period by period. Line 0 is the heading; each
-  // later line arrives with the matching card. Plain promises with a noun in
-  // them, for a director deciding whether to buy.
+  // later line arrives with the matching card.
   const lines = (id: string): ReactNode[] => {
     switch (id) {
       case "period-1":
@@ -130,45 +149,45 @@ export function ClassRoom() {
         ]
       case "period-2":
         return [
-          "Period 2 · The learner",
-          <>One file per learner, from enquiry to alumnus.</>,
-          <>Fees invoiced once a term. Paid by M-Pesa. Matched automatically.</>,
-          <>About <em>{num(m.families)}</em> families kept informed on WhatsApp, without an app.</>,
+          "Period 2 · The people",
+          <>The director asks: what came in this week, and what is it costing us?</>,
+          <>The bursar asks who still owes. The teacher asks who is absent, and who is falling behind.</>,
+          <>The parent asks what they owe, and how she did. One record answers all four.</>,
         ]
       case "period-3":
-        return [
-          "Period 3 · The academic line",
-          <>Schemes of work, lessons, exams and report cards, in one line.</>,
-          <>Marks entered once. Report cards ready the same day.</>,
-          <>Progress per learner, per subject, per term.</>,
-        ]
+        return ["Period 3 · The learner", <>Everything in the school hangs off her.</>, <></>, <></>]
       case "period-4":
+        return ["Period 4 · The school around her", <>Six systems. One graph. Every part knows the rest.</>, <></>, <></>]
+      case "period-5":
         return [
-          "Period 4 · The staff",
+          "Period 5 · Fees",
+          <>Fees decide what a school can become.</>,
+          <>Collection seen daily, by grade and by family, not at the end of term.</>,
+          <>The evidence for next term&rsquo;s operating budget and the next building.</>,
+        ]
+      case "period-6":
+        return [
+          "Period 6 · Parents",
+          <>No parent wants another login.</>,
+          <>The school answers on WhatsApp: the balance, a Pay button, the statement.</>,
+          <>About <em>{num(m.families)}</em> families, reached on the app they already open.</>,
+        ]
+      case "period-7":
+        return [
+          "Period 7 · The staff",
           <>Every teacher&rsquo;s load, schemes and marking, on one screen.</>,
           <>Performance measured against the same exams.</>,
           <>Overload flagged early, before a good teacher is lost.</>,
         ]
-      case "period-5":
+      case "period-8":
         return [
-          "Period 5 · Management",
+          "Period 8 · Management",
           <>Cash runway, margin by grade, anomalies. Computed, not estimated.</>,
-          <>A briefing every Monday at 07:00, on your phone.</>,
-          <>Ask it a question in plain language. It answers from the record.</>,
-        ]
-      case "period-6":
-        return [
-          "Period 6 · The school in 2027",
+          <>A briefing every Monday at 07:00. A question answered in plain language.</>,
           <>{S}, run on one record, not on memory.</>,
-          <>Decisions made in week two, not at year end.</>,
-          <>A complete view for management. Work that is seen. Numbers parents trust.</>,
         ]
       case "homework":
-        return [
-          "Homework",
-          <>Bring {S} onto one record.</>,
-          <>Set-up takes an afternoon.</>,
-        ]
+        return ["Homework", <>Bring {school.trim() || "your school"} onto one record.</>, <>Set-up takes an afternoon.</>]
       default:
         return [
           "Before the bell",
@@ -176,6 +195,13 @@ export function ClassRoom() {
           <>This lesson is about your school.</>,
         ]
     }
+  }
+
+  // The drawing on the board: the ontology grows through periods 3 and 4.
+  const figure = (id: string, step: number): ReactNode => {
+    if (id === "period-3") return <OntologyFigure upto={Math.min(3, step)} />
+    if (id === "period-4") return <OntologyFigure upto={3 + Math.min(3, step)} seen={3} />
+    return null
   }
 
   const rootRef = useRef<HTMLDivElement>(null)
@@ -207,8 +233,7 @@ export function ClassRoom() {
     const onScroll = () => {
       const r = el.getBoundingClientRect()
       const total = r.height - window.innerHeight
-      const done = Math.min(1, Math.max(0, -r.top / Math.max(1, total)))
-      setProgress(done)
+      setProgress(Math.min(1, Math.max(0, -r.top / Math.max(1, total))))
     }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -228,16 +253,8 @@ export function ClassRoom() {
         </Link>
         <nav aria-label="Primary">
           <ul>
-            <li>
-              <Link className="quiet" href="/">
-                Front page
-              </Link>
-            </li>
-            <li>
-              <Link className="quiet" href="/login">
-                Sign in
-              </Link>
-            </li>
+            <li><Link className="quiet" href="/">Front page</Link></li>
+            <li><Link className="quiet" href="/login">Sign in</Link></li>
           </ul>
         </nav>
       </header>
@@ -263,7 +280,7 @@ export function ClassRoom() {
           <div className="label">Before the bell</div>
           <h1>Welcome to class{school.trim() ? `, ${school.trim()}` : ""}.</h1>
           <p className="lede">
-            Six periods on how Tutagora runs a school as one record. Two things so the lesson
+            Eight periods on how Tutagora runs a school as one record. Two things so the lesson
             is about your school, nothing that belongs in your accounts.
           </p>
           <form className="door-form" onSubmit={(e) => e.preventDefault()}>
@@ -284,7 +301,7 @@ export function ClassRoom() {
         {/* ---------- the lesson: one board, cards over it ---------- */}
         <div className="lesson" ref={lessonRef}>
           <div className="lesson-board">
-            <Chalkboard at={at} lines={lines} />
+            <Chalkboard at={at} lines={lines} figure={figure} />
           </div>
 
           <div className="lesson-steps">
@@ -300,171 +317,225 @@ export function ClassRoom() {
               </p>
             </Slot>
             <Slot period="period-1" step={2}>
-              <h3>Why that matters to a director</h3>
+              <h3>Why one record</h3>
               <p>
                 The questions that decide a school cross departments. Which grade covers its
                 costs. Which teacher is overloaded. Which family is in arrears and still has a
-                child on the bus. Separate systems cannot answer them. One record can, in one
-                place.
+                child on the bus. Separate systems cannot answer them. One record can.
               </p>
+            </Slot>
+            <Slot period="period-1" step={3}>
+              <h3>What that means in practice</h3>
               <ul className="index">
                 <li>Learners, staff, academics, finance and operations in one model</li>
                 <li>Over a hundred related tables per school</li>
                 <li>Every row locked to its school</li>
-                <li>One source of truth for every report</li>
+                <li>One source of truth for every report and every message</li>
               </ul>
             </Slot>
-            <Slot period="period-1" step={3}>
-              <h3>One learner, as the record holds her</h3>
-              <div className="staff" aria-label="One learner's record, example">
-                <div className="hd"><span className="label">Amani Wanjiru</span><span className="label num">Grade 6 East · STU-0416</span></div>
-                <dl>
-                  <div><dt>Class</dt><dd>Grade 6 East</dd></div>
-                  <div><dt>Class teacher</dt><dd>Ms Adhiambo</dd></div>
-                  <div><dt>Term 2 invoice</dt><dd>KES 42,500 · settled</dd></div>
-                  <div><dt>Payment</dt><dd>M-Pesa, 14 Sep</dd></div>
-                  <div><dt>Transport</dt><dd>Route 3, stop 7</dd></div>
-                  <div><dt>Guardian</dt><dd>Mama Amani, on WhatsApp</dd></div>
-                </dl>
-              </div>
-            </Slot>
 
-            {/* Period 2 · The learner */}
+            {/* Period 2 · The people */}
             <Slot period="period-2" step={1} id="period-2">
-              <div className="label num">8:40 · Period 2 · The learner · Tutagora SMIS</div>
-              <h2>One file per learner, from enquiry to alumnus.</h2>
+              <div className="label num">8:40 · Period 2 · The people</div>
+              <h2>Different people. Different questions.</h2>
               <p>
-                Admissions, enrolment, attendance, transport, the clinic, the library, discipline
-                and achievement, kept on a single file for each learner. Nothing is asked twice.
-                Nothing is lost between departments.
+                A director wants to know what came in this week and what the school is costing.
+                A bursar wants to know who still owes. A class teacher wants to know who is absent
+                and who is slipping. A parent wants the balance and the result.
               </p>
             </Slot>
             <Slot period="period-2" step={2}>
-              <h3>Fees collected, not chased</h3>
+              <h3>Today, four different books</h3>
               <p>
-                The fee structure is set once per grade and term. Invoices go to every learner in
-                one action. Each parent receives an M-Pesa prompt for the exact amount, and the
-                payment is matched to its invoice as it lands. The bursar opens a balanced ledger
-                and a short list of who remains.
+                The director&rsquo;s answer comes from a spreadsheet built for the meeting. The
+                bursar&rsquo;s from the receipt book. The teacher&rsquo;s from the register. The
+                parent&rsquo;s from a phone call to the office. Four answers, and they rarely
+                agree.
+              </p>
+            </Slot>
+            <Slot period="period-2" step={3}>
+              <h3>With Tutagora, one record answers everyone</h3>
+              <p>
+                The same fact serves all four. A payment received at 07:42 is on the
+                bursar&rsquo;s ledger, in the director&rsquo;s weekly figure, on the class
+                teacher&rsquo;s arrears view and in the parent&rsquo;s WhatsApp by 07:43.
+              </p>
+              <ul className="index">
+                <li>Director: cash, collection, cost, by branch and by grade</li>
+                <li>Bursar: invoices, receipts, arrears, the books</li>
+                <li>Head and deputy: schemes, lessons, timetable, discipline</li>
+                <li>Teachers: register, marks, homework, their own classes</li>
+                <li>Parents: balance, attendance, results, on WhatsApp</li>
+              </ul>
+            </Slot>
+
+            {/* Period 3 · The learner */}
+            <Slot period="period-3" step={1} id="period-3">
+              <div className="label num">9:20 · Period 3 · The learner</div>
+              <h2>The learner is the centre of the school.</h2>
+              <p>
+                Every record in Tutagora is reached from the learner. Her guardian, who sees her
+                on WhatsApp. Her class, and the teacher who takes it. Watch the board.
+              </p>
+            </Slot>
+            <Slot period="period-3" step={2}>
+              <h3>The money she generates</h3>
+              <p>
+                Each term she is billed. Each payment settles that invoice and no other, matched
+                by the M-Pesa reference, so her file and the school&rsquo;s books agree by
+                construction.
+              </p>
+            </Slot>
+            <Slot period="period-3" step={3}>
+              <h3>What she learns, and how she gets there</h3>
+              <p>
+                Her marks, attendance and remarks make her report card. Her bus route, stop and
+                fare sit on the same file. Nothing about her is held in two places.
+              </p>
+            </Slot>
+
+            {/* Period 4 · The school around her */}
+            <Slot period="period-4" step={1} id="period-4">
+              <div className="label num">10:00 · Period 4 · The school around her</div>
+              <h2>The academic spine.</h2>
+              <p>
+                Her class belongs to a timetable, the timetable to subjects, the subjects to
+                schemes of work and exams. What is taught in Grade 6 East on Tuesday is a record,
+                and her mark on Friday is linked to it.
+              </p>
+            </Slot>
+            <Slot period="period-4" step={2}>
+              <h3>The books</h3>
+              <p>
+                Every payment posts itself to the ledger. Budgets, expenses, suppliers and bank
+                reconciliation sit in the same books, so the director&rsquo;s cash position and
+                the bursar&rsquo;s receipts are the same number.
+              </p>
+            </Slot>
+            <Slot period="period-4" step={3}>
+              <h3>Operations</h3>
+              <p>
+                An enquiry becomes an application becomes a learner, without re-typing. The
+                clinic, the library and discipline write to her file too. Six systems, one graph,
+                and each part of the school knows the rest.
+              </p>
+            </Slot>
+
+            {/* Period 5 · Fees */}
+            <Slot period="period-5" step={1} id="period-5">
+              <div className="label num">10:40 · Period 5 · Fees</div>
+              <h2>Fees decide what a school can become.</h2>
+              <p>
+                Collection is the lifeblood of the institution: it pays the teachers, keeps the
+                buses on the road and decides whether next year brings a new classroom block.
+                It is the number a director watches most closely, and usually sees last.
+              </p>
+            </Slot>
+            <Slot period="period-5" step={2}>
+              <h3>Collection, seen daily</h3>
+              <p>
+                Invoices go out once a term. Every M-Pesa payment matches its invoice on arrival.
+                The director sees collection by grade, by branch and by family on any day of the
+                term, not in a spreadsheet at the end of it.
               </p>
               <ul className="index">
                 <li>Fee structures per grade, term and optional item</li>
-                <li>Bulk invoicing for a class or the whole school</li>
-                <li>M-Pesa STK push, Paystack for cards</li>
-                <li>Automatic matching of every payment</li>
-                <li>Receipts, statements, credit notes, bursaries</li>
-                <li>Arrears list with one-tap reminders</li>
+                <li>Bulk invoicing, discounts and bursaries</li>
+                <li>M-Pesa STK push, Paystack for cards, automatic matching</li>
+                <li>Arrears by family with one-tap reminders</li>
+                <li>Receipts, statements and credit notes</li>
               </ul>
             </Slot>
-            <Slot period="period-2" step={3}>
-              <h3>Parents informed without an app</h3>
+            <Slot period="period-5" step={3}>
+              <h3>Evidence for planning</h3>
               <p>
-                A private link on WhatsApp shows each parent their child&rsquo;s fees, attendance
-                and results. No password to reset, nothing to install, nothing to abandon.
+                Collection patterns across terms show when families pay, which grades lag and
+                how cash moves through the year. That is the basis for next term&rsquo;s operating
+                budget and for the capital decisions that shape a school: the next classroom
+                block, the next bus, the next branch.
               </p>
-              <div className="phone" aria-label="M-Pesa payment prompt, example">
+              <div className="phone" aria-label="Director's question on WhatsApp, example">
                 <div className="screen">
-                  <div className="status num"><span>07:42</span><span>Safaricom</span></div>
-                  <div className="stk-bg">
-                    <div className="stk">
-                      <div className="t">M-PESA</div>
-                      <div className="num">Pay Ksh42,500.00 to TUTAGORA*{NAME} for account STU-0416?</div>
-                      <div className="pin" aria-label="PIN entry">••••</div>
-                      <div className="btns"><span className="quiet">Cancel</span><span>Send</span></div>
+                  <div className="status num"><span>16:22</span><span>Tuesday</span></div>
+                  <div className="wa">
+                    <div className="hdr"><span className="av">T</span><span>Tutagora</span></div>
+                    <div className="bubble out"><p>how do the branches compare</p><time>16:22</time></div>
+                    <div className="bubble">
+                      <p className="num">Springs Junior: 422 learners, 79% of the term collected, KES 1.70m in the last 7 days.</p>
+                      <p className="num">Highrise: 79 learners, 64% collected, KES 966k outstanding.</p>
+                      <p className="num">Sabaki: billing looks incomplete. Worth checking before Friday.</p>
+                      <time dateTime="16:22">16:22</time>
                     </div>
                   </div>
                 </div>
               </div>
             </Slot>
 
-            {/* Period 3 · The academic line */}
-            <Slot period="period-3" step={1} id="period-3">
-              <div className="label num">9:20 · Period 3 · The academic line · Tutagora Learning</div>
-              <h2>From the scheme of work to the report card, in one system.</h2>
+            {/* Period 6 · Parents */}
+            <Slot period="period-6" step={1} id="period-6">
+              <div className="label num">11:20 · Period 6 · Parents</div>
+              <h2>We bring the school to the parent, on WhatsApp.</h2>
               <p>
-                Schemes of work are written week by week and approved by the head of department.
-                Lesson plans, homework, quizzes and exams are built on them. Marks are entered once
-                and flow to report cards, rankings and progress views without being retyped.
+                No parent wants another login. They already have WhatsApp, and so does the
+                school. Instead of a portal to remember, the school&rsquo;s number answers: the
+                balance, a Pay button, the statement, the results when they are out.
               </p>
             </Slot>
-            <Slot period="period-3" step={2}>
-              <h3>What changes for the school</h3>
-              <p>
-                Report cards are ready the day the last mark is entered, printed in bulk or sent to
-                a parent&rsquo;s phone. Attendance, taken by phone each period, appears on the same
-                card. A learner who misses a week can find what was taught.
-              </p>
-              <ul className="index">
-                <li>Schemes of work with departmental approval</li>
-                <li>Lesson plans and study materials</li>
-                <li>Homework, assignments, quizzes with automatic marking</li>
-                <li>Exam sessions, grade scales, results</li>
-                <li>Report cards in bulk or to a phone</li>
-                <li>Progress per learner, per class, per subject</li>
-              </ul>
-            </Slot>
-            <Slot period="period-3" step={3}>
-              <h3>The gradebook</h3>
-              <div className="register" aria-label="Gradebook, example">
-                <div className="hd">
-                  <span className="label">Grade 6 East · Term 2</span>
-                  <span className="label num">9 subjects</span>
+            <Slot period="period-6" step={2}>
+              <h3>What a parent sees</h3>
+              <div className="phone" aria-label="Parent's exchange on WhatsApp, example">
+                <div className="screen">
+                  <div className="status num"><span>19:51</span><span>Tuesday</span></div>
+                  <div className="wa">
+                    <div className="hdr"><span className="av">{NAME.slice(0, 1)}</span><span>{S}</span></div>
+                    <div className="bubble out"><p>Hi</p><time>19:51</time></div>
+                    <div className="bubble">
+                      <p><strong>AMANI W.</strong> · Grade 6 · STU-0416</p>
+                      <p className="num">Fee balance: <strong>KES 10,200</strong></p>
+                      <p>You can pay by M-Pesa right here.</p>
+                      <time dateTime="19:51">19:51</time>
+                    </div>
+                    <div className="btns-wa"><span>Pay full balance</span><span>Pay an amount</span><span>Statement</span></div>
+                  </div>
                 </div>
-                <table>
-                  <thead>
-                    <tr><th>Learner</th><th className="r">Mat</th><th className="r">Eng</th><th className="r">Kis</th><th className="r">Sci</th><th className="r">Mean</th></tr>
-                  </thead>
-                  <tbody className="num">
-                    {[
-                      ["Amani Wanjiru", [84, 77, 81, 69]],
-                      ["Brian Otieno", [62, 70, 74, 58]],
-                      ["Faith Chebet", [91, 85, 79, 88]],
-                      ["Kevin Mwangi", [48, 55, 61, 44]],
-                    ].map(([n, marks]) => {
-                      const ms = marks as number[]
-                      const mean = Math.round(ms.reduce((a, b) => a + b, 0) / ms.length)
-                      return (
-                        <tr key={String(n)}>
-                          <td>{String(n)}</td>
-                          {ms.map((x, i) => (<td key={i} className="r">{x}</td>))}
-                          <td className="r"><strong>{mean}</strong></td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
               </div>
             </Slot>
+            <Slot period="period-6" step={3}>
+              <h3>The school&rsquo;s voice, the other way</h3>
+              <p>
+                Fee reminders with each family&rsquo;s own balance, sent in one action. A notice
+                that the bus is late, sent only to the parents on that route. Report cards to the
+                guardian&rsquo;s number on file. Enquiries from new families answered from the
+                same place.
+              </p>
+              <ul className="index">
+                <li>Private link per parent, no password</li>
+                <li>Balance, Pay button, statement, results</li>
+                <li>Reminders and notices to exactly the families affected</li>
+                <li>Enquiries and admissions through the same number</li>
+              </ul>
+            </Slot>
 
-            {/* Period 4 · The staff */}
-            <Slot period="period-4" step={1} id="period-4">
-              <div className="label num">10:00 · Period 4 · The staff · Tutagora HR</div>
+            {/* Period 7 · The staff */}
+            <Slot period="period-7" step={1} id="period-7">
+              <div className="label num">12:00 · Period 7 · The staff</div>
               <h2>Every teacher&rsquo;s load and output, on one screen.</h2>
               <p>
                 Who teaches which class and subject. How many periods that is, from the timetable.
-                Whether the scheme of work is in and approved. When marks were last entered. Seen
-                together, per teacher and per department.
+                Whether the scheme of work is in and approved. When marks were last entered. Per
+                teacher, per department.
               </p>
             </Slot>
-            <Slot period="period-4" step={2}>
+            <Slot period="period-7" step={2}>
               <h3>Performance and retention</h3>
               <p>
-                Teachers are measured by their classes&rsquo; results against the same exams, so the
-                comparison is fair. The early signs of overload are watched too: marks entered
-                later each week, leave requests rising, logins falling. The head teacher hears
-                about it before the resignation letter.
+                Teachers are measured by their classes&rsquo; results against the same exams, so
+                the comparison is fair. The early signs of overload are watched: marks entered
+                later each week, leave rising, logins falling. The head teacher hears before the
+                resignation letter.
               </p>
-              <ul className="index">
-                <li>Staff records, roles and permissions</li>
-                <li>Class and subject assignments, load from the timetable</li>
-                <li>Scheme of work approvals per department</li>
-                <li>Marks-entry timeliness per teacher</li>
-                <li>Performance by class results</li>
-                <li>Burnout risk score</li>
-                <li>Multiple branches, staff across them</li>
-              </ul>
             </Slot>
-            <Slot period="period-4" step={3}>
+            <Slot period="period-7" step={3}>
               <h3>One teacher, this week</h3>
               <div className="staff" aria-label="A teacher's record, example">
                 <div className="hd"><span className="label">Ms Adhiambo · English</span><span className="label num">Grade 6 East · 26 periods</span></div>
@@ -478,36 +549,20 @@ export function ClassRoom() {
               </div>
             </Slot>
 
-            {/* Period 5 · Management */}
-            <Slot period="period-5" step={1} id="period-5">
-              <div className="label num">10:40 · Period 5 · Management · Tutagora Advisor</div>
-              <h2>Insight a director can act on, not a dashboard to read.</h2>
+            {/* Period 8 · Management */}
+            <Slot period="period-8" step={1} id="period-8">
+              <div className="label num">12:40 · Period 8 · Management</div>
+              <h2>Insight a director can act on.</h2>
               <p>
                 Because every record is connected, the Advisor computes what separate systems
                 cannot: months of cash at the current collection rate, profitability by grade,
-                teachers at risk, and transactions that do not add up.
+                teachers at risk, and transactions that do not add up. Read daily. Flagged, not
+                discovered at audit.
               </p>
             </Slot>
-            <Slot period="period-5" step={2}>
-              <h3>Proper books underneath</h3>
-              <p>
-                A general ledger with a chart of accounts, budgets, expenses with approvals,
-                suppliers and bank reconciliation. The Advisor reads them daily. Fuel logged
-                against a bus that did not run, stock issued without a requisition and a register
-                fuller than the fee roll are flagged, not discovered at audit.
-              </p>
-              <ul className="index">
-                <li>General ledger, journals, budgets, other income</li>
-                <li>Expenses with approvals, suppliers, accounts payable</li>
-                <li>Bank accounts and reconciliation</li>
-                <li>Cash runway and profitability per grade</li>
-                <li>Anomaly detection across fuel, stock and attendance</li>
-                <li>Questions answered in plain language, on WhatsApp</li>
-              </ul>
-            </Slot>
-            <Slot period="period-5" step={3}>
+            <Slot period="period-8" step={2}>
               <h3>Monday, 07:00</h3>
-              <p>The week&rsquo;s position, on the director&rsquo;s phone before the first bell.</p>
+              <p>The week&rsquo;s position on the director&rsquo;s phone before the first bell, and any question answered in plain language after it.</p>
               <div className="phone" aria-label="WhatsApp briefing, example">
                 <div className="screen">
                   <div className="status num"><span>07:00</span><span>Monday</span></div>
@@ -524,29 +579,18 @@ export function ClassRoom() {
                 </div>
               </div>
             </Slot>
-
-            {/* Period 6 · The school in 2027 */}
-            <Slot period="period-6" step={1} id="period-6">
-              <div className="label num">11:20 · Period 6 · The school in 2027</div>
-              <h2>A school run on one record, not on memory.</h2>
+            <Slot period="period-8" step={3}>
+              <h3>{S === "Your school" ? "A school" : S}, in 2027</h3>
               <p>
-                Decisions made in week two, on figures that agree, instead of at year end on
-                figures that do not. Management with a complete view of the school. Teachers whose
-                work is seen. Parents who trust the number on their phone.
-              </p>
-            </Slot>
-            <Slot period="period-6" step={3}>
-              <h3>And after that</h3>
-              <p>
-                The record exists to serve the classroom. The next step is a learning guide built
-                on it, one that knows what each learner has mastered and what they have not, so
-                teaching can meet each child where they are.
+                Run on one record, not on memory. Decisions made in week two on figures that
+                agree, instead of at year end on figures that do not. A complete view for
+                management. Work that is seen. Numbers parents trust.
               </p>
             </Slot>
 
             {/* Homework */}
             <Slot period="homework" step={2} id="homework">
-              <div className="label num">12:00 · After class</div>
+              <div className="label num">13:20 · After class</div>
               <h2>Homework: bring {S === "Your school" ? "your school" : S} onto one record.</h2>
               <p>
                 Set-up takes an afternoon: classes, the fee structure, and a bulk import of
@@ -554,9 +598,7 @@ export function ClassRoom() {
                 work.
               </p>
               <div className="actions">
-                <Link href="/signup" className="arrow">
-                  Begin <Arrow />
-                </Link>
+                <Link href="/signup" className="arrow">Begin <Arrow /></Link>
                 <Link className="quiet" href="/">Back to the front page</Link>
               </div>
             </Slot>

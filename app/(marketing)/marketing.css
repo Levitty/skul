@@ -1916,3 +1916,80 @@
     box-shadow: none;
   }
 }
+
+/* ---------- class: the drawing on the board ---------- */
+
+.mk .timetable ol {
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.mk .timetable li a {
+  font-size: 0.75rem;
+}
+
+.mk .chalk-figure {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  aspect-ratio: 1200 / 600;
+  margin-top: 0.75rem;
+}
+
+.mk .chalk-layer,
+.mk .chalk-layer .sketch,
+.mk .chalk-layer .sketch svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.mk .chalk-figure text {
+  font-family: var(--hand);
+}
+
+.mk .lesson-board .chalk p:empty {
+  display: none;
+}
+
+/* WhatsApp reply buttons and an outgoing bubble */
+
+.mk .bubble.out {
+  align-self: flex-end;
+  background: #005c4b;
+  border-radius: 10px;
+  border-top-right-radius: 2px;
+}
+
+.mk .btns-wa {
+  align-self: flex-start;
+  max-width: 92%;
+  width: 100%;
+  background: #1f2c34;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mk .btns-wa span {
+  display: block;
+  text-align: center;
+  padding: 0.55rem;
+  color: #53bdeb;
+  font-weight: 500;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 900px) {
+  .mk .chalk-figure {
+    max-width: none;
+    margin-top: 0.4rem;
+  }
+  .mk .chalk-figure text {
+    font-size: 26px;
+  }
+  .mk .lesson-board .chalkboard {
+    height: 46vh;
+  }
+}
