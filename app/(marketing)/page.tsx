@@ -1,363 +1,236 @@
 import Link from "next/link"
+import { Board } from "./board"
 
-// The hero headline. The repo's brand panel uses this line; swap in the
-// official Tutagora slogan here and nothing else on the page needs to change.
-const SLOGAN = (
-  <>
-    Manage your school
-    <br />
-    with <em>confidence.</em>
-  </>
+// The hero headline. Swap in the official Tutagora slogan here; nothing else
+// on the page needs to change. Words are split so they can enter one by one.
+const SLOGAN = "Manage your school with confidence."
+
+const Arrow = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+    <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
 )
 
 export default function HomePage() {
   return (
     <>
-      <header className="nav">
-        <div className="wrap">
-          <Link href="/" className="wordmark" aria-label="Tutagora home">
-            Tutagora
-          </Link>
-          <nav aria-label="Primary">
-            <ul>
-              <li>
-                <a className="link" href="#fees">
-                  Product
-                </a>
-              </li>
-              <li>
-                <a className="link" href="#vision">
-                  Vision
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div className="aux">
-            <Link className="link" href="/login">
-              Sign in
+      <main>
+        <section className="hero wrap">
+          <Board />
+          <header className="nav wrap">
+            <Link href="/" className="wordmark" aria-label="Tutagora home">
+              Tutagora
+            </Link>
+            <nav aria-label="Primary">
+              <ul>
+                <li>
+                  <a className="quiet" href="#vision">
+                    Vision
+                  </a>
+                </li>
+                <li>
+                  <Link className="quiet" href="/login">
+                    Sign in
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </header>
+
+          <h1>
+            {SLOGAN.split(" ").map((word, i) => (
+              <span key={i}>
+                <span className="w">{word}</span>{" "}
+              </span>
+            ))}
+          </h1>
+          <div className="foot">
+            <p className="sub">
+              School management software for schools in Kenya. Fees on M-Pesa. Parents on
+              WhatsApp. One record that adds up.
+            </p>
+            <Link href="/signup" className="arrow">
+              Start with your school <Arrow />
             </Link>
           </div>
+        </section>
+
+        <div className="strip wrap" aria-label="What Tutagora covers">
+          <ul className="label">
+            <li>Admissions</li>
+            <li>Fees</li>
+            <li>Attendance</li>
+            <li>Exams</li>
+            <li>Report cards</li>
+            <li>Timetable</li>
+            <li>Transport</li>
+            <li>WhatsApp</li>
+          </ul>
         </div>
-      </header>
 
-      <main>
-        <section className="hero">
+        <section className="panel" id="fees">
           <div className="wrap">
-            <h1>{SLOGAN}</h1>
-            <p className="lede">
-              School management software for schools in Kenya. Admissions, fees, attendance,
-              exams and report cards in one record that adds up. Parents are reached on WhatsApp,
-              not another app.
-            </p>
-            <div className="actions">
-              <Link href="/signup" className="btn">
-                Start with your school
-              </Link>
-              <a className="link" href="#fees">
-                See how it works
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="ledger-band" aria-label="Example fee ledger">
-          <div className="wrap">
-            <div className="sheet">
-              <div className="sheet-head">
-                <span>Grade 6 East · Term 2, 2026 · Fee ledger</span>
-                <span className="num">Reconciled 04:12 today · Sample data</span>
-              </div>
-              <div className="scroll">
-              <table className="ledger">
-                <thead>
-                  <tr>
-                    <th>Student</th>
-                    <th className="r num hide-sm">Invoiced</th>
-                    <th className="r num">Paid</th>
-                    <th className="r num">Balance</th>
-                    <th className="hide-sm">Last payment</th>
-                    <th className="hide-sm">Reference</th>
-                  </tr>
-                </thead>
-                <tbody className="num">
-                  <tr>
-                    <td>Amani Wanjiru</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">42,500</td>
-                    <td className="r">0</td>
-                    <td className="hide-sm">14 Sep · M-Pesa</td>
-                    <td className="hide-sm">SGH4K2L9PQ</td>
-                  </tr>
-                  <tr className="due">
-                    <td>Brian Otieno</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">20,000</td>
-                    <td className="r">22,500</td>
-                    <td className="hide-sm">02 Sep · M-Pesa</td>
-                    <td className="hide-sm">SG27PLM4XT</td>
-                  </tr>
-                  <tr>
-                    <td>Faith Chebet</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">42,500</td>
-                    <td className="r">0</td>
-                    <td className="hide-sm">28 Aug · Card</td>
-                    <td className="hide-sm">PSK-88214</td>
-                  </tr>
-                  <tr className="due">
-                    <td>Kevin Mwangi</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">0</td>
-                    <td className="r">42,500</td>
-                    <td className="hide-sm">—</td>
-                    <td className="hide-sm">—</td>
-                  </tr>
-                  <tr>
-                    <td>Mercy Achieng</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">42,500</td>
-                    <td className="r">0</td>
-                    <td className="hide-sm">11 Sep · M-Pesa</td>
-                    <td className="hide-sm">SGB9Q1RV7D</td>
-                  </tr>
-                  <tr className="due">
-                    <td>Samuel Kiprop</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">21,250</td>
-                    <td className="r">21,250</td>
-                    <td className="hide-sm">05 Sep · M-Pesa</td>
-                    <td className="hide-sm">SG5WTN3ZK8</td>
-                  </tr>
-                  <tr>
-                    <td>Zawadi Njeri</td>
-                    <td className="r hide-sm">42,500</td>
-                    <td className="r">42,500</td>
-                    <td className="r">0</td>
-                    <td className="hide-sm">01 Sep · M-Pesa</td>
-                    <td className="hide-sm">SG1HC6YD2M</td>
-                  </tr>
-                </tbody>
-              </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="chapter" id="fees">
-          <div className="wrap">
-            <div className="no label num">01</div>
             <div className="text">
-              <h2>Every shilling, reconciled.</h2>
+              <h2>Paid on the phone. Matched before the bursar sits down.</h2>
               <p>
-                Invoices go out each term. Parents pay with a one-tap M-Pesa prompt on their phone,
-                or by card through Paystack. Each payment is matched to its invoice the moment it
-                lands.
-              </p>
-              <p>
-                The bursar&rsquo;s morning starts with a balanced ledger, not a bank statement and a
-                receipt book that disagree.
+                A parent gets an M-Pesa prompt, enters a PIN, and the payment is matched to the
+                invoice the moment it lands. Card payments run through Paystack the same way.
               </p>
             </div>
             <div className="art">
-              <div className="doc">
-                <div className="doc-head">
-                  <span>M-Pesa confirmation</span>
-                  <span>Received 07:42</span>
-                </div>
-                <div className="doc-body">
-                  <pre className="receipt">
-                    SGH4K2L9PQ Confirmed. Ksh42,500.00 sent to TUTAGORA*ST MARYS ACADEMY for
-                    account STU-0416 on 14/9/26 at 7:42 AM. New M-PESA balance is Ksh3,180.00.
-                  </pre>
-                </div>
-                <div className="foot match num">
-                  <span>
-                    Matched to <strong>INV-2026-T2-0416</strong>
-                  </span>
-                  <span>Balance 0</span>
+              <div className="phone" aria-label="M-Pesa payment prompt, example">
+                <div className="screen">
+                  <div className="status num">
+                    <span>07:42</span>
+                    <span>Safaricom</span>
+                  </div>
+                  <div className="stk-bg">
+                    <div className="stk">
+                      <div className="t">M-PESA</div>
+                      <div className="num">
+                        Pay Ksh42,500.00 to TUTAGORA*ST MARYS ACADEMY for account STU-0416?
+                      </div>
+                      <div className="pin" aria-label="PIN entry">
+                        ••••
+                      </div>
+                      <div className="btns">
+                        <span className="quiet">Cancel</span>
+                        <span>Send</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="chapter" id="academics">
+        <section className="panel" id="classroom">
           <div className="wrap">
-            <div className="no label num">02</div>
             <div className="text">
-              <h2>The register, the marks, the report card.</h2>
+              <h2>Attendance from a phone. Marks entered once.</h2>
               <p>
-                Teachers take attendance from a phone, period by period. Marks are entered once and
-                flow into report cards the school can print or send.
+                Teachers take the register period by period. Marks go in once and flow straight
+                into report cards the school prints or sends. No re-typing.
               </p>
-              <p>No re-typing. No spreadsheet at midnight before parents&rsquo; day.</p>
             </div>
-            <div className="art">
-              <div className="doc">
-                <div className="doc-head">
-                  <span>Report card · Term 2</span>
-                  <span>Grade 6 East</span>
+            <div className="art wide">
+              <div className="register" aria-label="Attendance register, example">
+                <div className="hd">
+                  <span className="label">Grade 6 East · Tuesday 15 Sep</span>
+                  <span className="label num">Present 27 of 29</span>
                 </div>
-                <div className="scroll">
                 <table>
                   <thead>
                     <tr>
-                      <th>Subject</th>
-                      <th className="r">Marks</th>
-                      <th className="r">Grade</th>
-                      <th className="hide-sm">Teacher</th>
+                      <th>Learner</th>
+                      <th>P1</th>
+                      <th>P2</th>
+                      <th>P3</th>
+                      <th>P4</th>
+                      <th>P5</th>
+                      <th>P6</th>
                     </tr>
                   </thead>
-                  <tbody className="num">
-                    <tr>
-                      <td>Mathematics</td>
-                      <td className="r">84</td>
-                      <td className="r">A</td>
-                      <td className="hide-sm">Mr Kamau</td>
-                    </tr>
-                    <tr>
-                      <td>English</td>
-                      <td className="r">77</td>
-                      <td className="r">B+</td>
-                      <td className="hide-sm">Ms Adhiambo</td>
-                    </tr>
-                    <tr>
-                      <td>Kiswahili</td>
-                      <td className="r">81</td>
-                      <td className="r">A-</td>
-                      <td className="hide-sm">Mr Barasa</td>
-                    </tr>
-                    <tr>
-                      <td>Science &amp; Technology</td>
-                      <td className="r">69</td>
-                      <td className="r">B</td>
-                      <td className="hide-sm">Ms Wairimu</td>
-                    </tr>
-                    <tr>
-                      <td>Social Studies</td>
-                      <td className="r">88</td>
-                      <td className="r">A</td>
-                      <td className="hide-sm">Mr Odhiambo</td>
-                    </tr>
+                  <tbody>
+                    {[
+                      ["Amani Wanjiru", "on on on on on on"],
+                      ["Brian Otieno", "late on on on on on"],
+                      ["Faith Chebet", "on on on on on on"],
+                      ["Kevin Mwangi", "off off off off off off"],
+                      ["Mercy Achieng", "on on on on on on"],
+                      ["Samuel Kiprop", "on on on off off off"],
+                      ["Zawadi Njeri", "on on on on on on"],
+                    ].map(([name, marks]) => (
+                      <tr key={name}>
+                        <td>{name}</td>
+                        {marks.split(" ").map((m, i) => (
+                          <td key={i}>
+                            <span className={`dot ${m === "on" ? "" : m}`} />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-                </div>
-                <div className="foot">
-                  <span className="remark">Steady, curious, and asks the right questions.</span>
-                  <span className="num"> &nbsp;— Class teacher · Attendance 58 of 60 days</span>
-                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="chapter" id="parents">
+        <section className="panel" id="parents">
           <div className="wrap">
-            <div className="no label num">03</div>
             <div className="text">
               <h2>Nothing to install. It&rsquo;s on WhatsApp.</h2>
               <p>
-                A parent taps a link in WhatsApp and sees fees, attendance and results for each of
-                their children. No password. The link expires on its own.
+                Parents open a link in WhatsApp and see fees, attendance and results for each
+                child. No password. The link expires on its own.
               </p>
               <p>
-                Every Monday at seven, the head teacher receives a briefing of the week ahead the
-                same way.
+                Every Monday at seven, the head teacher gets the week&rsquo;s numbers the same way.
               </p>
             </div>
             <div className="art">
-              <div className="doc">
-                <div className="doc-head">
-                  <span>WhatsApp · Monday briefing</span>
-                  <span>07:00</span>
-                </div>
-                <div className="doc-body msg">
-                  <p>Good morning. Here is St Mary&rsquo;s Academy this week.</p>
-                  <p className="num">
-                    Fees: 71% of Term 2 collected. KES 1,412,500 outstanding across 38 families,
-                    9 of them with no payment yet.
-                  </p>
-                  <p className="num">
-                    Attendance last week: 94%. Grade 8 dipped to 88% on Thursday.
-                  </p>
-                  <p className="num">
-                    Admissions: 3 applications have waited more than 48 hours. Staff: 2 leave
-                    requests need a decision.
-                  </p>
-                  <time dateTime="07:00">Sent automatically · Sample data</time>
+              <div className="phone" aria-label="WhatsApp briefing, example">
+                <div className="screen">
+                  <div className="status num">
+                    <span>07:00</span>
+                    <span>Monday</span>
+                  </div>
+                  <div className="wa">
+                    <div className="hdr">
+                      <span className="av">T</span>
+                      <span>Tutagora</span>
+                    </div>
+                    <div className="bubble">
+                      <p>Good morning. St Mary&rsquo;s Academy this week.</p>
+                      <p className="num">
+                        Fees: 71% of Term 2 collected. KES 1,412,500 outstanding across 38
+                        families, 9 with no payment yet.
+                      </p>
+                      <p className="num">Attendance last week 94%. Grade 8 dipped to 88% on Thursday.</p>
+                      <p className="num">
+                        3 applications waiting more than 48 hours. 2 leave requests need a decision.
+                      </p>
+                      <time dateTime="07:00">07:00</time>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="chapter" id="business">
+        <section className="panel" id="office">
           <div className="wrap">
-            <div className="no label num">04</div>
             <div className="text">
-              <h2>The school as a business, in plain numbers.</h2>
+              <h2>How many months of cash the school has.</h2>
               <p>
-                Tutagora forecasts how many months of cash the school has at its current collection
-                rate, and shows which classes pay for themselves.
-              </p>
-              <p>
-                It also flags what does not add up: fuel logged against a bus that did not run,
-                stock that left the store without a requisition, a register that is fuller than the
-                fee roll.
+                Tutagora forecasts runway from what has actually been collected, shows which
+                classes pay for themselves, and flags what does not add up: fuel logged against a
+                bus that did not run, stock that left the store without a requisition.
               </p>
             </div>
             <div className="art">
-              <div className="doc">
-                <div className="doc-head">
-                  <span>Profitability by grade · Term 2</span>
-                  <span>KES</span>
+              <div className="runway" aria-label="Cash runway forecast, example">
+                <div className="big num">
+                  4.7<small>months of cash</small>
                 </div>
-                <div className="scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Grade</th>
-                      <th className="r">Learners</th>
-                      <th className="r hide-sm">Fee income</th>
-                      <th className="r hide-sm">Direct cost</th>
-                      <th className="r">Margin</th>
-                    </tr>
-                  </thead>
-                  <tbody className="num">
-                    <tr>
-                      <td>Grade 4</td>
-                      <td className="r">52</td>
-                      <td className="r hide-sm">2,210,000</td>
-                      <td className="r hide-sm">1,640,000</td>
-                      <td className="r">26%</td>
-                    </tr>
-                    <tr>
-                      <td>Grade 5</td>
-                      <td className="r">47</td>
-                      <td className="r hide-sm">1,997,500</td>
-                      <td className="r hide-sm">1,585,000</td>
-                      <td className="r">21%</td>
-                    </tr>
-                    <tr>
-                      <td>Grade 6</td>
-                      <td className="r">44</td>
-                      <td className="r hide-sm">1,870,000</td>
-                      <td className="r hide-sm">1,610,000</td>
-                      <td className="r">14%</td>
-                    </tr>
-                    <tr>
-                      <td>Grade 7</td>
-                      <td className="r">31</td>
-                      <td className="r hide-sm">1,317,500</td>
-                      <td className="r hide-sm">1,480,000</td>
-                      <td className="r" style={{ color: "var(--mark)" }}>
-                        −12%
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <svg viewBox="0 0 400 120" role="img" aria-label="Runway across the term">
+                  <line x1="0" y1="119.5" x2="400" y2="119.5" stroke="rgba(242,242,240,0.2)" />
+                  <polyline
+                    fill="none"
+                    stroke="#f2f2f0"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                    points="0,96 40,90 80,74 120,70 160,48 200,44 240,40 280,30 320,26 360,20 400,12"
+                  />
+                  <circle cx="400" cy="12" r="3" fill="#f2f2f0" />
+                </svg>
+                <div className="legend num">
+                  <span>Term start</span>
+                  <span>Today</span>
                 </div>
-                <div className="foot num">Cash runway at current collection rate: 4.7 months</div>
               </div>
             </div>
           </div>
@@ -365,16 +238,14 @@ export default function HomePage() {
 
         <section className="vision" id="vision">
           <div className="wrap">
-            <div className="label">Why we build this</div>
+            <div className="label">Vision</div>
             <p>
               A school is run on paper, memory and goodwill. The register is a book. The fees are
-              a ledger, a receipt book and a bank statement that never quite agree. The plan for
-              the week lives in the head teacher&rsquo;s head.
+              a ledger, a receipt book and a bank statement that never quite agree.
             </p>
             <p>
-              Tutagora exists to put all of it in one place that is honest, that adds up, and that
-              reaches parents where they already are. <em>Not a dashboard to admire. A record you
-              can trust.</em>
+              Tutagora puts all of it in one place that adds up, and reaches parents where they
+              already are. Not a dashboard to admire. A record you can trust.
             </p>
           </div>
         </section>
@@ -383,17 +254,13 @@ export default function HomePage() {
           <div className="wrap">
             <h2>See it with your own school&rsquo;s numbers.</h2>
             <div className="actions">
-              <Link href="/signup" className="btn">
-                Start with your school
+              <Link href="/signup" className="arrow">
+                Start with your school <Arrow />
               </Link>
-              <Link className="link" href="/login">
+              <Link className="quiet" href="/login">
                 Sign in
               </Link>
             </div>
-            <p className="note">
-              Set-up takes an afternoon: classes, fee structure, and a bulk import of learners from
-              the spreadsheet you already have.
-            </p>
           </div>
         </section>
       </main>
@@ -403,27 +270,27 @@ export default function HomePage() {
           <span className="wordmark">Tutagora</span>
           <ul>
             <li>
-              <a className="link" href="#fees">
+              <a className="quiet" href="#fees">
                 Product
               </a>
             </li>
             <li>
-              <a className="link" href="#vision">
+              <a className="quiet" href="#vision">
                 Vision
               </a>
             </li>
             <li>
-              <Link className="link" href="/login">
+              <Link className="quiet" href="/login">
                 Sign in
               </Link>
             </li>
             <li>
-              <Link className="link" href="/signup">
+              <Link className="quiet" href="/signup">
                 Create an account
               </Link>
             </li>
           </ul>
-          <span className="num">© 2026 Tutagora · Built for schools in Kenya</span>
+          <span className="num">© 2026 Tutagora · Kenya</span>
         </div>
       </footer>
     </>
