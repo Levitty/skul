@@ -26,8 +26,8 @@ out = sys.argv[2]
 app = sys.argv[3].rstrip("/") if len(sys.argv) > 3 and sys.argv[3] != "-" else ""
 whatsapp = sys.argv[4] if len(sys.argv) > 4 else ""
 email = sys.argv[5] if len(sys.argv) > 5 else ""
-PLACEHOLDER_WA = "254700000000"
-PLACEHOLDER_MAIL = "hello@tutagora.com"
+PLACEHOLDER_WA = "254759240692"
+PLACEHOLDER_MAIL = "consulting@tutagora.com"
 
 TITLE = "Tutagora"
 DESC = "School management software for schools in Kenya. Fees on M-Pesa, parents on WhatsApp, one record that adds up."

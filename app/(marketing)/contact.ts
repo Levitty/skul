@@ -2,8 +2,8 @@
 // the marketing pages follows. The WhatsApp number is international format
 // with no plus sign or spaces.
 export const CONTACT = {
-  whatsapp: "254700000000", // PLACEHOLDER: replace with the Tutagora WhatsApp number
-  email: "hello@tutagora.com", // PLACEHOLDER: replace with the enquiries address
+  whatsapp: "254759240692",
+  email: "consulting@tutagora.com",
 }
 
 export const waLink = (text: string) => `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`
