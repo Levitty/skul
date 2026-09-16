@@ -12,6 +12,7 @@ import Link from "next/link"
 import { Board } from "./board"
 import { Mark } from "./logo"
 import { SketchOnto } from "./sketches"
+import { Phone, In, Out, Replies } from "./phone"
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -26,9 +27,10 @@ const PERIODS = [
   { id: "period-4", time: "10:00", n: 4, name: "The school" },
   { id: "period-5", time: "10:40", n: 5, name: "Fees" },
   { id: "period-6", time: "11:20", n: 6, name: "Parents" },
-  { id: "period-7", time: "12:00", n: 7, name: "The staff" },
-  { id: "period-8", time: "12:40", n: 8, name: "Management" },
-  { id: "homework", time: "13:20", n: 0, name: "Homework" },
+  { id: "period-7", time: "12:00", n: 7, name: "The fence" },
+  { id: "period-8", time: "12:40", n: 8, name: "The staff" },
+  { id: "period-9", time: "13:20", n: 9, name: "Management" },
+  { id: "homework", time: "14:00", n: 0, name: "Homework" },
 ]
 
 const num = (n: number) => Math.round(n).toLocaleString("en-KE")
@@ -134,7 +136,6 @@ export function ClassRoom() {
   }, [learnersIn])
 
   const S = school.trim() || "Your school"
-  const NAME = (school.trim() || "YOUR SCHOOL").toUpperCase()
 
   // What the teacher writes, period by period. Line 0 is the heading; each
   // later line arrives with the matching card.
@@ -174,14 +175,21 @@ export function ClassRoom() {
         ]
       case "period-7":
         return [
-          "Period 7 · The staff",
-          <>Every teacher&rsquo;s load, schemes and marking, on one screen.</>,
-          <>Performance measured against the same exams.</>,
-          <>Overload flagged early, before a good teacher is lost.</>,
+          "Period 7 · The fence",
+          <>The bursar sees money. The teacher sees learning.</>,
+          <>The head sees both as totals. A named child only through one logged door.</>,
+          <>The AI drafts. People decide.</>,
         ]
       case "period-8":
         return [
-          "Period 8 · Management",
+          "Period 8 · The staff",
+          <>Every person on the payroll has a record, not a line in a notebook.</>,
+          <>Hired, contracted, paid and grown on the term clock.</>,
+          <>Load seen as lessons and cover, never as a score.</>,
+        ]
+      case "period-9":
+        return [
+          "Period 9 · Management",
           <>Cash runway, margin by grade, anomalies. Computed, not estimated.</>,
           <>A briefing every Monday at 07:00. A question answered in plain language.</>,
           <>{S}, run on one record, not on memory.</>,
@@ -280,13 +288,13 @@ export function ClassRoom() {
           <div className="label">Before the bell</div>
           <h1>Welcome to class{school.trim() ? `, ${school.trim()}` : ""}.</h1>
           <p className="lede">
-            Eight periods on how Tutagora runs a school as one record. Two things so the lesson
+            Nine periods on how Tutagora runs a school as one record. Two things so the lesson
             is about your school, nothing that belongs in your accounts.
           </p>
           <form className="door-form" onSubmit={(e) => e.preventDefault()}>
             <label>
               <span className="label">School</span>
-              <input id="school" type="text" value={school} onChange={(e) => setSchool(e.target.value)} placeholder="St Mary's Academy" autoComplete="organization" />
+              <input id="school" type="text" value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Riverside Academy" autoComplete="organization" />
             </label>
             <label>
               <span className="label">Learners, roughly</span>
@@ -454,21 +462,16 @@ export function ClassRoom() {
                 budget and for the capital decisions that shape a school: the next classroom
                 block, the next bus, the next branch.
               </p>
-              <div className="phone" aria-label="Director's question on WhatsApp, example">
-                <div className="screen">
-                  <div className="status num"><span>16:22</span><span>Tuesday</span></div>
-                  <div className="wa">
-                    <div className="hdr"><span className="av">T</span><span>Tutagora</span></div>
-                    <div className="bubble out"><p>how do the branches compare</p><time>16:22</time></div>
-                    <div className="bubble">
-                      <p className="num">Springs Junior: 422 learners, 79% of the term collected, KES 1.70m in the last 7 days.</p>
-                      <p className="num">Highrise: 79 learners, 64% collected, KES 966k outstanding.</p>
-                      <p className="num">Sabaki: billing looks incomplete. Worth checking before Friday.</p>
-                      <time dateTime="16:22">16:22</time>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Phone time="16:22" day="Tuesday" name="Tutagora" sub="business account" label="The director asks how the branches compare, on WhatsApp. Example.">
+                <Out at="16:22">
+                  <p>how do the branches compare</p>
+                </Out>
+                <In at="16:22">
+                  <p className="num">Main: 422 learners, 79% of the term collected, KES 1.70m in the last 7 days.</p>
+                  <p className="num">Junior: 79 learners, 64% collected, KES 966k outstanding.</p>
+                  <p className="num">Hill Road: billing looks incomplete. Worth checking before Friday.</p>
+                </In>
+              </Phone>
             </Slot>
 
             {/* Period 6 · Parents */}
@@ -483,22 +486,17 @@ export function ClassRoom() {
             </Slot>
             <Slot period="period-6" step={2}>
               <h3>What a parent sees</h3>
-              <div className="phone" aria-label="Parent's exchange on WhatsApp, example">
-                <div className="screen">
-                  <div className="status num"><span>19:51</span><span>Tuesday</span></div>
-                  <div className="wa">
-                    <div className="hdr"><span className="av">{NAME.slice(0, 1)}</span><span>{S}</span></div>
-                    <div className="bubble out"><p>Hi</p><time>19:51</time></div>
-                    <div className="bubble">
-                      <p><strong>AMANI W.</strong> · Grade 6 · STU-0416</p>
-                      <p className="num">Fee balance: <strong>KES 10,200</strong></p>
-                      <p>You can pay by M-Pesa right here.</p>
-                      <time dateTime="19:51">19:51</time>
-                    </div>
-                    <div className="btns-wa"><span>Pay full balance</span><span>Pay an amount</span><span>Statement</span></div>
-                  </div>
-                </div>
-              </div>
+              <Phone time="19:51" day="Tuesday" name={S} sub="business account" label="A parent's exchange with the school on WhatsApp. Example.">
+                <Out at="19:51">
+                  <p>Hi</p>
+                </Out>
+                <In at="19:51">
+                  <p>Good evening. This number is for <strong>Amani W.</strong>, Grade 6.</p>
+                  <p className="num">Fee balance: <strong>KES 10,200</strong></p>
+                  <p>You can pay by M-Pesa right here.</p>
+                </In>
+                <Replies items={["Pay the full balance", "Pay an amount", "Send my statement"]} />
+              </Phone>
             </Slot>
             <Slot period="period-6" step={3}>
               <h3>The school&rsquo;s voice, the other way</h3>
@@ -516,70 +514,119 @@ export function ClassRoom() {
               </ul>
             </Slot>
 
-            {/* Period 7 · The staff */}
+            {/* Period 7 · The fence */}
             <Slot period="period-7" step={1} id="period-7">
-              <div className="label num">12:00 · Period 7 · The staff</div>
-              <h2>Every teacher&rsquo;s load and output, on one screen.</h2>
+              <div className="label num">12:00 · Period 7 · The fence</div>
+              <h2>Who sees what is decided by the record.</h2>
               <p>
-                Who teaches which class and subject. How many periods that is, from the timetable.
-                Whether the scheme of work is in and approved. When marks were last entered. Per
-                teacher, per department.
+                Money and learning describe the same children, and in Tutagora they are never
+                joined casually. The bursar sees invoices and receipts. The class teacher sees
+                marks and attendance. The head sees both as totals for a grade, and a named
+                child&rsquo;s case only through one door: a safeguarding role, time-limited, and
+                logged.
               </p>
             </Slot>
             <Slot period="period-7" step={2}>
-              <h3>Performance and retention</h3>
+              <h3>Every change is an action</h3>
               <p>
-                Teachers are measured by their classes&rsquo; results against the same exams, so
-                the comparison is fair. The early signs of overload are watched: marks entered
-                later each week, leave rising, logins falling. The head teacher hears before the
-                resignation letter.
+                Nothing in the record changes except through a named action: a payment recorded,
+                a discount approved, a report card issued. Each one checks who is asking, checks
+                its own rule, and writes a line to a log that cannot be edited. If something goes
+                wrong, the investigation starts from records, not recollection.
               </p>
+              <ul className="index">
+                <li>Every record locked to its school</li>
+                <li>Roles decide the screens, down to the column</li>
+                <li>Every action logged: what, to which record, by whom</li>
+                <li>The same log is the audit trail and the Monday briefing</li>
+              </ul>
             </Slot>
             <Slot period="period-7" step={3}>
+              <h3>The AI drafts. People decide.</h3>
+              <p>The Advisor reads the record and proposes. It sends nothing and pays nothing. The bursar decides, and every proposal is logged with what it read.</p>
+              <Phone time="08:10" day="Friday" name="Tutagora" sub="business account" label="The Advisor proposes fee reminders and the bursar decides, on WhatsApp. Example.">
+                <In at="08:10">
+                  <p className="num">Term 2, week 6. 41 invoices are past due across 33 families. I have drafted each family a reminder with its own balance.</p>
+                </In>
+                <Replies items={["Review the 33", "Send all", "Not now"]} />
+                <Out at="08:14">
+                  <p>Review the 33</p>
+                </Out>
+                <In at="08:14">
+                  <p className="num">Two families are on payment plans, so I left them out. 31 ready when you are.</p>
+                </In>
+              </Phone>
+            </Slot>
+
+            {/* Period 8 · The staff */}
+            <Slot period="period-8" step={1} id="period-8">
+              <div className="label num">12:40 · Period 8 · The staff</div>
+              <h2>Every person who works here, first-class.</h2>
+              <p>
+                Teachers, the bursar, the drivers, the cooks, the matron. Payroll is the largest
+                cost in a school, and most of it lives in a notebook. Tutagora HR gives every
+                employee one record: contract, documents, leave, attendance, pay, training. Across
+                every branch.
+              </p>
+            </Slot>
+            <Slot period="period-8" step={2}>
+              <h3>The lifecycle, on rails</h3>
+              <p>
+                From the open role to the certificate of service, each stage produces its own
+                paperwork from the record, instead of a Word template on someone&rsquo;s laptop.
+              </p>
+              <ul className="index">
+                <li>Recruitment: open roles, and every candidate seen for each</li>
+                <li>Offer letters, contracts and warnings, each acknowledged on receipt</li>
+                <li>Probation reviews and contracts ending, surfaced before they lapse</li>
+                <li>Leave: the head recommends, HR decides</li>
+                <li>Daily check-in, payroll and the statutory calendar</li>
+                <li>Training, goals and performance</li>
+                <li>Assets issued and returned</li>
+                <li>Clearance, final dues and a handover pack when someone leaves</li>
+              </ul>
+            </Slot>
+            <Slot period="period-8" step={3}>
               <h3>One teacher, this week</h3>
               <div className="staff" aria-label="A teacher's record, example">
-                <div className="hd"><span className="label">Ms Adhiambo · English</span><span className="label num">Grade 6 East · 26 periods</span></div>
+                <div className="hd"><span className="label">Ms Adhiambo · English</span><span className="label num">Grade 6 East · Main</span></div>
                 <dl>
+                  <div><dt>Teaching load</dt><dd>26 lessons · dept. 24</dd></div>
+                  <div><dt>Cover taken this term</dt><dd>2 lessons</dd></div>
                   <div><dt>Schemes of work</dt><dd>3 of 3 approved</dd></div>
                   <div><dt>Marks last entered</dt><dd>2 days ago</dd></div>
-                  <div><dt>Class mean, Term 2</dt><dd>74 · 2nd of 6 streams</dd></div>
-                  <div><dt>Leave this term</dt><dd>1 day</dd></div>
-                  <div><dt>Burnout risk</dt><dd>Low · 18 / 100</dd></div>
+                  <div><dt>Leave balance</dt><dd>14 days</dd></div>
+                  <div><dt>Contract</dt><dd>To December · renewal due</dd></div>
+                  <div><dt>Probation</dt><dd>Confirmed</dd></div>
                 </dl>
               </div>
             </Slot>
 
-            {/* Period 8 · Management */}
-            <Slot period="period-8" step={1} id="period-8">
-              <div className="label num">12:40 · Period 8 · Management</div>
+            {/* Period 9 · Management */}
+            <Slot period="period-9" step={1} id="period-9">
+              <div className="label num">13:20 · Period 9 · Management</div>
               <h2>Insight a director can act on.</h2>
               <p>
                 Because every record is connected, the Advisor computes what separate systems
                 cannot: months of cash at the current collection rate, profitability by grade,
-                teachers at risk, and transactions that do not add up. Read daily. Flagged, not
-                discovered at audit.
+                teaching load out of balance, and transactions that do not add up. It works on
+                the school&rsquo;s own clock, the term, not the calendar month. Read daily.
+                Flagged, not discovered at audit.
               </p>
             </Slot>
-            <Slot period="period-8" step={2}>
+            <Slot period="period-9" step={2}>
               <h3>Monday, 07:00</h3>
               <p>The week&rsquo;s position on the director&rsquo;s phone before the first bell, and any question answered in plain language after it.</p>
-              <div className="phone" aria-label="WhatsApp briefing, example">
-                <div className="screen">
-                  <div className="status num"><span>07:00</span><span>Monday</span></div>
-                  <div className="wa">
-                    <div className="hdr"><span className="av">T</span><span>Tutagora</span></div>
-                    <div className="bubble">
-                      <p>Good morning. {S} this week.</p>
-                      <p className="num">Fees: 71% of Term 2 collected. Outstanding across 38 families, 9 with no payment yet.</p>
-                      <p className="num">Runway at this rate: 4.7 months. Grade 7 below cost for a second term.</p>
-                      <p className="num">Attendance 94%. 3 applications waiting over 48 hours. 1 teacher at rising risk.</p>
-                      <time dateTime="07:00">07:00</time>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Phone time="07:00" day="Monday" name="Tutagora" sub="business account" label="The Monday briefing on WhatsApp. Example.">
+                <In at="07:00">
+                  <p>Good morning. {S} this week.</p>
+                  <p className="num">Fees: 71% of Term 2 collected. Outstanding across 38 families, 9 with no payment yet.</p>
+                  <p className="num">Runway at this rate: 4.7 months. Grade 7 below cost for a second term.</p>
+                  <p className="num">Attendance 94%. 3 applications waiting over 48 hours. Two teachers above load in Languages.</p>
+                </In>
+              </Phone>
             </Slot>
-            <Slot period="period-8" step={3}>
+            <Slot period="period-9" step={3}>
               <h3>{S === "Your school" ? "A school" : S}, in 2027</h3>
               <p>
                 Run on one record, not on memory. Decisions made in week two on figures that
@@ -590,7 +637,7 @@ export function ClassRoom() {
 
             {/* Homework */}
             <Slot period="homework" step={2} id="homework">
-              <div className="label num">13:20 · After class</div>
+              <div className="label num">14:00 · After class</div>
               <h2>Homework: bring {S === "Your school" ? "your school" : S} onto one record.</h2>
               <p>
                 Set-up takes an afternoon: classes, the fee structure, and a bulk import of

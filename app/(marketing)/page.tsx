@@ -65,21 +65,24 @@ const SYSTEMS = [
     id: "hr",
     art: <SketchHr />,
     name: "Tutagora HR",
-    tagline: "The people who make the school.",
-    blurb: "Who teaches, what they carry, and who needs help, seen before it is felt.",
-    title: "Every teacher, and the weight they carry.",
+    tagline: "Every person who works here, first-class.",
+    blurb: "From the head teacher to the driver: hired, contracted, paid and grown on one record.",
+    title: "The whole workforce, from the open role to the handover.",
     lede:
-      "A school is only ever as good as the people standing in front of the class. Tutagora HR knows who teaches what, how many periods, whether the schemes are in and the marks are entered, and it notices who is quietly running on empty before they hand in a letter.",
+      "A school is a people business with a building attached, and payroll is its largest cost. Tutagora HR runs the whole lifecycle for every employee, teaching and support, across every branch: recruitment, contracts and letters generated from the record, probation, leave, attendance, training, payroll, and the clearance and handover when someone leaves.",
     holds: [
-      "Staff records",
-      "Roles and permissions",
-      "Class and subject assignments",
+      "Employee records and documents",
+      "Recruitment: open roles and candidates",
+      "Offer letters, contracts and warnings, acknowledged on receipt",
+      "Probation reviews and contracts ending",
+      "Leave: heads recommend, HR decides",
+      "Daily attendance and check-in",
+      "Payroll and the statutory calendar",
+      "Training, goals and performance",
       "Teaching load from the timetable",
-      "Scheme of work approvals",
-      "Marks-entry timeliness",
-      "Teacher performance by class results",
-      "Burnout risk score",
-      "Branches and multi-school access",
+      "Assets issued and returned",
+      "Staff by department, across branches",
+      "Clearance, final dues and handover",
     ],
   },
   {
@@ -238,9 +241,11 @@ export default function HomePage() {
               <div className="label">04 &nbsp;·&nbsp; Tutagora Advisor</div>
               <h2>It does not show you the school. It tells you.</h2>
               <p>
-                A dashboard waits to be read. The Advisor reads the record itself, on a schedule,
-                and says what it found in plain language on WhatsApp. Ask it a question and it
-                answers from the same single truth.
+                A dashboard waits to be read. The Advisor reads the record itself, on the
+                school&rsquo;s own clock, the term, and says what it found in plain language on
+                WhatsApp. Ask it a question and it answers from the same single truth. It drafts
+                the reminder, the checklist, the staffing plan for next term. It sends nothing
+                and pays nothing. The AI drafts. People decide.
               </p>
             </div>
             <div className="art wide">
@@ -262,8 +267,8 @@ export default function HomePage() {
                 <li>
                   <span className="k num">2</span>
                   <span>
-                    <strong>Teachers at burnout risk.</strong> Late marks, rising leave,
-                    falling logins, scored before anyone resigns.
+                    <strong>Teachers above load.</strong> Lessons per teacher and cover taken,
+                    by department, seen before a good teacher is quietly lost.
                   </span>
                 </li>
                 <li>

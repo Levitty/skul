@@ -4,7 +4,7 @@ import { ClassRoom } from "../class-room"
 export const metadata: Metadata = {
   title: "Tutagora · Class",
   description:
-    "Four periods on how Tutagora runs a school, worked with your own numbers: fees, the register, parents on WhatsApp, and the office.",
+    "Nine periods on how Tutagora runs a school as one record: the learner at the centre, fees, parents on WhatsApp, the fence, the staff, and management.",
 }
 
 export default function ClassPage() {
