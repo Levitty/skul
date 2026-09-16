@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Board } from "./board"
+import { SketchSmis, SketchHr, SketchLearning } from "./sketches"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -11,64 +12,6 @@ const Arrow = () => (
   </svg>
 )
 
-
-// Card visuals. Monochrome, deterministic, drawn from what each system holds.
-const ROLL = [
-  3, 5, 4, 6, 3, 5, 6, 4, 3, 5, 4, 6, 5, 3, 6, 4, 5, 3, 4, 6, 3, 5, 4, 6, 5, 4, 3, 6, 4, 5, 3, 6, 5, 4, 6, 3,
-  4, 6, 3, 5, 6, 4, 5, 3, 6, 4, 3, 5, 6, 3, 5, 4, 3, 6, 4, 5, 3, 5, 6, 4, 5, 3, 6, 4, 6, 4, 5, 3, 4, 6, 3, 5,
-  5, 3, 6, 4, 3, 5, 4, 6, 4, 6, 5, 3, 6, 4, 3, 5, 3, 5, 4, 6, 5, 3, 6, 4,
-]
-
-// Every learner: a roll of dots, no two quite alike.
-const ArtRoll = () => (
-  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
-    {ROLL.map((v, i) => (
-      <circle
-        key={i}
-        cx={15 + (i % 12) * 19}
-        cy={15 + Math.floor(i / 12) * 24}
-        r={2.4}
-        fill="#f2f2f0"
-        opacity={v / 6}
-      />
-    ))}
-  </svg>
-)
-
-// Every teacher: the load each one carries, as bars.
-const LOADS = [26, 31, 18, 34, 22, 29, 12]
-const ArtLoad = () => (
-  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
-    {LOADS.map((v, i) => (
-      <g key={i}>
-        <rect x="16" y={14 + i * 19} width="208" height="7" fill="rgba(242,242,240,0.1)" />
-        <rect x="16" y={14 + i * 19} width={(v / 36) * 208} height="7" fill="#f2f2f0" opacity={v > 30 ? 1 : 0.55} />
-      </g>
-    ))}
-  </svg>
-)
-
-// What was learned: a gradebook, marks as squares.
-const MARKS = [
-  4, 3, 5, 5, 2, 4, 5, 3, 4, 5, 3, 4, 5, 5, 3, 2, 4, 5, 4, 3, 5, 4, 3, 5, 5, 4, 2, 3, 4, 5, 3, 5, 4, 4, 5, 3,
-  2, 4, 5, 5, 3, 4, 4, 5, 3, 5, 4, 2, 5, 3, 4, 5, 4, 3, 5, 4, 5, 2, 3, 4,
-]
-const ArtMarks = () => (
-  <svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet">
-    {MARKS.map((v, i) => (
-      <rect
-        key={i}
-        x={14 + (i % 12) * 18}
-        y={16 + Math.floor(i / 12) * 24}
-        width="12"
-        height="12"
-        rx="1.5"
-        fill="#f2f2f0"
-        opacity={0.12 + (v / 5) * 0.88}
-      />
-    ))}
-  </svg>
-)
 
 // The school thinking: runway, rising.
 const ArtAdvisor = () => (
@@ -90,7 +33,7 @@ const ArtAdvisor = () => (
 const SYSTEMS = [
   {
     id: "smis",
-    art: <ArtRoll />,
+    art: <SketchSmis />,
     name: "Tutagora SMIS",
     tagline: "Every learner, known completely.",
     blurb: "The memory of the school. From first enquiry to final report, one truth about every child.",
@@ -118,7 +61,7 @@ const SYSTEMS = [
   },
   {
     id: "hr",
-    art: <ArtLoad />,
+    art: <SketchHr />,
     name: "Tutagora HR",
     tagline: "The people who make the school.",
     blurb: "Who teaches, what they carry, and who needs help, seen before it is felt.",
@@ -139,7 +82,7 @@ const SYSTEMS = [
   },
   {
     id: "learning",
-    art: <ArtMarks />,
+    art: <SketchLearning />,
     name: "Tutagora Learning",
     tagline: "What is taught becomes what is known.",
     blurb: "From the term's plan to a single mark, in one unbroken line.",

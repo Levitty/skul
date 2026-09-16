@@ -875,3 +875,16 @@
     padding: 1.75rem;
   }
 }
+
+/* pencil drawings on the system cards */
+
+.mk .card-art .sketch {
+  width: 100%;
+  max-width: 340px;
+}
+
+.mk .card-art .sketch svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
