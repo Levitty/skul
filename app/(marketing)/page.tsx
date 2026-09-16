@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Board } from "./board"
-import { SketchSmis, SketchHr, SketchLearning } from "./sketches"
+import { SketchSmis, SketchHr, SketchLearning, SketchClassroom } from "./sketches"
 import { Mark, BRAND } from "./logo"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
@@ -306,19 +306,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="vision wrap" id="vision">
-          <div className="label">Vision</div>
-          <p>
-            Every school has a second body: the record. The register, the ledger, the receipt
-            book, the marks. Today it is scattered across paper and memory, and it never quite
-            agrees with itself. The head teacher carries the difference.
-          </p>
-          <p>
-            We are building that second body to be worthy of the first. One model of the whole
-            school, complete and current, so the software can do what a great head teacher does:
-            hold the entire school in mind at once, and know what to do next.
-          </p>
-          <p>Not a dashboard to admire. A school that knows itself.</p>
+        <section className="vision" id="vision">
+          <div className="wrap">
+            <div className="vision-art">
+              <SketchClassroom />
+            </div>
+            <h2>Vision</h2>
+            <p>
+              The dashboards were a real step. For the first time a school leader could see
+              enrolment, fees and attendance without waiting for month-end. The systems built
+              so far have served schools well, and they stopped there. Most schools have lived
+              inside a blanket template ever since: the same screens for every school, the same
+              reports, the school bent to fit the software.
+            </p>
+            <p>
+              We saw it was time to take advantage of what those systems made possible and move
+              to the next step. To the frontier of action. An integrated school, where the
+              software is led by the school rather than the other way round. Where every user,
+              from the bursar to the class teacher to the parent on WhatsApp, is given what they
+              need to do their part well. And where, at the top, management is given something
+              better than numbers: insight it can act on.
+            </p>
+            <p>
+              It begins in the classroom, where the main event happens: a teacher and a learner.
+              Everything else exists to serve them.
+            </p>
+            <p>Not a dashboard to admire. A school that knows itself.</p>
+          </div>
         </section>
 
         <section className="close">

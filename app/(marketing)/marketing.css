@@ -521,26 +521,50 @@
 }
 
 /* ---------- vision ---------- */
+/* A full-width drawing, then a plain heading and a first-person statement. */
 
 .mk .vision {
   border-top: 1px solid var(--line);
-  padding-top: clamp(5rem, 12vw, 11rem);
+  padding-top: clamp(3rem, 6vw, 5rem);
   padding-bottom: clamp(5rem, 12vw, 11rem);
 }
 
+.mk .vision-art {
+  background: #101110;
+  border: 1px solid var(--line);
+  margin-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.mk .vision-art .sketch svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mk .vision h2 {
+  margin: 0 0 1.75rem;
+  font-weight: 400;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
 .mk .vision p {
-  margin: 1.75rem 0 0;
-  max-width: 24em;
-  font-size: clamp(1.5rem, 3vw, 2.75rem);
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-  font-weight: 500;
-  text-wrap: pretty;
+  margin: 0;
+  max-width: 44em;
+  font-size: clamp(1.125rem, 1.75vw, 1.5rem);
+  line-height: 1.42;
+  letter-spacing: -0.01em;
+  color: var(--white);
 }
 
 .mk .vision p + p {
-  margin-top: 1.25em;
-  color: var(--mute);
+  margin-top: 1.1em;
+}
+
+.mk .vision p:last-child {
+  margin-top: 1.6em;
+  color: var(--white);
 }
 
 /* ---------- close ---------- */
@@ -757,15 +781,6 @@
   line-height: 1.7;
 }
 
-/* vision: three paragraphs, the last one white */
-
-.mk .vision p + p {
-  color: var(--mute);
-}
-
-.mk .vision p:last-child {
-  color: var(--white);
-}
 
 /* ---------- cards ---------- */
 
