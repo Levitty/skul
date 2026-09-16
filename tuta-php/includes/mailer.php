@@ -174,7 +174,6 @@ function resendApiSend(array $opts): array
     $resp = curl_exec($ch);
     $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $cerr = curl_error($ch);
-    curl_close($ch);
 
     if ($cerr !== '')          return ['ok' => false, 'error' => 'mail service unreachable (' . $cerr . ')'];
     if ($code >= 200 && $code < 300) return ['ok' => true, 'error' => ''];

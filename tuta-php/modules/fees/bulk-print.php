@@ -96,7 +96,7 @@ if (!$selectedClass || !$termId) {
             </select>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Stream</label>
             <select name="section_id" id="bpSectionSel"
                     class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-emerald-400 outline-none text-sm">
                 <option value="">All sections</option>

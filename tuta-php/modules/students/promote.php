@@ -384,7 +384,7 @@ require __DIR__ . '/../../includes/layout-top.php';
 
             <!-- Section -->
             <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Section (optional)</label>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Stream (optional)</label>
                 <select name="to_section" id="toSectionSelect" class="px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-emerald-400 outline-none">
                     <option value="">No section</option>
                 </select>

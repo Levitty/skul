@@ -33,6 +33,7 @@ RewriteRule ^config\.php$            - [F,L]
 RewriteRule ^SETUP\.txt$             - [F,L]
 RewriteRule ^(includes|supabase)/    - [F,L]
 RewriteRule ^logs/                   - [F,L]
+RewriteRule ^tools/                  - [F,L]
 RewriteRule \.(sql|md|log|ini|bak)$  - [F,L]
 
 # Block hidden/dotfiles (.DS_Store, .git, .env, …) but allow .well-known so

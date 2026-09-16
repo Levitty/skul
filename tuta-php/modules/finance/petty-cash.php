@@ -27,25 +27,11 @@ $from     = $month . '-01';
 $to       = date('Y-m-t', strtotime($from));
 $back     = fn() => 'finance/petty-cash?month=' . $month;
 
-$categories = $sb->from('expense_categories')->select('id,name,parent_category_id')->eq('school_id', $sid)
-    ->order('name')->execute()['data'] ?? [];
-// Headings and the lines under them — same picker as the Expenses page.
-$catById = []; foreach ($categories as $c) $catById[$c['id']] = $c;
-$headings = array_values(array_filter($categories, fn($c) => empty($c['parent_category_id']) || !isset($catById[$c['parent_category_id']])));
-$children = []; foreach ($categories as $c) if (!empty($c['parent_category_id']) && isset($catById[$c['parent_category_id']])) $children[$c['parent_category_id']][] = $c;
-$catOptions = function () use ($headings, $children): string {
-    $o = '';
-    foreach ($headings as $h) {
-        $kids = $children[$h['id']] ?? [];
-        if (!$kids) { $o .= '<option value="' . e($h['id']) . '">' . e($h['name']) . '</option>'; continue; }
-        $o .= '<optgroup label="' . e($h['name']) . '"><option value="' . e($h['id']) . '">' . e($h['name']) . ' (general)</option>';
-        foreach ($kids as $k) $o .= '<option value="' . e($k['id']) . '">' . e($k['name']) . '</option>';
-        $o .= '</optgroup>';
-    }
-    return $o;
-};
-$centres = $sb->from('cost_centres')->select('id,name,type')->eq('school_id', $sid)->eq('is_active', 'true')->order('type')->order('name')->execute()['data'] ?? [];
-$ccIcon = [];   // no icons in the UI — the name says what it is
+require_once __DIR__ . '/../../includes/finance-pickers.php';
+$tree       = financeCategoryTree($sb, $sid, 'id,name,parent_category_id');
+$categories = $tree['all'];
+$catOptions = fn() => financeCategoryOptions($tree);
+$centres    = financeCentres($sb, $sid);
 
 if (isPost() && verifyCsrf()) {
     $action = input('action');
@@ -373,8 +359,7 @@ $l = 'block text-xs font-medium text-gray-600 mb-1';
           </div>
           <div><label class="<?= $l ?>">For which <span class="text-gray-400 font-normal">(optional)</span></label>
             <select name="cost_centre_id" id="pcCC" class="<?= $f ?>" onchange="pcFuel()">
-              <option value="">— none —</option>
-              <?php foreach ($centres as $c): ?><option value="<?= e($c['id']) ?>" data-type="<?= e($c['type']) ?>"><?= e($c['name']) ?></option><?php endforeach; ?>
+              <?= financeCentreOptions($centres, '', 'For which… (optional)') ?>
             </select>
           </div>
           <div id="pcFuelBox" class="hidden col-span-2 grid grid-cols-2 gap-3 rounded-lg border border-amber-100 bg-amber-50/50 p-3">

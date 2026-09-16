@@ -215,11 +215,11 @@ require __DIR__ . '/../includes/layout-top.php';
             <span class="text-xs text-gray-500 tabular-nums">This week <strong class="text-gray-900">KES <?= $shortMoney($weekTot[$nW - 1] ?? 0) ?></strong></span>
         </div>
         <div class="flex items-end gap-2 h-40">
-            <?php for ($i = 0; $i < $nW; $i++): $tot = $weekTot[$i]; ?>
-            <div class="flex-1 flex flex-col justify-end h-full group relative" title="Week of <?= e(date('j M', strtotime($weeks[$i]))) ?> · KES <?= e(number_format($tot)) ?>">
-                <div class="flex flex-col-reverse rounded-t overflow-hidden" style="height:<?= $wMax > 0 ? max(2, (int)round($tot / $wMax * 100)) : 2 ?>%">
-                    <?php foreach ($more['branches'] as $mb): $v = (float)(((array)$mb['weekly'])[$i] ?? 0); if ($v <= 0 || $tot <= 0) continue; ?>
-                        <div style="height:<?= round($v / $tot * 100, 2) ?>%;background:<?= $branchColor[$mb['name']] ?? '#cbd5e1' ?>"></div>
+            <?php for ($i = 0; $i < $nW; $i++): $wkTot = $weekTot[$i]; ?>
+            <div class="flex-1 flex flex-col justify-end h-full group relative" title="Week of <?= e(date('j M', strtotime($weeks[$i]))) ?> · KES <?= e(number_format($wkTot)) ?>">
+                <div class="flex flex-col-reverse rounded-t overflow-hidden" style="height:<?= $wMax > 0 ? max(2, (int)round($wkTot / $wMax * 100)) : 2 ?>%">
+                    <?php foreach ($more['branches'] as $mb): $v = (float)(((array)$mb['weekly'])[$i] ?? 0); if ($v <= 0 || $wkTot <= 0) continue; ?>
+                        <div style="height:<?= round($v / $wkTot * 100, 2) ?>%;background:<?= $branchColor[$mb['name']] ?? '#cbd5e1' ?>"></div>
                     <?php endforeach; ?>
                 </div>
                 <span class="text-[10px] text-gray-400 mt-1 text-center truncate"><?= e(date('j M', strtotime($weeks[$i]))) ?></span>

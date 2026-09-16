@@ -523,7 +523,7 @@ $fieldCls = 'w-full px-3 py-2 text-sm rounded-lg border border-gray-200 focus:bo
         <div class="bg-white rounded-xl border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)] mb-6 overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-4">
                 <div>
-                    <h2 class="text-sm font-semibold text-gray-700">Sections</h2>
+                    <h2 class="text-sm font-semibold text-gray-700">Streams</h2>
                     <p class="text-xs text-gray-500 mt-0.5">The sheet records each pupil's stream, so they can be placed while the marks go in.</p>
                 </div>
                 <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer whitespace-nowrap">

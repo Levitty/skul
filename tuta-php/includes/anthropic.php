@@ -58,7 +58,6 @@ function claudeMessage(string $system, string $userText, ?array $schema = null, 
     $resp = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $err  = curl_error($ch);
-    curl_close($ch);
 
     if ($err) return ['ok' => false, 'error' => 'Connection error: ' . $err];
 

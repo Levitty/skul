@@ -221,7 +221,6 @@ class Supabase
             $isList = is_array($dec) && ($dec === [] || array_keys($dec) === range(0, count($dec) - 1));
             $out[$k] = $isList ? $dec : [];
             curl_multi_remove_handle($mh, $ch);
-            curl_close($ch);
         }
         curl_multi_close($mh);
         return $out;

@@ -308,7 +308,7 @@ require __DIR__ . '/../../includes/layout-top.php';
                 <dd class="text-gray-900 font-medium"><?= e($className) ?></dd>
             </div>
             <div class="flex justify-between">
-                <dt class="text-gray-500">Section</dt>
+                <dt class="text-gray-500">Stream</dt>
                 <dd class="text-gray-900 font-medium"><?= e($sectionName) ?></dd>
             </div>
             <div class="flex justify-between">

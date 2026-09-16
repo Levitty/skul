@@ -5,3 +5,6 @@ config.php
 # Runtime logs (may contain M-Pesa payloads / PII)
 logs/
 *.log
+
+# Smoke-test renders
+tools/.smoke-out/

@@ -34,27 +34,11 @@ $SKIP_ACCOUNT_RE = '/tax account|sales tax|accounts receivable|opening bal|owner
 $SKIP_TYPES = ['bill pmt -cheque', 'bill pmt -check', 'payment', 'deposit', 'transfer', 'sales receipt', 'invoice', 'credit card credit'];
 
 // ── Categories (two levels) and cost centres for the pickers ──────
-$categories = $sb->from('expense_categories')->select('id,name,parent_category_id')->eq('school_id', $sid)->order('name')->execute()['data'] ?? [];
-$catById = []; foreach ($categories as $c) $catById[$c['id']] = $c;
-$headings = array_values(array_filter($categories, fn($c) => empty($c['parent_category_id']) || !isset($catById[$c['parent_category_id']])));
-$children = []; foreach ($categories as $c) if (!empty($c['parent_category_id']) && isset($catById[$c['parent_category_id']])) $children[$c['parent_category_id']][] = $c;
-$catLabel = function (string $id) use ($catById): string {
-    $c = $catById[$id] ?? null; if (!$c) return '—';
-    $p = !empty($c['parent_category_id']) ? ($catById[$c['parent_category_id']] ?? null) : null;
-    return ($p ? $p['name'] . ' › ' : '') . $c['name'];
-};
-$catOptions = function (string $selected = '') use ($headings, $children): string {
-    $o = '<option value="">— skip these lines —</option>';
-    foreach ($headings as $h) {
-        $kids = $children[$h['id']] ?? [];
-        if (!$kids) { $o .= '<option value="' . e($h['id']) . '"' . ($selected === $h['id'] ? ' selected' : '') . '>' . e($h['name']) . '</option>'; continue; }
-        $o .= '<optgroup label="' . e($h['name']) . '"><option value="' . e($h['id']) . '"' . ($selected === $h['id'] ? ' selected' : '') . '>' . e($h['name']) . ' (general)</option>';
-        foreach ($kids as $k) $o .= '<option value="' . e($k['id']) . '"' . ($selected === $k['id'] ? ' selected' : '') . '>' . e($k['name']) . '</option>';
-        $o .= '</optgroup>';
-    }
-    return $o;
-};
-$centres = $sb->from('cost_centres')->select('id,name,type')->eq('school_id', $sid)->eq('is_active', 'true')->execute()['data'] ?? [];
+require_once __DIR__ . '/../../includes/finance-pickers.php';
+$tree       = financeCategoryTree($sb, $sid, 'id,name,parent_category_id');
+$categories = $tree['all']; $catById = $tree['byId']; $catLabel = $tree['label'];
+$catOptions = fn(string $selected = '') => financeCategoryOptions($tree, $selected, null, '— skip these lines —');
+$centres    = financeCentres($sb, $sid);
 $kitchenId = ''; foreach ($centres as $c) if ($c['type'] === 'kitchen') { $kitchenId = $c['id']; break; }
 
 /** Find a Tuta category by "Heading › Line" or plain name, case-insensitively. */

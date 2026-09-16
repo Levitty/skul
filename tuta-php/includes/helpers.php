@@ -283,6 +283,10 @@ function verifyCsrf(): bool
 
 function redirect(string $path): void
 {
+    // A POST that redirects has (almost always) just written something. Drop
+    // this session's five-minute caches so the next page shows the new class,
+    // term, fee head or setting straight away instead of after a re-login.
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && class_exists('Supabase')) Supabase::clearCache();
     header('Location: ' . baseUrl($path));
     exit;
 }

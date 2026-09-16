@@ -320,57 +320,47 @@ if (isPost() && verifyCsrf()) {
 // ════════════════════════════════════════════════════════════════
 // Data
 // ════════════════════════════════════════════════════════════════
-$categories = $sb->from('expense_categories')->select('id,name,description,parent_category_id')
-    ->eq('school_id', $sid)->order('name')->execute()['data'] ?? [];
-$catMap = []; $catColor = []; $catParent = []; $catById = [];
-foreach ($categories as $i => $c) {
-    $catMap[$c['id']]    = $titleCase($c['name']);
-    $catById[$c['id']]   = $c;
-    $catParent[$c['id']] = $c['parent_category_id'] ?? null;
-}
-// Two levels: headings (no parent) and the lines under them. A line borrows
-// its heading's colour so the cashbook reads by heading at a glance.
-$headings = array_values(array_filter($categories, fn($c) => empty($c['parent_category_id']) || !isset($catById[$c['parent_category_id']])));
-$children = [];
-foreach ($categories as $c) if (!empty($c['parent_category_id']) && isset($catById[$c['parent_category_id']])) $children[$c['parent_category_id']][] = $c;
+require_once __DIR__ . '/../../includes/finance-pickers.php';
+$tree       = financeCategoryTree($sb, $sid);
+$categories = $tree['all']; $catById = $tree['byId']; $headings = $tree['headings']; $children = $tree['children'];
+$catMap = []; $catColor = []; $catParent = [];
+foreach ($categories as $c) { $catMap[$c['id']] = $titleCase($c['name']); $catParent[$c['id']] = $c['parent_category_id'] ?? null; }
+// A line borrows its heading's colour so the cashbook reads by heading at a glance.
 foreach ($headings as $i => $h) {
     $catColor[$h['id']] = $palette[$i % count($palette)];
     foreach ($children[$h['id']] ?? [] as $k) $catColor[$k['id']] = $palette[$i % count($palette)];
 }
-/** <option>s grouped by heading; the heading itself is selectable as "(general)". */
-$catOptions = function (string $selected = '') use ($headings, $children, $catMap): string {
-    $o = '';
-    foreach ($headings as $h) {
-        $kids = $children[$h['id']] ?? [];
-        if (!$kids) { $o .= '<option value="' . e($h['id']) . '"' . ($selected === $h['id'] ? ' selected' : '') . '>' . e($catMap[$h['id']]) . '</option>'; continue; }
-        $o .= '<optgroup label="' . e($catMap[$h['id']]) . '">';
-        $o .= '<option value="' . e($h['id']) . '"' . ($selected === $h['id'] ? ' selected' : '') . '>' . e($catMap[$h['id']]) . ' (general)</option>';
-        foreach ($kids as $k) $o .= '<option value="' . e($k['id']) . '"' . ($selected === $k['id'] ? ' selected' : '') . '>' . e($catMap[$k['id']]) . '</option>';
-        $o .= '</optgroup>';
-    }
-    return $o;
-};
+$catOptions = fn(string $selected = '') => financeCategoryOptions($tree, $selected, fn($c) => $titleCase($c['name']));
 
 // Cost centres — the "for which" of a spend. Buses arrive from Transport by
 // themselves; the rest are set up on Finance → Cost Centres.
-$ccRes = $sb->from('cost_centres')->select('id,name,type')->eq('school_id', $sid)->eq('is_active', 'true')->order('type')->order('name')->execute();
-$centres = $ccRes['data'] ?? [];
-$ccMigrationMissing = !empty($ccRes['error']) && stripos((string)$ccRes['error'], 'cost_centres') !== false;
+$ccProbe = $sb->from('cost_centres')->select('id')->eq('school_id', $sid)->limit(1)->execute();
+$ccMigrationMissing = !empty($ccProbe['error']) && stripos((string)$ccProbe['error'], 'cost_centres') !== false;
+$centres = $ccMigrationMissing ? [] : financeCentres($sb, $sid);
+$ccMap = []; $ccType = [];
+foreach ($centres as $c) { $ccMap[$c['id']] = $c['name']; $ccType[$c['id']] = $c['type']; }
+$ccOptions = fn(string $selected = '') => financeCentreOptions($centres, $selected);
 // Owing (mig. 144): payment_status / paid_date exist once it has run.
 $owingProbe = $sb->from('expenses')->select('paid_date')->eq('school_id', $sid)->limit(1)->execute();
 $owingMissing = !empty($owingProbe['error']) && stripos((string)$owingProbe['error'], 'paid_date') !== false;
-$ccMap = []; $ccType = [];
-foreach ($centres as $c) { $ccMap[$c['id']] = $c['name']; $ccType[$c['id']] = $c['type']; }
-$ccIcon = [];   // no icons in the UI — the name says what it is
-$ccOptions = function (string $selected = '') use ($centres, $ccIcon): string {
-    $o = '<option value="">— none —</option>';
-    foreach ($centres as $c) $o .= '<option value="' . e($c['id']) . '" data-type="' . e($c['type']) . '"' . ($selected === $c['id'] ? ' selected' : '') . '>' . e($c['name']) . '</option>';
-    return $o;
-};
 
-$allExpenses = Supabase::fetchAllPaged(fn($q) => $q->from('expenses')
-    ->select('id,category_id,amount,description,expense_date,invoice_number,vendor_name,payment_method,created_at' . ($ccMigrationMissing ? '' : ',cost_centre_id,litres,odometer_km') . ($owingMissing ? '' : ',payment_status,paid_date,paid_reference'))
-    ->eq('school_id', $sid)->order('expense_date', false)->order('created_at', false));
+// Only the period on screen is loaded in full. The page used to pull every
+// expense the school ever recorded on each view; by next year that is
+// thousands of rows for a month's cashbook.
+if ($filterTerm)                 { [$winFrom, $winTo] = $termSpan($filterTerm); }
+elseif ($filterMonth === 'all')  { $winFrom = null; $winTo = null; }
+else                             { $winFrom = $filterMonth . '-01'; $winTo = date('Y-m-t', strtotime($filterMonth . '-01')); }
+$prevMonth = (!$filterTerm && $filterMonth !== 'all') ? date('Y-m', strtotime($filterMonth . '-01 -1 month')) : null;
+$fullCols = 'id,category_id,amount,description,expense_date,invoice_number,vendor_name,payment_method,created_at' . ($ccMigrationMissing ? '' : ',cost_centre_id,litres,odometer_km') . ($owingMissing ? '' : ',payment_status,paid_date,paid_reference');
+$allExpenses = Supabase::fetchAllPaged(function ($q) use ($sid, $fullCols, $winFrom, $winTo, $prevMonth) {
+    $q = $q->from('expenses')->select($fullCols)->eq('school_id', $sid);
+    if ($winFrom) $q = $q->gte('expense_date', $prevMonth ? $prevMonth . '-01' : $winFrom);
+    if ($winTo)   $q = $q->lte('expense_date', $winTo);
+    return $q->order('expense_date', false)->order('created_at', false);
+});
+// Four light columns across all time: which months exist, category totals
+// for the Categories panel, and the supplier list.
+$lightRows = Supabase::fetchAllPaged(fn($q) => $q->from('expenses')->select('expense_date,category_id,amount,vendor_name')->eq('school_id', $sid));
 
 $methodLabels      = methodLabelMap();
 $configuredMethods = cachedPaymentMethods();
@@ -397,7 +387,7 @@ foreach ($allExpenses as $exp) {
 
 // Months that have data (plus this month), newest first.
 $monthSet = [date('Y-m') => true];
-foreach ($allExpenses as $exp) {
+foreach ($lightRows as $exp) {
     $d = substr((string)($exp['expense_date'] ?? ''), 0, 7);
     if (preg_match('/^\d{4}-\d{2}$/', $d)) $monthSet[$d] = true;
 }
@@ -437,7 +427,7 @@ if (!$filterTerm && $filterMonth !== 'all' && $filterCat === '' && $filterMethod
     $prev = date('Y-m', strtotime($filterMonth . '-01 -1 month'));
     $prevLabel = date('M', strtotime($prev . '-01'));
     $prevTotal = 0.0; $prevHas = false;
-    foreach ($allExpenses as $exp) {
+    foreach ($lightRows as $exp) {
         if (str_starts_with((string)($exp['expense_date'] ?? ''), $prev)) { $prevTotal += (float)($exp['amount'] ?? 0); $prevHas = true; }
     }
     if (!$prevHas) $prevTotal = null;
@@ -452,7 +442,7 @@ foreach ($categories as $c) {
 
 // Per-category counts/totals across all time (for the Categories panel).
 $catAll = [];
-foreach ($allExpenses as $exp) {
+foreach ($lightRows as $exp) {
     $cid = $exp['category_id'] ?? '_none';
     $catAll[$cid] = ['amt' => ($catAll[$cid]['amt'] ?? 0) + (float)($exp['amount'] ?? 0), 'n' => ($catAll[$cid]['n'] ?? 0) + 1];
 }
@@ -614,7 +604,7 @@ require __DIR__ . '/../../includes/layout-top.php';
                 <?= $catOptions() ?>
             </select>
             <select name="cost_centre_id" class="w-full px-2 py-1.5 rounded-lg border border-gray-200 text-sm bg-white focus:border-emerald-400 outline-none" title="For which — a bus, the kitchen, a building. Leave blank for a general spend.">
-                <?= str_replace('>— none —<', '>For which… (optional)<', $ccOptions()) ?>
+                <?= financeCentreOptions($centres, '', 'For which… (optional)') ?>
             </select>
             <select name="payment_method" class="xp-method w-full px-2 py-1.5 rounded-lg border border-gray-200 text-sm bg-white focus:border-emerald-400 outline-none" data-ref="qaRef" title="Petty cash = the office tin. Cash = fee collections not yet banked.">
                 <option value="petty_cash">Petty cash (the tin)</option>
@@ -645,7 +635,7 @@ require __DIR__ . '/../../includes/layout-top.php';
                     $ref = trim((string)($exp['invoice_number'] ?? ''));
                     $vendor = trim((string)($exp['vendor_name'] ?? '')); ?>
                 <div class="xp-ln hover:bg-gray-50/60">
-                    <div class="min-w-0 truncate text-sm font-medium text-gray-900" title="<?= e($exp['description'] ?? '') ?>"><?= e($exp['description'] ?? '') ?><?= $vendor !== '' ? ' <span class="text-gray-400 font-normal">· ' . e($vendor) . '</span>' : '' ?><?php if (!empty($exp['cost_centre_id']) && isset($ccMap[$exp['cost_centre_id']])): ?> <a href="<?= baseUrl('finance/cost-centres') ?>?id=<?= e($exp['cost_centre_id']) ?>" class="text-[11px] font-medium text-gray-500 hover:text-gray-800 whitespace-nowrap"><?= $ccIcon[$ccType[$exp['cost_centre_id']] ?? 'other'] ?? '' ?> <?= e($ccMap[$exp['cost_centre_id']]) ?><?= !empty($exp['litres']) ? ' · ' . rtrim(rtrim(number_format((float)$exp['litres'], 1), '0'), '.') . ' L' : '' ?></a><?php endif; ?></div>
+                    <div class="min-w-0 truncate text-sm font-medium text-gray-900" title="<?= e($exp['description'] ?? '') ?>"><?= e($exp['description'] ?? '') ?><?= $vendor !== '' ? ' <span class="text-gray-400 font-normal">· ' . e($vendor) . '</span>' : '' ?><?php if (!empty($exp['cost_centre_id']) && isset($ccMap[$exp['cost_centre_id']])): ?> <a href="<?= baseUrl('finance/cost-centres') ?>?id=<?= e($exp['cost_centre_id']) ?>" class="text-[11px] font-medium text-gray-500 hover:text-gray-800 whitespace-nowrap"><?= e($ccMap[$exp['cost_centre_id']]) ?><?= !empty($exp['litres']) ? ' · ' . rtrim(rtrim(number_format((float)$exp['litres'], 1), '0'), '.') . ' L' : '' ?></a><?php endif; ?></div>
                     <a href="<?= baseUrl('finance/expenses') ?>?<?= $qs(['category' => $cid]) ?>" class="xp-chip" style="color:<?= e($col) ?>;background:<?= e($col) ?>18" title="Filter by this category"><?= e($catMap[$cid] ?? 'Uncategorised') ?></a>
                     <div class="xp-pay flex items-center gap-2 text-xs text-gray-500 min-w-0">
                         <?php if (($exp['payment_status'] ?? 'paid') === 'unpaid'): ?>
@@ -1019,7 +1009,7 @@ require __DIR__ . '/../../includes/layout-top.php';
 </div>
 
 <datalist id="supplierList">
-    <?php $seenV = []; foreach ($allExpenses as $exp) { $v = trim((string)($exp['vendor_name'] ?? '')); if ($v !== '' && !isset($seenV[strtolower($v)])) { $seenV[strtolower($v)] = true; echo '<option value="' . e($v) . '">'; } } ?>
+    <?php $seenV = []; foreach ($lightRows as $exp) { $v = trim((string)($exp['vendor_name'] ?? '')); if ($v !== '' && !isset($seenV[strtolower($v)])) { $seenV[strtolower($v)] = true; echo '<option value="' . e($v) . '">'; } } ?>
 </datalist>
 
 <script>
