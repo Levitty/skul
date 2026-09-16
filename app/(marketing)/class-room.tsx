@@ -13,6 +13,7 @@ import { Board } from "./board"
 import { Mark } from "./logo"
 import { SketchOnto } from "./sketches"
 import { Phone, In, Out, Replies } from "./phone"
+import { CONTACT, waLink, mailLink } from "./contact"
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -642,11 +643,24 @@ export function ClassRoom() {
               <p>
                 Set-up takes an afternoon: classes, the fee structure, and a bulk import of
                 learners from the spreadsheet you already have. From then on the record does the
-                work.
+                work. Send one message and we will come and show you.
               </p>
               <div className="actions">
-                <Link href="/signup" className="arrow">Begin <Arrow /></Link>
-                <Link className="quiet" href="/">Back to the front page</Link>
+                <a
+                  href={waLink(
+                    school.trim()
+                      ? `Hello Tutagora. I am from ${school.trim()}, about ${num(m.learners)} learners. I would like to talk about using Tutagora.`
+                      : "Hello Tutagora. I have taken the class and would like to talk about using Tutagora at my school."
+                  )}
+                  className="arrow"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Talk to us on WhatsApp <Arrow />
+                </a>
+                <a className="quiet" href={mailLink(`Enquiry from ${school.trim() || "a school"}`)}>
+                  Email {CONTACT.email}
+                </a>
               </div>
             </Slot>
           </div>

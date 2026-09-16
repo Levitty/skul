@@ -3,6 +3,7 @@ import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mark, BRAND } from "./logo"
 import { RecordMap } from "./record-map"
+import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -140,6 +141,11 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
+                  <a className="quiet" href={waLink(ENQUIRY)} target="_blank" rel="noopener">
+                    Talk to us
+                  </a>
+                </li>
+                <li className="hide-sm">
                   <Link className="quiet" href="/login">
                     Sign in
                   </Link>
@@ -335,13 +341,17 @@ export default function HomePage() {
         <section className="close">
           <div className="wrap">
             <h2>Bring your school into one record.</h2>
+            <p className="close-sub">
+              Tell us about your school and we will come and show you the record, in person or
+              on a call. One message is enough.
+            </p>
             <div className="actions">
-              <Link href="/signup" className="arrow">
-                Begin with your school <Arrow />
-              </Link>
-              <Link className="quiet" href="/login">
-                Sign in
-              </Link>
+              <a href={waLink(ENQUIRY)} className="arrow" target="_blank" rel="noopener">
+                Talk to us on WhatsApp <Arrow />
+              </a>
+              <a className="quiet" href={mailLink("Enquiry about Tutagora", ENQUIRY)}>
+                Email {CONTACT.email}
+              </a>
             </div>
           </div>
         </section>
@@ -372,6 +382,16 @@ export default function HomePage() {
             <li>
               <a className="quiet" href="#advisor">
                 Advisor
+              </a>
+            </li>
+            <li>
+              <a className="quiet" href={waLink(ENQUIRY)} target="_blank" rel="noopener">
+                WhatsApp
+              </a>
+            </li>
+            <li>
+              <a className="quiet" href={mailLink("Enquiry about Tutagora")}>
+                Email
               </a>
             </li>
             <li>
