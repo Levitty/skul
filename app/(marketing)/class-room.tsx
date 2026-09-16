@@ -19,12 +19,12 @@ const Arrow = () => (
 )
 
 const PERIODS = [
-  { id: "period-1", time: "8:00", n: 1, name: "Fees" },
-  { id: "period-2", time: "8:40", n: 2, name: "The register" },
+  { id: "period-1", time: "8:00", n: 1, name: "The record" },
+  { id: "period-2", time: "8:40", n: 2, name: "The learner" },
   { id: "period-3", time: "9:20", n: 3, name: "The lesson" },
-  { id: "period-4", time: "10:00", n: 4, name: "Parents" },
-  { id: "period-5", time: "10:40", n: 5, name: "The staffroom" },
-  { id: "period-6", time: "11:20", n: 6, name: "The office" },
+  { id: "period-4", time: "10:00", n: 4, name: "The teacher" },
+  { id: "period-5", time: "10:40", n: 5, name: "The school" },
+  { id: "period-6", time: "11:20", n: 6, name: "Tomorrow" },
   { id: "homework", time: "12:00", n: 0, name: "Homework" },
 ]
 
@@ -134,66 +134,64 @@ export function ClassRoom() {
   const NAME = (school.trim() || "YOUR SCHOOL").toUpperCase()
 
   // What the teacher writes, period by period. Line 0 is the heading; each
-  // later line arrives with the matching card.
+  // later line arrives with the matching card. Statements, not sums: the
+  // visitor's numbers make the picture theirs, they do not show working.
+  const S = school.trim() || "Your school"
   const lines = (id: string): ReactNode[] => {
     switch (id) {
       case "period-1":
         return [
-          "Period 1 · Fees",
-          <><em>{num(m.learners)}</em> learners × <em>{kes(m.fee)}</em> = <em>{kes(m.invoiced)}</em> invoiced this term</>,
-          <>By week six: <em>{kes(m.collected)}</em> in, <em>{kes(m.outstanding)}</em> still out. About <em>{num(m.unpaidFamilies)}</em> families to chase.</>,
-          <>Or none, if the prompt does it. →</>,
+          "Period 1 · The record",
+          <>{S}. <em>{num(m.learners)}</em> learners. About <em>{num(m.teachers)}</em> teachers. One record.</>,
+          <>Every learner knows her class, her teacher, her invoice, her bus.</>,
+          <>Nothing is copied. Nothing disagrees.</>,
         ]
       case "period-2":
         return [
-          "Period 2 · The register",
-          <><em>{num(m.learners)}</em> learners × 6 periods = <em>{num(m.marksDay)}</em> marks a day</>,
-          <><em>{num(m.marksTerm)}</em> a term. Each one a record, not a tick.</>,
-          <>Kevin absent all day → his mother knows by 8:15.</>,
+          "Period 2 · The learner",
+          <>Every learner, known completely.</>,
+          <>From the first enquiry to the last report card.</>,
+          <><em>{num(m.families)}</em> families, reached on the WhatsApp they already use.</>,
         ]
       case "period-3":
         return [
           "Period 3 · The lesson",
-          <>Scheme of work → lesson → homework → quiz → exam → mark → report card</>,
-          <><em>{num(m.learners * m.subjects)}</em> marks per exam, entered once.</>,
-          <><em>{num(m.learners)}</em> report cards, printed or sent. No re-typing.</>,
+          <>What is taught becomes what is known.</>,
+          <>Scheme of work → lesson → mark → report card. Entered once.</>,
+          <><em>{num(m.learners)}</em> report cards, true the moment the last mark is in.</>,
         ]
       case "period-4":
         return [
-          "Period 4 · Parents",
-          <>About <em>{num(m.families)}</em> families. All on WhatsApp already.</>,
-          <>No app. No password. A link that expires.</>,
-          <>Monday, 07:00: the head teacher&rsquo;s briefing, before the first bell.</>,
+          "Period 4 · The teacher",
+          <>The people who make the school.</>,
+          <>Who teaches what, and the weight they carry.</>,
+          <>Strain seen before it is felt.</>,
         ]
       case "period-5":
         return [
-          "Period 5 · The staffroom",
-          <>About <em>{num(m.teachers)}</em> teachers, <em>{num(m.periodsWeek)}</em> periods a week between them.</>,
-          <>Who teaches what. Schemes in? Marks entered? One screen.</>,
-          <>Burnout risk, scored before the letter is written.</>,
+          "Period 5 · The school",
+          <>The school, thinking about itself.</>,
+          <>Runway. Margin by grade. Risk. Drift.</>,
+          <>At today&rsquo;s collection rate, <em>{m.runway.toFixed(1)}</em> months of costs are covered. Known in week two, not at year end.</>,
         ]
       case "period-6":
         return [
-          "Period 6 · The office",
-          <>Costs about <em>{kes(m.costs)}</em> a month. Collected so far covers <em>{m.runway.toFixed(1)}</em> months.</>,
-          <>Per learner, per month: <em>{kes(m.feePerMonth)}</em> in, <em>{kes(m.costPerLearner)}</em> out.</>,
-          m.margin >= 0 ? (
-            <>Margin <em>{kes(m.margin)}</em> a head. It works.</>
-          ) : (
-            <>Margin <em>−{kes(Math.abs(m.margin))}</em> a head. Something has to move.</>
-          ),
+          "Period 6 · Tomorrow",
+          <>A school that knows itself.</>,
+          <>Every decision, made on the record.</>,
+          <>The head teacher, no longer the integration layer.</>,
         ]
       case "homework":
         return [
           "Homework",
-          <>Bring the real numbers.</>,
-          <>Set-up: one afternoon. Classes, fees, and the spreadsheet you already have.</>,
+          <>Bring {S} into one record.</>,
+          <>Set-up takes an afternoon.</>,
         ]
       default:
         return [
           "Before the bell",
           <>Welcome to class{school.trim() ? `, ${school.trim()}` : ""}.</>,
-          <>Fill in the register and take your seat.</>,
+          <>This lesson is about your school.</>,
         ]
     }
   }
@@ -283,8 +281,8 @@ export function ClassRoom() {
           <div className="label">Before the bell</div>
           <h1>Welcome to class{school.trim() ? `, ${school.trim()}` : ""}.</h1>
           <p className="lede">
-            Six periods on how Tutagora runs a school, worked on the board with your numbers,
-            not ours. Four things before we begin, and one if you know it.
+            Six periods on the system that runs a school as one record. Tell us about yours,
+            and the lesson will be about it.
           </p>
           <form className="door-form" onSubmit={(e) => e.preventDefault()}>
             <label>
@@ -320,35 +318,78 @@ export function ClassRoom() {
           </div>
 
           <div className="lesson-steps">
-            {/* Period 1 · Fees */}
+            {/* Period 1 · The record */}
             <Slot period="period-1" step={1} id="period-1">
-              <div className="label num">8:00 · Period 1 · Fees</div>
-              <h2>Every shilling, reconciled.</h2>
+              <div className="label num">8:00 · Period 1 · The record</div>
+              <h2>A school is made of records.</h2>
               <p>
-                The fee structure is set once per grade and term. Invoices go out to every
-                learner in one action, and each parent gets an M-Pesa prompt on their phone for
-                the exact amount. The payment is matched to its invoice the moment it lands.
+                A learner. A class. A teacher. An invoice. A mark. A bus route. Today they live
+                in registers, receipt books, spreadsheets and memory, and they never quite agree.
+                Tutagora holds them as one record, in which each knows the others.
               </p>
             </Slot>
             <Slot period="period-1" step={2}>
-              <h3>What the bursar sees</h3>
+              <h3>Why one record</h3>
               <p>
-                Not a bank statement to reconcile against a receipt book. A ledger that is
-                already balanced, and a list of exactly who is left, with a WhatsApp reminder
-                one tap away.
+                The questions that run a school cross every line. Which grade pays for itself.
+                Which teacher is quietly overloaded. Which family has not paid and still has a
+                child on the bus. No single ledger can answer them. One record can.
               </p>
               <ul className="index">
-                <li>Fee structures per grade, term and optional item</li>
-                <li>Invoices for a class or the whole school</li>
-                <li>M-Pesa STK push, Paystack for cards</li>
-                <li>Automatic matching of payment to invoice</li>
-                <li>Receipts, statements, credit notes, bursaries</li>
-                <li>Arrears list with one-tap reminders</li>
-                <li>Term transition that carries balances forward</li>
+                <li>Learners, staff, learning, money and time in one model</li>
+                <li>More than a hundred related tables per school</li>
+                <li>Every row locked to its school</li>
+                <li>One truth, read by every system</li>
               </ul>
             </Slot>
             <Slot period="period-1" step={3}>
-              <h3>What the parent sees</h3>
+              <h3>One learner, in the record</h3>
+              <div className="staff" aria-label="One learner's record, example">
+                <div className="hd"><span className="label">Amani Wanjiru</span><span className="label num">Grade 6 East · STU-0416</span></div>
+                <dl>
+                  <div><dt>Belongs to</dt><dd>Grade 6 East</dd></div>
+                  <div><dt>Taught by</dt><dd>Ms Adhiambo</dd></div>
+                  <div><dt>Invoiced</dt><dd>Term 2, KES 42,500</dd></div>
+                  <div><dt>Settled by</dt><dd>M-Pesa, 14 Sep</dd></div>
+                  <div><dt>Rides</dt><dd>Route 3, stop 7</dd></div>
+                  <div><dt>Seen by</dt><dd>Mama Amani, on WhatsApp</dd></div>
+                </dl>
+              </div>
+            </Slot>
+
+            {/* Period 2 · The learner */}
+            <Slot period="period-2" step={1} id="period-2">
+              <div className="label num">8:40 · Period 2 · The learner · Tutagora SMIS</div>
+              <h2>Every learner, known completely.</h2>
+              <p>
+                An enquiry becomes an application, an application a learner, a learner an
+                alumnus. Along the way: fees, transport, the clinic, the library, discipline,
+                achievement. All of it on one record, so nothing is asked twice and nothing is
+                lost.
+              </p>
+            </Slot>
+            <Slot period="period-2" step={2}>
+              <h3>Fees, settled where the money already is</h3>
+              <p>
+                Invoices go out once per term. Each parent receives an M-Pesa prompt for the
+                exact amount, and the payment is matched to its invoice as it lands. The bursar
+                opens a ledger that is already balanced and sees exactly who remains.
+              </p>
+              <ul className="index">
+                <li>Fee structures per grade, term and optional item</li>
+                <li>Invoices for a class or the whole school in one action</li>
+                <li>M-Pesa STK push, Paystack for cards</li>
+                <li>Every payment matched to its invoice</li>
+                <li>Receipts, statements, credit notes, bursaries</li>
+                <li>Attendance by period, transport, clinic, library, discipline</li>
+              </ul>
+            </Slot>
+            <Slot period="period-2" step={3}>
+              <h3>Parents, reached without an app</h3>
+              <p>
+                A link in WhatsApp, theirs alone, that expires on its own. Fees, attendance and
+                results for each child. No password to reset. No app to abandon.
+              </p>
               <div className="phone" aria-label="M-Pesa payment prompt with your fee">
                 <div className="screen">
                   <div className="status num"><span>07:42</span><span>Safaricom</span></div>
@@ -366,89 +407,30 @@ export function ClassRoom() {
               </div>
             </Slot>
 
-            {/* Period 2 · The register */}
-            <Slot period="period-2" step={1} id="period-2">
-              <div className="label num">8:40 · Period 2 · The register</div>
-              <h2>Attendance from a phone, period by period.</h2>
-              <p>
-                A teacher takes the register on a phone at the start of each period, in under a
-                minute. An absence becomes a record rather than a tick in a book, so it can be
-                counted, compared and acted on.
-              </p>
-            </Slot>
-            <Slot period="period-2" step={2}>
-              <h3>Because it is a record</h3>
-              <p>
-                It feeds transport, the clinic and discipline, so a learner on the bus, in the
-                sick bay or on suspension is never marked absent by mistake. A pattern is
-                flagged by Friday. Term attendance lands on the report card without anyone
-                adding it up.
-              </p>
-              <ul className="index">
-                <li>Attendance by period, from any phone</li>
-                <li>Absence and late marks with reasons</li>
-                <li>Patterns flagged: three absences in a week</li>
-                <li>Leaves, suspensions and transfers reflected</li>
-                <li>Bus assignments and clinic visits linked</li>
-              </ul>
-            </Slot>
-            <Slot period="period-2" step={3}>
-              <h3>What the guardian gets</h3>
-              <p>A message the same morning. Not a letter at the end of term.</p>
-              <div className="register" aria-label="Attendance register, example">
-                <div className="hd">
-                  <span className="label">Grade 6 East · Tuesday</span>
-                  <span className="label num">27 of 29</span>
-                </div>
-                <table>
-                  <thead>
-                    <tr><th>Learner</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Amani Wanjiru", "on on on on on on"],
-                      ["Brian Otieno", "late on on on on on"],
-                      ["Kevin Mwangi", "off off off off off off"],
-                      ["Samuel Kiprop", "on on on off off off"],
-                    ].map(([n, marks]) => (
-                      <tr key={n}>
-                        <td>{n}</td>
-                        {marks.split(" ").map((x, i) => (
-                          <td key={i}><span className={`dot ${x === "on" ? "" : x}`} /></td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Slot>
-
             {/* Period 3 · The lesson */}
             <Slot period="period-3" step={1} id="period-3">
-              <div className="label num">9:20 · Period 3 · The lesson</div>
-              <h2>From the scheme of work to the report card, unbroken.</h2>
+              <div className="label num">9:20 · Period 3 · The lesson · Tutagora Learning</div>
+              <h2>What is taught becomes what is known.</h2>
               <p>
-                The term begins with a scheme of work, written week by week and approved by the
-                head of department. Lesson plans hang off it. Homework, assignments and quizzes
-                are set against it and come back marked.
+                The term begins with a scheme of work, approved by the head of department.
+                Lessons hang off it. Homework, quizzes and exams are set against it and come back
+                marked. From the plan to the report card, one unbroken line.
               </p>
             </Slot>
             <Slot period="period-3" step={2}>
               <h3>Entered once</h3>
               <p>
-                Exams are scheduled as sessions. Marks go into the gradebook once, and the
-                report card, the class ranking and the progress view are already true. Study
-                materials sit alongside, so a learner who missed Tuesday can find what was
-                taught.
+                A mark goes into the gradebook once. The report card, the class ranking and the
+                progress view are already true. Attendance, taken by phone period by period,
+                lands on the same card without anyone adding it up.
               </p>
               <ul className="index">
                 <li>Schemes of work, week by week, with approval</li>
-                <li>Lesson plans linked to the scheme</li>
-                <li>Study materials: documents, video, links</li>
-                <li>Homework and assignments with submissions</li>
-                <li>Quizzes with automatic marking</li>
-                <li>Exam sessions, grade scales, results</li>
-                <li>Progress per learner, class and subject</li>
+                <li>Lesson plans and study materials</li>
+                <li>Homework, assignments, quizzes with automatic marking</li>
+                <li>Exam sessions and grade scales</li>
+                <li>Report cards printed in bulk or sent to a phone</li>
+                <li>Progress per learner, per class, per subject</li>
               </ul>
             </Slot>
             <Slot period="period-3" step={3}>
@@ -484,82 +466,34 @@ export function ClassRoom() {
               </div>
             </Slot>
 
-            {/* Period 4 · Parents */}
+            {/* Period 4 · The teacher */}
             <Slot period="period-4" step={1} id="period-4">
-              <div className="label num">10:00 · Period 4 · Parents</div>
-              <h2>Nothing to install. It&rsquo;s on WhatsApp.</h2>
+              <div className="label num">10:00 · Period 4 · The teacher · Tutagora HR</div>
+              <h2>The people who make the school.</h2>
               <p>
-                A parent taps a link in WhatsApp and sees fees, attendance and results for each
-                of their children. The link is theirs alone and it expires on its own. No one at{" "}
-                {name} resets a password, ever.
+                A school is only as good as the people standing in front of the class. Tutagora
+                knows who teaches what, how many periods that is, whether the scheme is in and
+                approved, and when marks were last entered.
               </p>
             </Slot>
             <Slot period="period-4" step={2}>
-              <h3>The school&rsquo;s voice, the other way</h3>
+              <h3>Strain, seen before it is felt</h3>
               <p>
-                Fee reminders, notices, event invitations. Admissions arrive through a public
-                application page for the school, and a watchdog makes sure none waits more than
-                48 hours.
-              </p>
-              <ul className="index">
-                <li>Parent view of fees, attendance and results per child</li>
-                <li>Magic links on WhatsApp, no password</li>
-                <li>Fee reminders and receipts to the phone</li>
-                <li>Message campaigns and templates</li>
-                <li>Noticeboard and events</li>
-                <li>Online application page per school</li>
-                <li>Admissions watchdog</li>
-              </ul>
-            </Slot>
-            <Slot period="period-4" step={3}>
-              <h3>Monday, 07:00</h3>
-              <div className="phone" aria-label="WhatsApp briefing with your numbers">
-                <div className="screen">
-                  <div className="status num"><span>07:00</span><span>Monday</span></div>
-                  <div className="wa">
-                    <div className="hdr"><span className="av">T</span><span>Tutagora</span></div>
-                    <div className="bubble">
-                      <p>Good morning. {school.trim() || "Your school"} this week.</p>
-                      <p className="num">Fees: {Math.round(100 - m.unpaid)}% of the term collected. {kes(m.outstanding)} outstanding across about {num(m.unpaidFamilies)} families.</p>
-                      <p className="num">Attendance last week 94%. Grade 8 dipped to 88% on Thursday.</p>
-                      <p className="num">3 applications waiting more than 48 hours. 2 leave requests need a decision.</p>
-                      <time dateTime="07:00">07:00</time>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Slot>
-
-            {/* Period 5 · The staffroom */}
-            <Slot period="period-5" step={1} id="period-5">
-              <div className="label num">10:40 · Period 5 · The staffroom</div>
-              <h2>Every teacher, and the weight they carry.</h2>
-              <p>
-                Tutagora knows who teaches which class and subject, how many periods that is
-                from the timetable, whether the scheme of work is in and approved, and when marks
-                were last entered.
-              </p>
-            </Slot>
-            <Slot period="period-5" step={2}>
-              <h3>Seen before it is felt</h3>
-              <p>
-                Teachers are ranked by their classes&rsquo; results against the same exams. And
-                the quiet signs are watched: marks entered later each week, leave requests
-                creeping up, logins falling away. A burnout risk score, so the head teacher has
-                the conversation before the resignation letter.
+                Marks entered later each week. Leave requests creeping up. Logins falling away.
+                A burnout risk score per teacher, so the head teacher has the conversation
+                before the resignation letter.
               </p>
               <ul className="index">
                 <li>Staff records, roles and permissions</li>
-                <li>Class and subject assignments</li>
-                <li>Teaching load from the timetable</li>
+                <li>Class and subject assignments, load from the timetable</li>
                 <li>Scheme of work approvals per department</li>
                 <li>Marks-entry timeliness per teacher</li>
-                <li>Performance by class results</li>
+                <li>Performance by class results, against the same exams</li>
                 <li>Burnout risk score</li>
                 <li>Branches, with staff across them</li>
               </ul>
             </Slot>
-            <Slot period="period-5" step={3}>
+            <Slot period="period-4" step={3}>
               <h3>One teacher&rsquo;s week</h3>
               <div className="staff" aria-label="A teacher's record, example">
                 <div className="hd"><span className="label">Ms Adhiambo · English</span><span className="label num">Grade 6 East · 26 periods</span></div>
@@ -573,63 +507,84 @@ export function ClassRoom() {
               </div>
             </Slot>
 
-            {/* Period 6 · The office */}
-            <Slot period="period-6" step={1} id="period-6">
-              <div className="label num">11:20 · Period 6 · The office</div>
-              <h2>How many months of cash the school has.</h2>
+            {/* Period 5 · The school */}
+            <Slot period="period-5" step={1} id="period-5">
+              <div className="label num">10:40 · Period 5 · The school · Tutagora Advisor</div>
+              <h2>The school, thinking about itself.</h2>
               <p>
-                The lesson most systems never teach, because it needs every other record at
-                once: what was invoiced, what was actually collected, what it costs to run the
-                place, and which classes carry the rest.
+                Because every record knows every other, the Advisor answers what a dashboard
+                cannot. How many months of cash the school has. Which grade pays for itself.
+                Which teacher is at risk. What does not add up.
               </p>
             </Slot>
-            <Slot period="period-6" step={2}>
+            <Slot period="period-5" step={2}>
               <h3>Proper books, then read</h3>
               <p>
                 A general ledger with a chart of accounts, budgets, expenses with approvals,
-                suppliers and bank reconciliation. From those, runway, profitability by grade,
-                and what does not add up: fuel logged against a bus that did not run, stock that
-                left the store without a requisition.
+                suppliers and bank reconciliation. From those: runway from real collections,
+                profitability by grade, and an auditor that never sleeps.
               </p>
               <ul className="index">
-                <li>General ledger and chart of accounts</li>
-                <li>Journal entries, budgets, other income</li>
-                <li>Expenses with categories and approvals</li>
-                <li>Suppliers, accounts payable, bank reconciliation</li>
-                <li>Cash runway from real collections</li>
-                <li>Profitability per grade and per campus</li>
-                <li>Invisible auditor: anomalies flagged</li>
-                <li>Ask a question in plain language, on WhatsApp</li>
+                <li>General ledger, journals, budgets, other income</li>
+                <li>Expenses with approvals, suppliers, accounts payable</li>
+                <li>Bank accounts and reconciliation</li>
+                <li>Cash runway and profitability per grade</li>
+                <li>Anomalies flagged: fuel, stock, attendance against the fee roll</li>
+                <li>Questions answered in plain language, on WhatsApp</li>
               </ul>
             </Slot>
-            <Slot period="period-6" step={3}>
-              <h3>Your estimate</h3>
-              <p>From the numbers at the door. The real figure comes from the record.</p>
-              <div className="runway" aria-label="Runway estimate">
-                <div className="big num">
-                  {m.runway.toFixed(1)}
-                  <small>months of costs covered by this term&rsquo;s collections</small>
+            <Slot period="period-5" step={3}>
+              <h3>Monday, 07:00</h3>
+              <p>The week&rsquo;s numbers, before the first bell. Written from the record.</p>
+              <div className="phone" aria-label="WhatsApp briefing with your numbers">
+                <div className="screen">
+                  <div className="status num"><span>07:00</span><span>Monday</span></div>
+                  <div className="wa">
+                    <div className="hdr"><span className="av">T</span><span>Tutagora</span></div>
+                    <div className="bubble">
+                      <p>Good morning. {S} this week.</p>
+                      <p className="num">Fees: {Math.round(100 - m.unpaid)}% of the term collected. {kes(m.outstanding)} outstanding across about {num(m.unpaidFamilies)} families.</p>
+                      <p className="num">Runway at this rate: {m.runway.toFixed(1)} months. Grade 7 below cost for a second term.</p>
+                      <p className="num">Attendance 94%. 3 applications waiting more than 48 hours. 1 teacher at rising risk.</p>
+                      <time dateTime="07:00">07:00</time>
+                    </div>
+                  </div>
                 </div>
-                <svg viewBox="0 0 400 120" role="img" aria-label="Collections against costs">
-                  <line x1="0" y1="119.5" x2="400" y2="119.5" stroke="rgba(242,242,240,0.2)" />
-                  <polyline fill="none" stroke="#f2f2f0" strokeWidth="1.5" strokeLinejoin="round" points="0,110 40,100 80,88 120,84 160,66 200,60 240,52 280,44 320,38 360,30 400,22" />
-                  <circle cx="400" cy="22" r="4" fill="#f4a21d" />
-                </svg>
-                <div className="legend num"><span>Term start</span><span>Week six</span></div>
               </div>
+            </Slot>
+
+            {/* Period 6 · Tomorrow */}
+            <Slot period="period-6" step={1} id="period-6">
+              <div className="label num">11:20 · Period 6 · Tomorrow</div>
+              <h2>A school that knows itself.</h2>
+              <p>
+                Every decision made on the record. The head teacher no longer the integration
+                layer between a fees system, a gradebook and a messaging app. Parents who trust
+                the number on their phone. Teachers whose work is seen.
+              </p>
+            </Slot>
+            <Slot period="period-6" step={3}>
+              <h3>Where this goes</h3>
+              <p>
+                It begins in the classroom, where the main event happens: a teacher and a
+                learner. The record exists to serve them. What comes next is a learning guide
+                that knows what each child has mastered and what they have not, so no one is
+                left behind and no one is held back.
+              </p>
             </Slot>
 
             {/* Homework */}
             <Slot period="homework" step={2} id="homework">
               <div className="label num">12:00 · After class</div>
-              <h2>Homework: bring the real numbers.</h2>
+              <h2>Homework: bring {S === "Your school" ? "your school" : S} into one record.</h2>
               <p>
-                Everything on the board was worked from the figures you typed at the door. The
-                record does it from every learner, every invoice and every payment, every day.
+                Set-up takes an afternoon: classes, the fee structure, and a bulk import of
+                learners from the spreadsheet you already have. From then on, the record does
+                the work.
               </p>
               <div className="actions">
                 <Link href="/signup" className="arrow">
-                  Start with {name === "your school" ? "your school" : name} <Arrow />
+                  Begin <Arrow />
                 </Link>
                 <Link className="quiet" href="/">Back to the front page</Link>
               </div>
