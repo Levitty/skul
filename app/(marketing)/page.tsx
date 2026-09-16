@@ -11,6 +11,82 @@ const Arrow = () => (
   </svg>
 )
 
+// The three systems, and what each one actually holds. Every item here is a
+// record the product keeps today; nothing is aspirational.
+const SYSTEMS = [
+  {
+    id: "smis",
+    name: "Tutagora SMIS",
+    title: "Every learner, from application to alumni.",
+    lede:
+      "The school information system. One record per learner that follows them from the first enquiry to the day they leave, with everything the office needs attached to it.",
+    holds: [
+      "Enquiries and applications",
+      "Admission rules",
+      "Learner records and documents",
+      "Guardians and emergency contacts",
+      "Enrolment, promotion, transfer",
+      "Attendance by period",
+      "Fee structures and invoices",
+      "M-Pesa and card payments",
+      "Statements and receipts",
+      "Transport routes and buses",
+      "Clinic visits and health profiles",
+      "Library loans",
+      "Discipline and merit",
+      "Leaves and suspensions",
+      "Uniform and store sales",
+      "WhatsApp to parents",
+    ],
+  },
+  {
+    id: "hr",
+    name: "Tutagora HR",
+    title: "Every teacher, and the load they carry.",
+    lede:
+      "Staff records, roles and the work itself. Who teaches what, how many periods, whether the schemes are in, when marks were last entered, and who is quietly running on empty.",
+    holds: [
+      "Staff records",
+      "Roles and permissions",
+      "Class and subject assignments",
+      "Teaching load from the timetable",
+      "Scheme of work approvals",
+      "Marks-entry timeliness",
+      "Teacher performance by class results",
+      "Burnout risk score",
+      "Branches and multi-school access",
+    ],
+  },
+  {
+    id: "learning",
+    name: "Tutagora Learning",
+    title: "What is taught, and what was learned.",
+    lede:
+      "From the term's scheme of work down to a single mark. Lessons, homework, assignments and quizzes on one side; exams, gradebook and report cards on the other. Entered once.",
+    holds: [
+      "Schemes of work, week by week",
+      "Lesson plans",
+      "Study materials",
+      "Homework and submissions",
+      "Assignments",
+      "Quizzes with auto-marking",
+      "Exam sessions and results",
+      "Grade scales",
+      "Gradebook",
+      "Report cards, printed or sent",
+      "Student progress by class",
+    ],
+  },
+]
+
+const ONTOLOGY = [
+  { group: "Learners", items: ["Learner", "Guardian", "Application", "Enrolment", "Attendance", "Leave", "Transfer", "Health profile", "Library loan", "Incident"] },
+  { group: "Staff", items: ["Employee", "Role", "Permission", "Class assignment", "Scheme approval", "Staff metrics"] },
+  { group: "Learning", items: ["Subject", "Scheme of work", "Lesson plan", "Assignment", "Quiz", "Exam", "Result", "Grade scale", "Report card"] },
+  { group: "Money", items: ["Fee structure", "Invoice", "Payment", "Receipt", "Credit note", "Expense", "Supplier", "Budget", "Bank account", "Journal entry", "General ledger"] },
+  { group: "School", items: ["School", "Branch", "Academic year", "Term", "Class", "Section", "Period", "Timetable", "Route", "Vehicle", "Event", "Announcement"] },
+]
+
 export default function HomePage() {
   return (
     <>
@@ -23,6 +99,11 @@ export default function HomePage() {
             </Link>
             <nav aria-label="Primary">
               <ul>
+                <li>
+                  <a className="quiet" href="#systems">
+                    Systems
+                  </a>
+                </li>
                 <li>
                   <a className="quiet" href="#vision">
                     Vision
@@ -55,199 +136,128 @@ export default function HomePage() {
           </div>
         </section>
 
-        <div className="strip wrap" aria-label="What Tutagora covers">
-          <ul className="label">
-            <li>Admissions</li>
-            <li>Fees</li>
-            <li>Attendance</li>
-            <li>Exams</li>
-            <li>Report cards</li>
-            <li>Timetable</li>
-            <li>Transport</li>
-            <li>WhatsApp</li>
-          </ul>
-        </div>
-
-        <section className="panel" id="fees">
-          <div className="wrap">
-            <div className="text">
-              <h2>Paid on the phone. Matched before the bursar sits down.</h2>
-              <p>
-                A parent gets an M-Pesa prompt, enters a PIN, and the payment is matched to the
-                invoice the moment it lands. Card payments run through Paystack the same way.
-              </p>
-            </div>
-            <div className="art">
-              <div className="phone" aria-label="M-Pesa payment prompt, example">
-                <div className="screen">
-                  <div className="status num">
-                    <span>07:42</span>
-                    <span>Safaricom</span>
-                  </div>
-                  <div className="stk-bg">
-                    <div className="stk">
-                      <div className="t">M-PESA</div>
-                      <div className="num">
-                        Pay Ksh42,500.00 to TUTAGORA*ST MARYS ACADEMY for account STU-0416?
-                      </div>
-                      <div className="pin" aria-label="PIN entry">
-                        ••••
-                      </div>
-                      <div className="btns">
-                        <span className="quiet">Cancel</span>
-                        <span>Send</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <section className="thesis wrap" id="systems">
+          <div className="label">Not a dashboard</div>
+          <h2>
+            A school is learners, teachers, lessons and money, all connected. Tutagora runs the
+            whole unit as one record.
+          </h2>
+          <p>
+            Three systems share that record. A fourth layer reads it and tells you what to do.
+          </p>
         </section>
 
-        <section className="panel" id="classroom">
+        {SYSTEMS.map((s, i) => (
+          <section className="panel sys" id={s.id} key={s.id}>
+            <div className="wrap">
+              <div className="text">
+                <div className="label num">
+                  {String(i + 1).padStart(2, "0")} &nbsp;·&nbsp; {s.name}
+                </div>
+                <h2>{s.title}</h2>
+                <p>{s.lede}</p>
+              </div>
+              <div className="art">
+                <ul className="index" aria-label={`What ${s.name} holds`}>
+                  {s.holds.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        ))}
+
+        <section className="panel advisor" id="advisor">
           <div className="wrap">
             <div className="text">
-              <h2>Attendance from a phone. Marks entered once.</h2>
+              <div className="label">04 &nbsp;·&nbsp; Tutagora Advisor</div>
+              <h2>It doesn&rsquo;t show you the school. It tells you.</h2>
               <p>
-                Teachers take the register period by period. Marks go in once and flow straight
-                into report cards the school prints or sends. No re-typing.
+                Because every record is related to every other, the Advisor can compute what a
+                dashboard cannot. It runs on a schedule, sends the answer to WhatsApp, and answers
+                questions in plain language.
               </p>
             </div>
             <div className="art wide">
-              <div className="register" aria-label="Attendance register, example">
-                <div className="hd">
-                  <span className="label">Grade 6 East · Tuesday 15 Sep</span>
-                  <span className="label num">Present 27 of 29</span>
-                </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Learner</th>
-                      <th>P1</th>
-                      <th>P2</th>
-                      <th>P3</th>
-                      <th>P4</th>
-                      <th>P5</th>
-                      <th>P6</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Amani Wanjiru", "on on on on on on"],
-                      ["Brian Otieno", "late on on on on on"],
-                      ["Faith Chebet", "on on on on on on"],
-                      ["Kevin Mwangi", "off off off off off off"],
-                      ["Mercy Achieng", "on on on on on on"],
-                      ["Samuel Kiprop", "on on on off off off"],
-                      ["Zawadi Njeri", "on on on on on on"],
-                    ].map(([name, marks]) => (
-                      <tr key={name}>
-                        <td>{name}</td>
-                        {marks.split(" ").map((m, i) => (
-                          <td key={i}>
-                            <span className={`dot ${m === "on" ? "" : m}`} />
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <ul className="insights">
+                <li>
+                  <span className="k num">4.7</span>
+                  <span>
+                    <strong>Cash runway, in months.</strong> Income actually collected against
+                    expenses actually paid, projected forward.
+                  </span>
+                </li>
+                <li>
+                  <span className="k num">−12%</span>
+                  <span>
+                    <strong>Grade 7 does not pay for itself.</strong> Fee income per class
+                    against the direct cost of teaching it.
+                  </span>
+                </li>
+                <li>
+                  <span className="k num">2</span>
+                  <span>
+                    <strong>Teachers at burnout risk.</strong> Late marks, rising leave,
+                    falling logins, scored before anyone resigns.
+                  </span>
+                </li>
+                <li>
+                  <span className="k num">3</span>
+                  <span>
+                    <strong>Things that do not add up.</strong> Fuel logged against a bus that
+                    did not run. Stock out without a requisition. A register fuller than the fee
+                    roll.
+                  </span>
+                </li>
+                <li>
+                  <span className="k num">07:00</span>
+                  <span>
+                    <strong>Monday briefing on WhatsApp.</strong> Fees, attendance, stuck
+                    applications and pending decisions, before the first bell.
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
 
-        <section className="panel" id="parents">
-          <div className="wrap">
-            <div className="text">
-              <h2>Nothing to install. It&rsquo;s on WhatsApp.</h2>
-              <p>
-                Parents open a link in WhatsApp and see fees, attendance and results for each
-                child. No password. The link expires on its own.
-              </p>
-              <p>
-                Every Monday at seven, the head teacher gets the week&rsquo;s numbers the same way.
-              </p>
-            </div>
-            <div className="art">
-              <div className="phone" aria-label="WhatsApp briefing, example">
-                <div className="screen">
-                  <div className="status num">
-                    <span>07:00</span>
-                    <span>Monday</span>
-                  </div>
-                  <div className="wa">
-                    <div className="hdr">
-                      <span className="av">T</span>
-                      <span>Tutagora</span>
-                    </div>
-                    <div className="bubble">
-                      <p>Good morning. St Mary&rsquo;s Academy this week.</p>
-                      <p className="num">
-                        Fees: 71% of Term 2 collected. KES 1,412,500 outstanding across 38
-                        families, 9 with no payment yet.
-                      </p>
-                      <p className="num">Attendance last week 94%. Grade 8 dipped to 88% on Thursday.</p>
-                      <p className="num">
-                        3 applications waiting more than 48 hours. 2 leave requests need a decision.
-                      </p>
-                      <time dateTime="07:00">07:00</time>
-                    </div>
-                  </div>
-                </div>
+        <section className="onto wrap" id="ontology">
+          <div className="label">One ontology</div>
+          <h2>Every record knows every other.</h2>
+          <p>
+            A learner belongs to a class, which has a teacher, who teaches a subject, which is
+            examined in a term, which is invoiced, which is paid on a phone. More than a hundred
+            related tables in one schema, per school, with every row locked to that school.
+          </p>
+          <div className="onto-grid">
+            {ONTOLOGY.map((g) => (
+              <div key={g.group}>
+                <h3 className="label">{g.group}</h3>
+                <ul>
+                  {g.items.map((it) => (
+                    <li key={it}>{it}</li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        <section className="panel" id="office">
-          <div className="wrap">
-            <div className="text">
-              <h2>How many months of cash the school has.</h2>
-              <p>
-                Tutagora forecasts runway from what has actually been collected, shows which
-                classes pay for themselves, and flags what does not add up: fuel logged against a
-                bus that did not run, stock that left the store without a requisition.
-              </p>
-            </div>
-            <div className="art">
-              <div className="runway" aria-label="Cash runway forecast, example">
-                <div className="big num">
-                  4.7<small>months of cash</small>
-                </div>
-                <svg viewBox="0 0 400 120" role="img" aria-label="Runway across the term">
-                  <line x1="0" y1="119.5" x2="400" y2="119.5" stroke="rgba(242,242,240,0.2)" />
-                  <polyline
-                    fill="none"
-                    stroke="#f2f2f0"
-                    strokeWidth="1.5"
-                    strokeLinejoin="round"
-                    points="0,96 40,90 80,74 120,70 160,48 200,44 240,40 280,30 320,26 360,20 400,12"
-                  />
-                  <circle cx="400" cy="12" r="3" fill="#f2f2f0" />
-                </svg>
-                <div className="legend num">
-                  <span>Term start</span>
-                  <span>Today</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="vision" id="vision">
-          <div className="wrap">
-            <div className="label">Vision</div>
-            <p>
-              A school is run on paper, memory and goodwill. The register is a book. The fees are
-              a ledger, a receipt book and a bank statement that never quite agree.
-            </p>
-            <p>
-              Tutagora puts all of it in one place that adds up, and reaches parents where they
-              already are. Not a dashboard to admire. A record you can trust.
-            </p>
-          </div>
+        <section className="vision wrap" id="vision">
+          <div className="label">Vision</div>
+          <p>
+            Schools have been sold software one piece at a time. A fees system. A gradebook. A
+            messaging app. The head teacher is left as the integration layer, carrying the whole
+            picture in their head.
+          </p>
+          <p>
+            Tutagora is built on a single model of the school. Learners, staff, learning and
+            money are one record, so the system can do more than display. It can reason about
+            the school as a unit: what it costs, what it earns, who is struggling, what is
+            stuck.
+          </p>
+          <p>Not a dashboard to admire. A school that knows itself.</p>
         </section>
 
         <section className="close">
@@ -270,23 +280,28 @@ export default function HomePage() {
           <span className="wordmark">Tutagora</span>
           <ul>
             <li>
-              <a className="quiet" href="#fees">
-                Product
+              <a className="quiet" href="#smis">
+                SMIS
               </a>
             </li>
             <li>
-              <a className="quiet" href="#vision">
-                Vision
+              <a className="quiet" href="#hr">
+                HR
+              </a>
+            </li>
+            <li>
+              <a className="quiet" href="#learning">
+                Learning
+              </a>
+            </li>
+            <li>
+              <a className="quiet" href="#advisor">
+                Advisor
               </a>
             </li>
             <li>
               <Link className="quiet" href="/login">
                 Sign in
-              </Link>
-            </li>
-            <li>
-              <Link className="quiet" href="/signup">
-                Create an account
               </Link>
             </li>
           </ul>
