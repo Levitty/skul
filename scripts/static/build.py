@@ -39,7 +39,7 @@ def links(html):
     html = re.sub(r'<div class="mk[^"]*">', '<div class="mk">', html, 1)
     html = html.replace('href="/class"', 'href="/class/"')
     if app:
-        html = html.replace('href="/login"', f'href="{app}/login"').replace('href="/signup"', f'href="{app}/signup"')
+        html = html.replace('href="/login"', f'href="{app}/"').replace('href="/signup"', f'href="{app}/"')
     else:
         html = html.replace('href="/login"', 'href="#"').replace('href="/signup"', 'href="#"')
     if whatsapp:
