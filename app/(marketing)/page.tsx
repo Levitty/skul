@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Board } from "./board"
-import { SketchSmis, SketchHr, SketchLearning, SketchClassroom } from "./sketches"
+import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mark, BRAND } from "./logo"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
@@ -145,6 +145,10 @@ export default function HomePage() {
               </ul>
             </nav>
           </header>
+
+          <div className="hero-mark" aria-hidden="true">
+            <SketchBalloon />
+          </div>
 
           <h1>
             {SLOGAN.split(" ").map((word, i) => (

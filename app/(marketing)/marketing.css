@@ -931,3 +931,41 @@
 .mk .card:hover .arrow svg {
   transform: translateX(0.25em);
 }
+
+/* ---------- hero mark ---------- */
+/* The balloon in chalk, upper right, drawing itself after the headline lands,
+   then rising very slowly. Delete this block and the .hero-mark element to
+   return the hero to type alone. */
+
+.mk .hero-mark {
+  position: absolute;
+  top: clamp(6.5rem, 14vh, 9rem);
+  right: var(--gutter);
+  width: clamp(120px, 15vw, 220px);
+  animation: lift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.mk .hero-mark .sketch svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes lift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-14px); }
+}
+
+@media (max-width: 720px) {
+  .mk .hero-mark {
+    width: 96px;
+    top: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk .hero-mark {
+    animation: none;
+  }
+}
