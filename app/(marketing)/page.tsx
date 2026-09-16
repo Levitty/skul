@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mark, BRAND } from "./logo"
+import { RecordMap } from "./record-map"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -106,13 +107,6 @@ const SYSTEMS = [
   },
 ]
 
-const ONTOLOGY = [
-  { group: "Learners", items: ["Learner", "Guardian", "Application", "Enrolment", "Attendance", "Leave", "Transfer", "Health profile", "Library loan", "Incident"] },
-  { group: "Staff", items: ["Employee", "Role", "Permission", "Class assignment", "Scheme approval", "Staff metrics"] },
-  { group: "Learning", items: ["Subject", "Scheme of work", "Lesson plan", "Assignment", "Quiz", "Exam", "Result", "Grade scale", "Report card"] },
-  { group: "Money", items: ["Fee structure", "Invoice", "Payment", "Receipt", "Credit note", "Expense", "Supplier", "Budget", "Bank account", "Journal entry", "General ledger"] },
-  { group: "School", items: ["School", "Branch", "Academic year", "Term", "Class", "Section", "Period", "Timetable", "Route", "Vehicle", "Event", "Announcement"] },
-]
 
 export default function HomePage() {
   return (
@@ -296,18 +290,7 @@ export default function HomePage() {
             related tables in one schema, every row locked to its school. Nothing is copied.
             Nothing disagrees.
           </p>
-          <div className="onto-grid">
-            {ONTOLOGY.map((g) => (
-              <div key={g.group}>
-                <h3 className="label">{g.group}</h3>
-                <ul>
-                  {g.items.map((it) => (
-                    <li key={it}>{it}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <RecordMap />
         </section>
 
         <section className="vision" id="vision">
