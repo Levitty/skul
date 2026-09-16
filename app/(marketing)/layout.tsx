@@ -8,6 +8,13 @@ const geist = localFont({
   display: "swap",
 })
 
+// Chalk handwriting, used only for what the teacher writes on the board.
+const hand = localFont({
+  src: [{ path: "./fonts/Caveat-Variable.woff2", weight: "400 700", style: "normal" }],
+  variable: "--font-hand",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "Tutagora",
   description:
@@ -15,5 +22,5 @@ export const metadata: Metadata = {
 }
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
-  return <div className={`mk ${geist.variable}`}>{children}</div>
+  return <div className={`mk ${geist.variable} ${hand.variable}`}>{children}</div>
 }

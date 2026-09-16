@@ -11,6 +11,7 @@
   --mute-2: rgba(242, 242, 240, 0.36);
 
   --sans: var(--font-geist), "Helvetica Neue", Arial, sans-serif;
+  --hand: var(--font-hand), "Segoe Script", "Bradley Hand", cursive;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --gutter: clamp(20px, 4vw, 64px);
 
@@ -499,11 +500,12 @@
 }
 
 .mk .runway .big small {
-  font-size: 0.28em;
+  display: block;
+  font-size: 0.22em;
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   color: var(--mute);
-  margin-left: 0.25em;
+  margin-top: 0.6em;
 }
 
 .mk .runway svg {
@@ -1121,4 +1123,309 @@
     max-width: none;
     min-width: 0;
   }
+}
+
+/* ---------- class page ---------- */
+/* A school day in periods. The board is sticky; the notes scroll past it. */
+
+.mk .nav.static {
+  position: static;
+}
+
+@media (max-width: 480px) {
+  .mk .nav .hide-sm {
+    display: none;
+  }
+}
+
+.mk .timetable {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: rgba(11, 11, 11, 0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.mk .timetable ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.mk .timetable li a {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.8rem 0.5rem 0.8rem 0;
+  border-left: 1px solid var(--line);
+  padding-left: 0.85rem;
+  color: var(--mute-2);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  transition: color 200ms ease;
+}
+
+.mk .timetable li:first-child a {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.mk .timetable li a .t {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+}
+
+.mk .timetable li a .pn {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mk .timetable li a .nm {
+  font-weight: 500;
+  color: inherit;
+}
+
+.mk .timetable li.on a {
+  color: var(--white);
+}
+
+.mk .timetable li.on a .t {
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .mk .timetable ol {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mk .timetable li a {
+    white-space: nowrap;
+    padding-right: 1rem;
+  }
+  .mk .timetable li a .pn {
+    display: none;
+  }
+}
+
+.mk .door {
+  padding-top: clamp(3.5rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+}
+
+.mk .door h1 {
+  margin: 1.25rem 0 0;
+  font-weight: 500;
+  font-size: clamp(2.75rem, 7.6vw, 7.75rem);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  max-width: 10em;
+  text-wrap: balance;
+}
+
+.mk .door .lede {
+  margin: 1.75rem 0 0;
+  max-width: 30em;
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+  line-height: 1.4;
+  color: var(--mute);
+}
+
+.mk .door-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem 2rem;
+  margin: clamp(2.5rem, 5vw, 4rem) 0;
+  max-width: 64rem;
+}
+
+.mk .door-form label {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.mk .door-form input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-2);
+  border-radius: 0;
+  color: var(--white);
+  font-family: var(--hand), cursive;
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  line-height: 1.1;
+  padding: 0.2rem 0 0.35rem;
+  outline: none;
+  transition: border-color 160ms ease;
+}
+
+.mk .door-form input::placeholder {
+  color: var(--mute-2);
+}
+
+.mk .door-form input:focus {
+  border-bottom-color: var(--accent);
+}
+
+/* the periods */
+
+.mk .period {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+}
+
+.mk .period .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+
+.mk .board-col {
+  position: sticky;
+  top: 5.5rem;
+}
+
+.mk .chalkboard {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line-2);
+  outline: 6px solid #141414;
+  outline-offset: 0;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.mk .chalkboard .board {
+  z-index: -1;
+}
+
+.mk .chalk {
+  font-family: var(--hand), cursive;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.5vw, 2.4rem);
+  line-height: 1.25;
+  color: rgba(242, 242, 240, 0.92);
+  max-width: 100%;
+}
+
+.mk .chalk p {
+  margin: 0;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.mk .chalk p + p {
+  margin-top: 0.35em;
+}
+
+.mk .chalkboard.on .chalk p {
+  opacity: 1;
+  transform: none;
+}
+
+.mk .chalkboard.on .chalk p:nth-child(1) { transition-delay: 0.1s; }
+.mk .chalkboard.on .chalk p:nth-child(2) { transition-delay: 0.6s; }
+.mk .chalkboard.on .chalk p:nth-child(3) { transition-delay: 1.1s; }
+.mk .chalkboard.on .chalk p:nth-child(4) { transition-delay: 1.6s; }
+.mk .chalkboard.on .chalk p:nth-child(5) { transition-delay: 2.1s; }
+.mk .chalkboard.on .chalk p:nth-child(6) { transition-delay: 2.6s; }
+
+.mk .chalk-h {
+  font-size: 0.7em;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  margin-bottom: 0.4em !important;
+}
+
+.mk .chalk em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.mk .notes h2 {
+  margin: 1.25rem 0 1.25rem;
+  font-weight: 500;
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.mk .notes p {
+  margin: 0 0 1rem;
+  max-width: 30em;
+  color: var(--mute);
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.45;
+}
+
+.mk .notes .phone,
+.mk .notes .register,
+.mk .notes .runway {
+  margin-top: 2rem;
+}
+
+.mk .notes .register {
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .mk .period .wrap {
+    grid-template-columns: 1fr;
+  }
+  .mk .board-col {
+    position: static;
+  }
+  .mk .chalkboard {
+    aspect-ratio: auto;
+    min-height: 16rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk .chalk p {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.mk .homework {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(5rem, 12vw, 11rem);
+  padding-bottom: clamp(5rem, 12vw, 11rem);
+}
+
+.mk .homework h2 {
+  margin: 1.25rem 0 1.5rem;
+  font-weight: 500;
+  font-size: clamp(2.5rem, 6.4vw, 6.25rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  max-width: 10em;
+  text-wrap: balance;
+}
+
+.mk .homework p {
+  margin: 0 0 2rem;
+  max-width: 34em;
+  color: var(--mute);
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+}
+
+.mk .homework .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 3rem;
+  align-items: center;
 }

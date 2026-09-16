@@ -121,12 +121,17 @@ export default function HomePage() {
             </Link>
             <nav aria-label="Primary">
               <ul>
-                <li>
+                <li className="hide-sm">
                   <a className="quiet" href="#systems">
                     Systems
                   </a>
                 </li>
                 <li>
+                  <Link className="quiet" href="/class">
+                    Class
+                  </Link>
+                </li>
+                <li className="hide-sm">
                   <a className="quiet" href="#vision">
                     Vision
                   </a>
@@ -156,8 +161,8 @@ export default function HomePage() {
               One record for the whole school. Built for Kenya. Fees on M-Pesa, parents on
               WhatsApp, and a truth that adds up.
             </p>
-            <Link href="/signup" className="arrow">
-              Start with your school <Arrow />
+            <Link href="/class" className="arrow">
+              Take the class <Arrow />
             </Link>
           </div>
         </section>
