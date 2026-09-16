@@ -1,0 +1,7 @@
+# Secrets — config.php holds the Supabase service-role key and Resend API key.
+# It must NEVER be committed. (Already untracked; this is a guardrail.)
+config.php
+
+# Runtime logs (may contain M-Pesa payloads / PII)
+logs/
+*.log

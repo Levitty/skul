@@ -1,0 +1,48 @@
+RewriteEngine On
+RewriteBase /
+
+# ── Force HTTPS (prevents session cookies / logins over plaintext) ──────
+# Hostinger terminates TLS; honour its forwarded-proto as well as HTTPS.
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ── Security response headers ───────────────────────────────────────────
+<IfModule mod_headers.c>
+    # Keep browsers on HTTPS for a year (only honoured over HTTPS).
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    # Clickjacking: don't allow framing by other origins.
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Don't let browsers MIME-sniff responses into executable types.
+    Header always set X-Content-Type-Options "nosniff"
+    # Trim referrer leakage to other sites.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Modern clickjacking control. (No full CSP yet — pages load
+    # cdn.tailwindcss.com inline; tighten to a real CSP later.)
+    Header always set Content-Security-Policy "frame-ancestors 'self'"
+</IfModule>
+
+# ── No directory listings ───────────────────────────────────────────────
+Options -Indexes
+
+# ── Security: block direct web access to server-side files ──────────────
+# These are loaded by PHP via the filesystem (require/include), never fetched
+# over HTTP — so forbidding HTTP access changes nothing for the app but stops
+# anyone downloading config, setup notes, helper source, or migration SQL.
+RewriteRule ^config\.php$            - [F,L]
+RewriteRule ^SETUP\.txt$             - [F,L]
+RewriteRule ^(includes|supabase)/    - [F,L]
+RewriteRule ^logs/                   - [F,L]
+RewriteRule \.(sql|md|log|ini|bak)$  - [F,L]
+
+# Block hidden/dotfiles (.DS_Store, .git, .env, …) but allow .well-known so
+# TLS/ACME challenges still work.
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule (^|/)\.          - [F,L]
+
+# If the request is for an existing file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route everything else through index.php
+RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]

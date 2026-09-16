@@ -1,0 +1,8 @@
+-- 077_uniform_pos.sql — SUPERSEDED. DO NOT RUN.
+--
+-- A complete uniform POS schema already exists in the database:
+--   uniform_products, uniform_variants, uniform_sales, uniform_sale_items,
+--   stock_adjustments.
+-- The Uniform Sales page (modules/finance/uniform.php) is built on those
+-- existing tables, so no new tables are needed. This file is intentionally
+-- left empty to avoid creating duplicate/competing tables.

@@ -1,0 +1,54 @@
+TUTA SCHOOL — PHP VERSION
+==========================
+A lightweight school management system that runs on any PHP shared hosting (Hostinger, etc.)
+and connects to your existing Supabase database.
+
+DEPLOYMENT STEPS
+================
+
+1. EDIT config.php
+   Open config.php and fill in your Supabase credentials:
+   - SUPABASE_URL:         Your Supabase project URL (e.g. https://abcdefgh.supabase.co)
+   - SUPABASE_ANON_KEY:    Your anon/public key (find in Supabase > Settings > API)
+   - SUPABASE_SERVICE_KEY: Your service_role key (same place — keep this SECRET)
+   - APP_URL:              Your live URL (e.g. https://yourschool.com/tuta-php)
+
+2. UPLOAD TO HOSTINGER
+   Upload the entire tuta-php folder to your Hostinger public_html directory:
+   - Using File Manager: Go to Hostinger hPanel > Files > File Manager
+   - Or use FTP (FileZilla, etc.)
+
+   Your folder structure should be:
+   public_html/
+     tuta-php/
+       .htaccess
+       config.php
+       index.php
+       includes/
+       modules/
+
+3. CHECK REQUIREMENTS
+   - PHP 7.4+ (Hostinger has this by default)
+   - cURL extension enabled (enabled by default on Hostinger)
+   - mod_rewrite enabled (enabled by default on Hostinger)
+
+4. LOGIN
+   Go to https://yourschool.com/tuta-php/
+   Log in with the same email/password you use in your Supabase auth.
+
+DATABASE TABLES USED
+====================
+This system reads/writes the same Supabase tables as the Next.js version:
+- students, classes, enrollments, academic_years
+- fee_heads, fee_groups, fee_group_items, fee_group_assignments
+- fee_invoices, fee_invoice_items, fee_payments
+- exams, grades, subjects, terms
+- user_profiles (for login)
+
+FEATURES
+========
+- Students & Classes: Add, edit, import CSV, manage classes
+- Fees & Payments: Fee heads (with amounts per class), fee groups, invoices, payments
+- Grades & Exams: Create exams, enter marks, auto-grade, report cards with rankings
+
+NO LOADING SCREENS — everything is server-rendered and instant.

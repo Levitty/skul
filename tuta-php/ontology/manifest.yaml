@@ -1,0 +1,485 @@
+# =============================================================================
+# The Tuta Ontology — single definition
+# -----------------------------------------------------------------------------
+# The one place the school graph is declared. Objects, links, and actions are
+# defined here; guards, nav, the parent portal, and the agent gateway generate
+# from this file rather than each re-implementing it. See the engineering spec
+# "The Tuta Ontology" (§09) and "The School as an Organization" (§10).
+#
+# STATUS  v0.1 — Step 0 of the build sequence. Object/link/action names are the
+#         real table and RPC identifiers in the codebase (migrations 052–099).
+#         Property lists are seeded here and reconciled against information_schema
+#         by the generator; where a property is uncertain it is omitted, not guessed.
+#
+# CONVENTIONS
+#   system_of_record : OPS = this Supabase app · HR = WLSM staff platform · LRN = learning system
+#   sensitivity      : none | pii | child_pii | financial | meta   (drives the fence, §07)
+#   actions.status   : built (a live RPC) | to_build (write exists but bypasses the contract)
+# =============================================================================
+
+version: 0.1
+metadata:
+  name: tuta-ontology
+  store: postgresql            # Supabase — not Foundry, not a graph DB
+  companion_spec: "The Tuta Ontology — engineering spec"
+
+# --- The three source systems (consolidate into OPS, keyed by person_id) -----
+systems:
+  OPS: { name: "Tuta school operations", db: supabase, role: spine }
+  HR:  { name: "WLSM staff/HR platform", sync: into_ops, key: verified_email }
+  LRN: { name: "Learning / mastery system", sync: into_ops, key: verified_email }
+
+# --- The fence vocabulary: capabilities (mirrors includes/permissions.php) ----
+capabilities:
+  dashboard.finance:   See money totals on the dashboard
+  students.manage:     Students, classes, sections, promotion
+  admissions.manage:   Admissions & enquiries
+  fees.manage:         Billing, invoices, payments, discounts, fee reports
+  finance.books:       Ledger, chart of accounts, expenses, statement import
+  results.enter:       Enter grades & remarks
+  results.manage:      Exam setup, report cards, analysis
+  teaching.own:        A teacher's own tools
+  academics.oversight: Lesson-plan oversight, timetable builder
+  services.manage:     Transport & activities
+  comms.send:          Send SMS / WhatsApp
+  approvals.manage:    Approvals inbox
+  settings.manage:     School settings
+  safeguarding:        "PROPOSED (§07) — named-access to the fee_stress link; logged, time-boxed"
+
+# --- Link verbs glossary (used by objects[].links[].via/inverse) -------------
+link_types:
+  member_of:   Person holds a role in a School
+  parent_of:   Guardian is responsible for a Student
+  enrolled_in: Student sits in a Class for a Term
+  teaches:     Staff delivers a Subject to a Class
+  billed:      Student is charged by an Invoice
+  settled_by:  Invoice is paid down by a Payment
+  posts_to:    A money event lands in the ledger (double-entry)
+  results_for: A Report card belongs to a Student
+  rides:       Student is assigned to a transport Route
+  same_person: One human across OPS/HR/LRN  # the root cross-system link — to build
+
+# =============================================================================
+# OBJECTS
+# =============================================================================
+objects:
+
+  # ---- Identity & tenancy ---------------------------------------------------
+  Person:
+    table: user_profiles
+    also: [user_schools]
+    title: "{full_name} <{email}>"
+    system_of_record: OPS+HR+LRN
+    sensitivity: pii
+    id_key: verified_email        # the resolution key for same_person
+    properties: [id, email, full_name]
+    links:
+      memberships: { via: user_schools, to: School, verb: member_of, cardinality: many }
+
+  School:
+    table: schools
+    also: [school_branches, school_groups, school_group_members, school_group_admins]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, name, domain, group_id]
+    links:
+      terms: { to: Term, cardinality: many }
+
+  Term:
+    table: terms
+    also: [academic_years]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    note: "is_current flag = the active clock; the whole term-native model hangs off this"
+    properties: [id, name, is_current, start_date, end_date, academic_year_id]
+
+  # ---- People the school serves ---------------------------------------------
+  Student:
+    table: students
+    title: "{first_name} {last_name} · {admission_number}"
+    system_of_record: OPS
+    sensitivity: child_pii
+    properties: [id, admission_number, first_name, last_name, dob, status, class_id, section_id, school_id, media_consent]
+    links:
+      guardians:  { via: student_parents, to: Guardian, verb: parent_of, cardinality: many }
+      enrolment:  { via: enrollments, to: Class, verb: enrolled_in, term_scoped: true }
+      invoices:   { to: Invoice, verb: billed, cardinality: many }
+      results:    { to: ReportCard, verb: results_for, cardinality: many }
+      transport:  { via: student_transport, to: Route, verb: rides }
+
+  Guardian:
+    table: student_parents
+    title: "{name} ({relationship})"
+    system_of_record: OPS
+    sensitivity: pii
+    properties: [id, student_id, name, relationship, phone, portal_access]
+
+  Staff:
+    table: user_profiles
+    also: [subject_teachers]     # HR system holds contract/payroll/probation
+    title: "{full_name}"
+    system_of_record: HR
+    sensitivity: pii
+    properties: [id, email, full_name, tsc_number, contract_type]
+    sync: { from: HR, key: verified_email }
+
+  # ---- Academic spine -------------------------------------------------------
+  Class:
+    table: classes
+    also: [sections]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, name, level, capacity, school_id]
+    links:
+      subjects: { via: class_subjects, to: Subject, cardinality: many }
+
+  Subject:
+    table: subjects
+    also: [class_subjects, subject_teachers]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, name, code]
+    links:
+      teacher: { via: subject_teachers, to: Staff, verb: teaches }
+
+  Enrolment:
+    table: enrollments
+    also: [promotion_history]
+    title: "{student} in {class} ({term})"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, student_id, class_id, section_id, term_id]
+
+  # ---- Fees & revenue -------------------------------------------------------
+  Invoice:
+    table: invoices
+    also: [invoice_items]
+    title: "{invoice_number} — {amount}"
+    system_of_record: OPS
+    sensitivity: financial
+    properties: [id, invoice_number, student_id, term_id, amount, paid_amount, balance, status, due_date]
+    links:
+      payments: { to: Payment, verb: settled_by, cardinality: many }
+
+  Payment:
+    table: payments
+    also: [payment_methods]
+    title: "{receipt_number} — {amount} ({method})"
+    system_of_record: OPS
+    sensitivity: financial
+    properties: [id, invoice_id, amount, method, transaction_ref, payment_date, receipt_number]
+    links:
+      ledger: { to: LedgerEntry, verb: posts_to }   # via trg_post_payment
+
+  FeeSchedule:
+    table: fee_groups
+    also: [fee_group_items, fee_group_assignments, fee_heads]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    note: "UNIQUE(school_id,class_id,term_id) dropped (mig. 098) to allow new vs continuing schedules"
+    properties: [id, name, class_id, term_id, school_id]
+
+  Discount:
+    table: fee_discounts
+    also: [student_discounts]
+    title: "{label} ({value})"
+    system_of_record: OPS
+    sensitivity: financial
+    note: "stored as a negative contra line on the next generated invoice (mig. 074)"
+    properties: [id, label, value, is_percentage, student_id]
+
+  # ---- Finance / books ------------------------------------------------------
+  LedgerEntry:
+    table: ledger_lines
+    also: [ledger_accounts, ledger_entries, ledger_periods, income, expenses, income_categories, expense_categories, category_budgets, imported_txns]
+    title: "{account} {amount}"
+    system_of_record: OPS
+    sensitivity: financial
+    note: "double-entry, auto-posted by trg_post_* triggers via post_journal"
+    properties: [id, account_code, debit, credit, period_id]
+
+  # ---- Learning & results ---------------------------------------------------
+  Exam:
+    table: exams
+    also: [grades, grading_schemes, grading_bands, questions]
+    title: "{name} ({term})"
+    system_of_record: OPS+LRN
+    sensitivity: child_pii
+    properties: [id, name, term_id, class_id]
+
+  ReportCard:
+    table: report_cards
+    also: [report_card_subjects]
+    title: "{student} — {term}"
+    system_of_record: OPS
+    sensitivity: child_pii
+    properties: [id, student_id, term_id, published, remarks]
+
+  # ---- Operations / services ------------------------------------------------
+  Route:
+    table: transport_routes
+    also: [student_transport]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, name, zone, fare, trip_type]
+
+  Activity:
+    table: activities
+    also: [student_activities]
+    title: "{name}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, name, fee]
+
+  Admission:
+    table: admissions
+    also: [enquiries]
+    title: "{applicant_name} — {stage}"
+    system_of_record: OPS
+    sensitivity: pii
+    note: "pipeline object; AdmitApplicant turns it into a Student. Captures consent per purpose (§11): consent_accepted+rules_version (rules), media_consent none|internal|public (images)"
+    properties: [id, applicant_name, stage, school_id, consent_accepted, consent_name, consent_at, rules_version, media_consent, source_ip]
+
+  # ---- Governance / meta ----------------------------------------------------
+  Approval:
+    table: approval_requests
+    title: "{type} — {status}"
+    system_of_record: OPS
+    sensitivity: none
+    properties: [id, type, maker_id, checker_id, status, payload]
+
+  Role:
+    table: school_roles
+    also: [role_defaults]
+    title: "{label}"
+    system_of_record: OPS
+    sensitivity: none
+    note: "capabilities[] jsonb — this IS the fence configuration (mig. 099)"
+    properties: [id, role_key, label, capabilities, is_custom, school_id]
+
+  Event:
+    table: audit_logs
+    title: "{action} {entity_type}:{entity_id}"
+    system_of_record: OPS
+    sensitivity: meta
+    note: "append-only (mig. 075); the object-keyed event log every action emits to (§08)"
+    properties: [id, action, entity_type, entity_id, payload, user_id, user_email, school_id, created_at]
+
+# =============================================================================
+# ACTIONS — the only sanctioned writes. Contract: permission → invariant →
+# mutate → emit. Returns JSONB { success: bool, error?: text, ... }. SECURITY
+# DEFINER. Takes p_user_id / p_user_email (or p_decider_*) for the audit row.
+# App code calls actions; it never issues INSERT/UPDATE on an ontology object.
+# =============================================================================
+actions:
+
+  RecordPayment:
+    status: built
+    rpc: record_payment
+    params: [p_invoice_id, p_school_id, p_amount, p_method, p_transaction_ref, p_payment_date, p_user_id, p_user_email]
+    capability: fees.manage
+    reads: [Invoice]
+    writes: [Payment, Invoice]
+    invariant: "paid_amount <= invoice.balance; overpay -> family credit; receipt number assigned"
+    emits: payment.recorded
+
+  GenerateInvoices:
+    status: built
+    rpc: generate_invoices_for_class
+    params: [p_school_id, p_class_id, p_fee_group_id, p_term_id, p_due_date, p_students, p_invoice_prefix, p_status, p_user_id, p_user_email]
+    capability: fees.manage
+    reads: [Class, FeeSchedule, Term, Student, Discount]
+    writes: [Invoice]
+    invariant: "explicit p_students list; discount applied as negative contra line"
+    emits: invoice.generated
+
+  ImportStudents:
+    status: built
+    rpc: import_students_batch
+    capability: students.manage
+    writes: [Student]
+    invariant: "admission number assigned per-school; no duplicate"
+    emits: student.imported
+
+  PostJournal:
+    status: built
+    rpc: post_journal            # invoked by trg_post_payment/income/expense/invoice/uniform_sale
+    writes: [LedgerEntry]
+    invariant: "debits = credits (balanced double-entry)"
+    emits: ledger.posted
+
+  AssignAdmissionNumber:
+    status: built
+    rpc: assign_admission_number
+    writes: [Student]
+    invariant: "gap-free per-school sequence"
+    emits: student.numbered
+
+  # --- writes that exist today but bypass the contract → wrap as actions ------
+  AdmitApplicant:
+    status: built                      # mig. 101 (ontology Step 2)
+    rpc: admit_applicant
+    params: [p_admission_id, p_school_id, p_class_id, p_user_id, p_user_email]
+    capability: admissions.manage
+    reads: [Admission]
+    writes: [Student, Admission]       # enrolment is students.current_class_id today, not an enrollments row
+    invariant: "admission still pending (race-proof, FOR UPDATE) — the no-duplicate-child guard; admission_number auto-assigned by trigger (mig. 089); atomic"
+    emits: admit
+
+  EnrollStudent:
+    status: to_build
+    capability: students.manage
+    writes: [Enrolment]
+    invariant: "term-scoped; class capacity check (mig. 095)"
+    emits: student.enrolled
+
+  PromoteStudent:
+    status: built                      # mig. 106 (ontology Step 2)
+    rpc: promote_students              # batch: promote | graduate | repeat
+    params: [p_school_id, p_student_ids, p_from_class, p_to_class, p_to_section, p_from_year, p_to_year, p_type, p_user_id, p_user_email]
+    capability: students.manage
+    writes: [Student, Enrolment]       # Student.current_class_id/status + promotion_history
+    invariant: "whole batch atomic (one txn); per-student dup-check on the year transition; all-or-nothing"
+    emits: promoted | graduated | repeated
+
+  ApproveDiscount:
+    status: built                      # mig. 100 (ontology Step 2)
+    rpc: decide_approval_request       # generic maker-checker executor
+    params: [p_request_id, p_school_id, p_decision, p_decider_id, p_decider_email, p_note]
+    capability: approvals.manage
+    reads: [Approval, Discount]
+    writes: [Discount, Approval]
+    invariant: "maker != checker; request still pending; atomic (row locked FOR UPDATE); applies to next generated invoice"
+    emits: assign_discount
+
+  CancelInvoice:
+    status: built                      # mig. 100 — same governed executor
+    rpc: decide_approval_request
+    capability: approvals.manage
+    reads: [Approval, Invoice]
+    writes: [Invoice, Approval]
+    invariant: "maker != checker; request still pending; atomic"
+    emits: cancel_invoice
+
+  RecordExpense:
+    status: built                      # mig. 103 (ontology Step 2)
+    rpc: record_expense
+    params: [p_school_id, p_description, p_amount, p_expense_date, p_category_id, p_vendor_name, p_invoice_number, p_payment_method, p_user_id, p_user_email]
+    capability: finance.books
+    writes: [LedgerEntry]              # inserts expenses; trg_post_expense posts the double-entry
+    invariant: "amount > 0; description set; category belongs to school; auto-posts to ledger; budget is advisory (not blocked)"
+    emits: record_expense
+
+  IssueReportCard:
+    status: to_build
+    capability: results.manage
+    writes: [ReportCard]
+    invariant: "term closed; grading scheme resolved"
+    emits: reportcard.issued
+
+  DeactivateStudent:
+    status: built                      # mig. 107 (ontology Step 2)
+    rpc: set_student_status            # p_status='exited'; batch, atomic
+    capability: students.manage
+    writes: [Student]
+    invariant: "status change only — never a delete; reversible via RestoreStudent; whole batch in one txn"
+    emits: deactivate
+
+  RestoreStudent:
+    status: built                      # mig. 107 — same RPC, p_status='active'
+    rpc: set_student_status
+    capability: students.manage
+    writes: [Student]
+    emits: reactivate
+
+  OffboardStaff:
+    status: to_build
+    capability: settings.manage
+    writes: [Person]
+    invariant: "cross-system single switch-off; assembles §5.9 clearance / final-dues pack"
+    emits: staff.offboarded
+
+  RecordAttendance:
+    status: built                      # mig. 108 — the missing daily pump
+    rpc: record_attendance
+    params: [p_school_id, p_class_id, p_date, p_exceptions, p_source, p_taken_by, p_user_id, p_user_email]
+    capability: students.manage        # office path; the class link is token-authed (class_register_tokens)
+    reads: [Class, Student]
+    writes: [Student]                  # attendance_sessions (receipt) + attendance_records (exceptions only)
+    invariant: "class belongs to school; date = today ±1; exceptions ⊆ active roster; resubmit = correction (idempotent per class-day); atomic"
+    emits: record_attendance
+
+  RecordPayrollRun:
+    status: built                      # mig. 109 — the payroll→ledger bridge (census dry well #3)
+    rpc: record_payroll_run
+    params: [p_school_id, p_period, p_gross, p_statutory, p_net, p_method, p_note, p_user_id, p_user_email]
+    capability: finance.books
+    writes: [LedgerEntry]              # payroll_postings + DR 5000 / CR 2200 / CR cash via post_journal
+    invariant: "net + statutory = gross; one posting per school-month (idempotent); balanced journal"
+    emits: record_payroll_run
+
+  RecordStatutoryRemittance:
+    status: built                      # mig. 109 — clears 2200 when PAYE/NSSF/SHA actually paid
+    rpc: record_statutory_remittance
+    capability: finance.books
+    writes: [LedgerEntry]
+    emits: record_statutory_remittance
+
+  InviteUser:
+    status: to_build
+    rpc_seam: invitations
+    capability: settings.manage
+    writes: [Person]
+    emits: user.invited
+
+# =============================================================================
+# FENCES — who may see/do what, down to the column (§07)
+# =============================================================================
+fences:
+  tenant:
+    rule: "every query scoped by schoolId(); RLS lockdown (mig. 086); service-role bypasses RLS so the in-app fence is the capability layer"
+  object_level:
+    rule: "userCan(capability) gates whole surfaces (guards in index.php, nav in layout-top.php)"
+  fee_stress:
+    kind: sensitive_link
+    joins: [Invoice.arrears, Student.attendance, Student.results]
+    default_mode: aggregate       # cohort-level only; never resolves to a named child
+    named_access:
+      capability: safeguarding    # PROPOSED
+      constraints: [time_boxed, logged]
+    rationale: "the one join that could become a discrimination surface — aggregates for insight, named+logged access for intervention"
+
+# =============================================================================
+# EVENT LOG — one table, three payoffs (§08)
+# =============================================================================
+events:
+  table: audit_logs
+  append_only: true               # mig. 075 audit_logs_block_mutation
+  shape: [action, entity_type, entity_id, payload, user_id, user_email, school_id, created_at]
+  payoffs:
+    compliance:  "DPA evidence (§12) — access is a record, not a recollection"
+    agent_trail: "every agent proposal logged with the objects it cited (§11)"
+    telemetry:   "the weekly briefing (school_briefings) computed from the stream (§13)"
+
+# =============================================================================
+# AGENT GATEWAY — read objects (through the fence) + propose actions only (§10)
+# The order test: an agent that cannot name the objects it reads and the action
+# it proposes does not ship.
+# =============================================================================
+agents:
+  arrears_followup:
+    status: built                    # mig. 110 + modules/fees/reminders.php — the first live agent
+    reads: [Invoice, Student, Guardian]
+    proposes: DecideFeeReminders     # drafts per-invoice reminders (citing invoice_id/student_id); bursar approves/dismisses in batch
+    human_gate: bursar               # decide_fee_reminders RPC — atomic, audited; nothing sends without it
+    send_channel: "copy-pack now; WhatsApp auto-send when Meta channel is live"
+  briefing_narrator:
+    reads: [Event]             # the week's computed telemetry
+    proposes: null             # writes school_briefings via a narration seam that already exists
+    human_gate: head
