@@ -317,23 +317,51 @@ export default function HomePage() {
             </div>
             <h2>Vision</h2>
             <p>
-              The dashboards were a real step. For the first time a school leader could see
-              enrolment, fees and attendance without waiting for month-end. The systems built
-              so far have served schools well, and they stopped there. Most schools have lived
-              inside a blanket template ever since: the same screens for every school, the same
-              reports, the school bent to fit the software.
+              I have spent years inside the school as an organisation, in different capacities,
+              from the lower rungs of the hierarchy to the top, and across its departments. In
+              that time the school changed, and so did the tools it ran on. How a school was run
+              when I was in one is not how a school is run now.
             </p>
             <p>
-              We saw it was time to take advantage of what those systems made possible and move
-              to the next step. To the frontier of action. An integrated school, where the
-              software is led by the school rather than the other way round. Where every user,
-              from the bursar to the class teacher to the parent on WhatsApp, is given what they
-              need to do their part well. And where, at the top, management is given something
-              better than numbers: insight it can act on.
+              When I began, a school ran on paper: the register, the receipt book, the mark book,
+              the file. The first software arrived to replace them one at a time, desktop
+              programs that kept the same records in a computer instead of a cupboard. Then the
+              systems moved onto the web and onto phones. Fees could be paid on M-Pesa, results
+              could be sent by SMS, and a school&rsquo;s records could be reached from home.
             </p>
             <p>
-              It begins in the classroom, where the main event happens: a teacher and a learner.
-              Everything else exists to serve them.
+              Then came the dashboards. The data collected over the years could at last be seen:
+              enrolment, collection, attendance and results on one screen, without waiting for
+              month end. It was a real step. For the first time a director could run a school by
+              its numbers, and we could do so much with them. Today every system collects the data
+              and shows a dashboard, and that is good.
+            </p>
+            <p>
+              I believed, and felt, that there was still more. A dashboard shows you the school.
+              It does not know the school. It cannot tell you that the family behind an arrears
+              figure also has a child on the bus, that a grade is not paying for itself, or that
+              one teacher is carrying twice the load of her department. Those answers live in the
+              connections between records, and a dashboard has none.
+            </p>
+            <p>
+              The world changed too. At the end of 2022 a chat window put a language model in
+              everyone&rsquo;s hands and showed what was now possible. We are in the era of agents
+              and automated work, where software no longer only reports; it acts. A school that
+              runs on paper, WhatsApp threads and a dashboard cannot use any of that safely.
+            </p>
+            <p>
+              So we adapted, ahead of the change rather than behind it, and built on what the
+              industry had already started. Not another dashboard, but software ingrained in the
+              institution: one model of the school in which every learner, teacher, invoice,
+              lesson and bus is a record, joined to the others by the relationships that actually
+              exist, and changed only through named, logged actions. The connections a director
+              needs for strategy are one step away instead of three spreadsheets apart. And
+              intelligence can act inside that model, drafting the reminder, the checklist, the
+              staffing plan, while people decide.
+            </p>
+            <p>
+              So now we have Tutagora. It begins where it always did, in the classroom, with a
+              teacher and a learner. Everything else exists to serve them.
             </p>
             <p>Not a dashboard to admire. A school that knows itself.</p>
           </div>
