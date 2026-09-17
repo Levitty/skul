@@ -288,7 +288,7 @@ export function ClassRoom() {
         <nav aria-label="Primary">
           <ul>
             <li><Link className="quiet" href="/">Front page</Link></li>
-            <li><Link className="quiet" href="/login">Sign in</Link></li>
+            <li><a className="quiet" href={waLink("Hello Tutagora. I am in the class and would like to talk about using Tutagora at my school.")} target="_blank" rel="noopener">Talk to us</a></li>
           </ul>
         </nav>
       </header>
@@ -710,7 +710,7 @@ export function ClassRoom() {
           </span>
           <ul>
             <li><Link className="quiet" href="/">Front page</Link></li>
-            <li><Link className="quiet" href="/login">Sign in</Link></li>
+            <li><a className="quiet" href={waLink("Hello Tutagora. I am in the class and would like to talk about using Tutagora at my school.")} target="_blank" rel="noopener">Talk to us</a></li>
           </ul>
           <span className="num">© 2026 Tutagora · Kenya</span>
         </div>

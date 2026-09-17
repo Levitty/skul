@@ -146,11 +146,6 @@ export default function HomePage() {
                     Talk to us
                   </a>
                 </li>
-                <li className="hide-sm">
-                  <Link className="quiet" href="/login">
-                    Sign in
-                  </Link>
-                </li>
               </ul>
             </nav>
           </header>
@@ -439,11 +434,6 @@ export default function HomePage() {
               <a className="quiet" href={mailLink("Enquiry about Tutagora")}>
                 Email
               </a>
-            </li>
-            <li>
-              <Link className="quiet" href="/login">
-                Sign in
-              </Link>
             </li>
           </ul>
           <span className="num">© 2026 Tutagora · Kenya</span>
