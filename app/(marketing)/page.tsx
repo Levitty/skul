@@ -5,6 +5,7 @@ import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
 import { Match } from "./match"
+import { Work } from "./work"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -37,6 +38,7 @@ const ArtAdvisor = () => (
 const SYSTEMS = [
   {
     id: "smis",
+    to: "#smis",
     art: <SketchSmis />,
     name: "Tutagora SMIS",
     tagline: "Every learner, known completely.",
@@ -65,6 +67,7 @@ const SYSTEMS = [
   },
   {
     id: "hr",
+    to: "#work-4",
     art: <SketchHr />,
     name: "Tutagora HR",
     tagline: "Every person who works here, first-class.",
@@ -89,6 +92,7 @@ const SYSTEMS = [
   },
   {
     id: "learning",
+    to: "#work-3",
     art: <SketchLearning />,
     name: "Tutagora Learning",
     tagline: "What is taught becomes what is known.",
@@ -183,7 +187,7 @@ export default function HomePage() {
 
           <div className="cards">
             {SYSTEMS.map((c) => (
-              <a className="card" href={`#${c.id}`} key={c.id}>
+              <a className="card" href={c.to} key={c.id}>
                 <div className="card-art" aria-hidden="true">
                   {c.art}
                 </div>
@@ -215,6 +219,8 @@ export default function HomePage() {
             </a>
           </div>
         </section>
+
+        <Work />
 
         <section className="panel sys smis" id="smis">
           <div className="wrap">
@@ -272,27 +278,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {SYSTEMS.filter((s) => s.id !== "smis").map((s, i) => (
-          <section className="panel sys" id={s.id} key={s.id}>
-            <div className="wrap">
-              <div className="text">
-                <div className="label num">
-                  {String(i + 2).padStart(2, "0")} &nbsp;·&nbsp; {s.name}
-                </div>
-                <h2>{s.title}</h2>
-                <p>{s.lede}</p>
-              </div>
-              <div className="art">
-                <ul className="index" aria-label={`What ${s.name} holds`}>
-                  {s.holds.map((h) => (
-                    <li key={h}>{h}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-        ))}
 
         <section className="panel advisor" id="advisor">
           <div className="wrap">
@@ -456,12 +441,12 @@ export default function HomePage() {
               </a>
             </li>
             <li>
-              <a className="quiet" href="#hr">
+              <a className="quiet" href="#work-4">
                 HR
               </a>
             </li>
             <li>
-              <a className="quiet" href="#learning">
+              <a className="quiet" href="#work-3">
                 Learning
               </a>
             </li>
