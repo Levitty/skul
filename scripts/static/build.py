@@ -51,6 +51,19 @@ def links(html):
     return html
 
 
+import hashlib
+
+
+def fingerprint(name, data):
+    """assets/site.css -> assets/site.3f9a1c2b.css, so browsers never keep a stale copy."""
+    h = hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()[:8]
+    base, ext = os.path.splitext(name)
+    return f"{base}.{h}{ext}"
+
+
+ASSET = {}
+
+
 def page(title, desc, path, body, scripts):
     return f"""<!doctype html>
 <html lang="en">
@@ -80,11 +93,11 @@ def page(title, desc, path, body, scripts):
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-icon.svg">
 <link rel="preload" href="/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/{ASSET["site.css"]}">
 </head>
 <body>
 {body}
-{''.join(f'<script src="/assets/{s}"></script>' for s in scripts)}
+{''.join(f'<script src="/assets/{ASSET[s]}"></script>' for s in scripts)}
 </body>
 </html>
 """
@@ -108,10 +121,14 @@ class_js = open(os.path.join(HERE, "class.js")).read().replace("__BOARDS__", boa
 shutil.rmtree(out, ignore_errors=True)
 os.makedirs(os.path.join(out, "assets", "fonts"))
 os.makedirs(os.path.join(out, "class"))
-open(os.path.join(out, "assets", "site.css"), "w").write(site_css)
-open(os.path.join(out, "assets", "board.js"), "w").write(open(os.path.join(HERE, "board.js")).read())
-open(os.path.join(out, "assets", "home.js"), "w").write(open(os.path.join(HERE, "home.js")).read())
-open(os.path.join(out, "assets", "class.js"), "w").write(class_js)
+for name, data in (
+    ("site.css", site_css),
+    ("board.js", open(os.path.join(HERE, "board.js")).read()),
+    ("home.js", open(os.path.join(HERE, "home.js")).read()),
+    ("class.js", class_js),
+):
+    ASSET[name] = fingerprint(name, data)
+    open(os.path.join(out, "assets", ASSET[name]), "w").write(data)
 for f in ("Geist-Variable.woff2", "Caveat-Variable.woff2"):
     shutil.copy(os.path.join(MK, "fonts", f), os.path.join(out, "assets", "fonts", f))
 for f in ("icon.svg", "apple-icon.svg", "og.png"):
