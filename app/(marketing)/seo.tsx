@@ -3,7 +3,9 @@
 
 import { CONTACT } from "./contact"
 
-export const SITE = "https://tutagora.com"
+// The address the marketing site is served from. Set NEXT_PUBLIC_SITE_URL
+// in the environment for the app; the static build takes SITE_URL.
+export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://tutagora.com").replace(/\/$/, "")
 
 export const HOME_TITLE = "Tutagora · School management software for Kenyan schools"
 export const HOME_DESC =

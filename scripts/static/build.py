@@ -4,7 +4,7 @@ Input: the rendered markup captured from the running site (mk.html,
 mk-class.html, boards.json). Output: a folder that can be uploaded as-is to
 any web host's document root, and a zip of the same.
 
-    python3 scripts/static/build.py <capture-dir> <out-dir> [app-url] [whatsapp] [email]
+    SITE_URL=https://<host> python3 scripts/static/build.py <capture-dir> <out-dir> [app-url] [whatsapp] [email]
 
 app-url is where "Sign in" should go (the Tutagora app); until it is known
 the link points at "#". whatsapp (international format, digits only) and
@@ -29,7 +29,7 @@ email = sys.argv[5] if len(sys.argv) > 5 else ""
 PLACEHOLDER_WA = "254759240692"
 PLACEHOLDER_MAIL = "consulting@tutagora.com"
 
-SITE = "https://tutagora.com"
+SITE = os.environ.get("SITE_URL", "https://tutagora.com").rstrip("/")
 TITLE = "Tutagora · School management software for Kenyan schools"
 DESC = "School management system for private schools in Kenya. Fees on M-Pesa, parents on WhatsApp, HR and payroll, report cards and the books, on one record for the whole school."
 CLASS_TITLE = "The class · How Tutagora runs a school as one record"
