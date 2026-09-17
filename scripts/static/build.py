@@ -29,10 +29,12 @@ email = sys.argv[5] if len(sys.argv) > 5 else ""
 PLACEHOLDER_WA = "254759240692"
 PLACEHOLDER_MAIL = "consulting@tutagora.com"
 
-TITLE = "Tutagora"
-DESC = "School management software for schools in Kenya. Fees on M-Pesa, parents on WhatsApp, one record that adds up."
-CLASS_TITLE = "Tutagora · Class"
-CLASS_DESC = "Nine periods on how Tutagora runs a school as one record: the learner at the centre, fees, parents on WhatsApp, the fence, the staff, and management."
+SITE = "https://tutagora.com"
+TITLE = "Tutagora · School management software for Kenyan schools"
+DESC = "School management system for private schools in Kenya. Fees on M-Pesa, parents on WhatsApp, HR and payroll, report cards and the books, on one record for the whole school."
+CLASS_TITLE = "The class · How Tutagora runs a school as one record"
+CLASS_DESC = "Nine short periods on how a school runs as one record: the learner at the centre, fees collected on M-Pesa, parents reached on WhatsApp, staff and payroll, and a Monday briefing for the director."
+KEYWORDS = "school management system Kenya, school management software Kenya, school fees management software, M-Pesa school fees, school ERP Kenya, parent communication WhatsApp school, school HR and payroll software, report card software Kenya, private school software Nairobi"
 
 
 def links(html):
@@ -57,9 +59,23 @@ def page(title, desc, path, body, scripts):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<meta name="keywords" content="{KEYWORDS}">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="{SITE}{path}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tutagora">
+<meta property="og:locale" content="en_KE">
+<meta property="og:url" content="{SITE}{path}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:type" content="website">
+<meta property="og:image" content="{SITE}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tutagora. Manage your school with confidence.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{SITE}/og.png">
 <meta name="theme-color" content="#0b0b0b">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-icon.svg">
@@ -98,13 +114,18 @@ open(os.path.join(out, "assets", "home.js"), "w").write(open(os.path.join(HERE, 
 open(os.path.join(out, "assets", "class.js"), "w").write(class_js)
 for f in ("Geist-Variable.woff2", "Caveat-Variable.woff2"):
     shutil.copy(os.path.join(MK, "fonts", f), os.path.join(out, "assets", "fonts", f))
-for f in ("icon.svg", "apple-icon.svg"):
+for f in ("icon.svg", "apple-icon.svg", "og.png"):
     shutil.copy(os.path.join(ROOT, "public", f), os.path.join(out, f))
+today = __import__("datetime").date.today().isoformat()
+open(os.path.join(out, "sitemap.xml"), "w").write(
+    '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    f'<url><loc>{SITE}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>\n'
+    f'<url><loc>{SITE}/class/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n'
+    "</urlset>\n"
+)
+open(os.path.join(out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
 open(os.path.join(out, "index.html"), "w").write(page(TITLE, DESC, "/", home, ["board.js", "home.js"]))
 open(os.path.join(out, "class", "index.html"), "w").write(page(CLASS_TITLE, CLASS_DESC, "/class/", klass, ["board.js", "class.js"]))
-open(os.path.join(out, ".htaccess"), "w").write(
-    "AddType font/woff2 .woff2\nAddType image/svg+xml .svg\n<IfModule mod_expires.c>\nExpiresActive On\nExpiresByType font/woff2 \"access plus 1 year\"\nExpiresByType text/css \"access plus 1 day\"\nExpiresByType application/javascript \"access plus 1 day\"\n</IfModule>\n"
-)
 
 zip_path = out.rstrip("/") + ".zip"
 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:

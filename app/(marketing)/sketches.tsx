@@ -152,7 +152,7 @@ export const SketchBalloon = () => (
 export const SketchRecord = ({ onDraw }: { onDraw?: () => void }) => (
   <Sketch svg={RECORD} seconds={4.2} title="Chalk lines from one learner to the records that know her" onDraw={onDraw} />
 )
-export const SketchOnto = ({ layer, play, instant }: { layer: number; play: boolean; instant?: boolean }) => (
+export const SketchOnto = ({ layer, play, instant }: { layer: number; play?: boolean; instant?: boolean }) => (
   <Sketch svg={ONTO[layer - 1]} seconds={1.6} title="" play={play} instant={instant} />
 )
 export const SketchClassroom = () => (

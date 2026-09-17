@@ -2319,3 +2319,157 @@
   font-size: 1.0625rem;
   line-height: 1.5;
 }
+
+/* ---------- class on a phone: a board per period, cards as plain text ---------- */
+
+.mk .mboard {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mk .lesson-board {
+    display: none;
+  }
+  .mk .lesson-steps {
+    margin: 0;
+    padding: 0 var(--gutter) 3rem;
+  }
+  .mk .mboard {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin: 2.75rem calc(-1 * var(--gutter)) 0.25rem;
+    padding: 1.5rem var(--gutter) 1.6rem;
+    background: #0c0d0c;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .mk .mboard .chalk {
+    position: relative;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    line-height: 1.28;
+  }
+  .mk .mboard .chalk p:empty {
+    display: none;
+  }
+  .mk .mboard .chalk-figure {
+    max-width: none;
+    margin: 0.9rem 0 0.2rem;
+  }
+  .mk .mboard .chalk-figure text {
+    font-size: 26px;
+  }
+  .mk .slot {
+    min-height: 0;
+    padding: 1.35rem 0 1.15rem;
+    border-top: 1px solid var(--line);
+  }
+  .mk .mboard + .slot {
+    border-top: 0;
+    padding-top: 1.5rem;
+  }
+  .mk .note {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  .mk .note h2 {
+    font-size: 1.6rem;
+  }
+  .mk .note h3 {
+    font-size: 1.2rem;
+  }
+  .mk .note p,
+  .mk .note .index li {
+    font-size: 1rem;
+  }
+  .mk .note .ph {
+    width: min(300px, 100%);
+    margin: 1rem auto 0.25rem;
+  }
+  .mk .note .ph-screen {
+    min-height: 480px;
+  }
+  .mk .note .staff {
+    margin-top: 0.75rem;
+  }
+  .mk .timetable li a {
+    padding: 0.55rem 0.9rem 0.55rem 0.7rem;
+    font-size: 0.72rem;
+    gap: 0.05rem;
+  }
+  .mk .timetable li a .t {
+    font-size: 0.6rem;
+  }
+  .mk .door h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+}
+
+/* the phone boards are plain blocks, not the 4:3 framed board */
+@media (max-width: 900px) {
+  .mk .mboard {
+    aspect-ratio: auto;
+    height: auto;
+    min-height: 0;
+    border-left: 0;
+    border-right: 0;
+    outline: 0;
+    display: block;
+  }
+  .mk .mboard .chalk-figure {
+    width: 92%;
+    margin: 1rem auto 0.25rem;
+  }
+}
+
+/* ---------- questions ---------- */
+
+.mk .faq {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(4rem, 9vw, 8rem);
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+}
+
+.mk .faq h2 {
+  margin: 0 0 2.5rem;
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.mk .faq dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 4rem;
+  max-width: 1100px;
+}
+
+.mk .faq dl div {
+  border-top: 1px solid var(--line);
+  padding: 1.25rem 0 1.5rem;
+}
+
+.mk .faq dt {
+  font-weight: 500;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.mk .faq dd {
+  margin: 0;
+  color: var(--mute);
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: 34rem;
+}
+
+@media (max-width: 720px) {
+  .mk .faq dl {
+    grid-template-columns: 1fr;
+  }
+}

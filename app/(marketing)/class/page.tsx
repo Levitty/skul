@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
 import { ClassRoom } from "../class-room"
+import { CLASS_TITLE, CLASS_DESC } from "../seo"
 
 export const metadata: Metadata = {
-  title: "Tutagora · Class",
-  description:
-    "Nine periods on how Tutagora runs a school as one record: the learner at the centre, fees, parents on WhatsApp, the fence, the staff, and management.",
+  title: { absolute: CLASS_TITLE },
+  description: CLASS_DESC,
+  alternates: { canonical: "/class" },
+  openGraph: { title: CLASS_TITLE, description: CLASS_DESC, url: "/class" },
 }
 
 export default function ClassPage() {

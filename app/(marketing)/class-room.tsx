@@ -66,14 +66,22 @@ function Slot({
 // The ontology, drawn on the board in six layers. Layers 1 to 3 are the
 // learner's own ring (Period 3); 4 to 6 are the school around her (Period 4).
 // Layers up to `seen` were drawn in an earlier period and are shown at once.
-function OntologyFigure({ upto, seen = 0 }: { upto: number; seen?: number }) {
+// With `auto`, the layers draw themselves when they scroll into view (the
+// phone layout, where each period has its own board in the page).
+function OntologyFigure({ upto, seen = 0, auto = false }: { upto: number; seen?: number; auto?: boolean }) {
   return (
     <div className="chalk-figure" aria-label="The school's records, drawn around one learner">
-      {[1, 2, 3, 4, 5, 6].map((n) => (
-        <div className="chalk-layer" key={n}>
-          <SketchOnto layer={n} play={upto >= n} instant={n <= seen} />
-        </div>
-      ))}
+      {[1, 2, 3, 4, 5, 6].map((n) =>
+        auto && n > upto ? null : (
+          <div className="chalk-layer" key={n}>
+            {auto ? (
+              <SketchOnto layer={n} play={n <= seen ? true : undefined} instant={n <= seen} />
+            ) : (
+              <SketchOnto layer={n} play={upto >= n} instant={n <= seen} />
+            )}
+          </div>
+        )
+      )}
     </div>
   )
 }
@@ -213,6 +221,23 @@ export function ClassRoom() {
     return null
   }
 
+  // On a phone the pinned board is hidden and each period gets its own board
+  // in the page, fully written, with its drawing. Hidden on wide screens.
+  const mboard = (id: string) => (
+    <div className="chalkboard on mboard" aria-hidden="true">
+      <Board />
+      <div className="chalk">
+        {lines(id).map((l, i) => (
+          <p key={i} className={`${i === 0 ? "chalk-h" : ""} in`}>
+            {l}
+          </p>
+        ))}
+        {id === "period-3" && <OntologyFigure upto={3} auto />}
+        {id === "period-4" && <OntologyFigure upto={6} seen={3} auto />}
+      </div>
+    </div>
+  )
+
   const rootRef = useRef<HTMLDivElement>(null)
   const lessonRef = useRef<HTMLDivElement>(null)
 
@@ -315,6 +340,7 @@ export function ClassRoom() {
 
           <div className="lesson-steps">
             {/* Period 1 · One record */}
+            {mboard("period-1")}
             <Slot period="period-1" step={1} id="period-1">
               <div className="label num">8:00 · Period 1 · One record</div>
               <h2>A school is made of records.</h2>
@@ -344,6 +370,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 2 · The people */}
+            {mboard("period-2")}
             <Slot period="period-2" step={1} id="period-2">
               <div className="label num">8:40 · Period 2 · The people</div>
               <h2>Different people. Different questions.</h2>
@@ -379,6 +406,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 3 · The learner */}
+            {mboard("period-3")}
             <Slot period="period-3" step={1} id="period-3">
               <div className="label num">9:20 · Period 3 · The learner</div>
               <h2>The learner is the centre of the school.</h2>
@@ -404,6 +432,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 4 · The school around her */}
+            {mboard("period-4")}
             <Slot period="period-4" step={1} id="period-4">
               <div className="label num">10:00 · Period 4 · The school around her</div>
               <h2>The academic spine.</h2>
@@ -431,6 +460,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 5 · Fees */}
+            {mboard("period-5")}
             <Slot period="period-5" step={1} id="period-5">
               <div className="label num">10:40 · Period 5 · Fees</div>
               <h2>Fees decide what a school can become.</h2>
@@ -476,6 +506,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 6 · Parents */}
+            {mboard("period-6")}
             <Slot period="period-6" step={1} id="period-6">
               <div className="label num">11:20 · Period 6 · Parents</div>
               <h2>We bring the school to the parent, on WhatsApp.</h2>
@@ -516,6 +547,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 7 · The fence */}
+            {mboard("period-7")}
             <Slot period="period-7" step={1} id="period-7">
               <div className="label num">12:00 · Period 7 · The fence</div>
               <h2>Who sees what is decided by the record.</h2>
@@ -560,6 +592,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 8 · The staff */}
+            {mboard("period-8")}
             <Slot period="period-8" step={1} id="period-8">
               <div className="label num">12:40 · Period 8 · The staff</div>
               <h2>Every person who works here, first-class.</h2>
@@ -604,6 +637,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Period 9 · Management */}
+            {mboard("period-9")}
             <Slot period="period-9" step={1} id="period-9">
               <div className="label num">13:20 · Period 9 · Management</div>
               <h2>Insight a director can act on.</h2>
@@ -637,6 +671,7 @@ export function ClassRoom() {
             </Slot>
 
             {/* Homework */}
+            {mboard("homework")}
             <Slot period="homework" step={2} id="homework">
               <div className="label num">14:00 · After class</div>
               <h2>Homework: bring {S === "Your school" ? "your school" : S} onto one record.</h2>

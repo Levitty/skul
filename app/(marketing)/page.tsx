@@ -4,6 +4,7 @@ import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } 
 import { Mark, BRAND } from "./logo"
 import { RecordMap } from "./record-map"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
+import { FAQ, jsonLd } from "./seo"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -337,6 +338,23 @@ export default function HomePage() {
             <p>Not a dashboard to admire. A school that knows itself.</p>
           </div>
         </section>
+
+        <section className="faq wrap" id="questions">
+          <div className="label">Questions directors ask</div>
+          <h2>Before you call.</h2>
+          <dl>
+            {FAQ.map((f) => (
+              <div key={f.q}>
+                <dt>{f.q}</dt>
+                <dd>{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {jsonLd().map((d, i) => (
+          <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }} />
+        ))}
 
         <section className="close">
           <div className="wrap">
