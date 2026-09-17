@@ -2473,3 +2473,240 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- SMIS panel: what you expect, then what you did not ---------- */
+
+.mk .panel.smis .wrap {
+  display: block;
+}
+
+.mk .panel.smis .text {
+  max-width: 40rem;
+}
+
+.mk .panel.smis .text h2 {
+  max-width: 12em;
+}
+
+.mk .expect {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) auto;
+  gap: 1.5rem 2rem;
+  align-items: start;
+}
+
+.mk .chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mk .chips li {
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--mute);
+  white-space: nowrap;
+}
+
+.mk .expect .got {
+  margin: 0.3rem 0 0;
+  color: var(--white);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.mk .diff {
+  margin-top: 4rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 3rem 5rem;
+  align-items: center;
+}
+
+.mk .diff h3 {
+  margin: 0 0 1.1rem;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  max-width: 11em;
+  text-wrap: balance;
+}
+
+.mk .diff p {
+  color: var(--mute);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  max-width: 32rem;
+}
+
+/* the payment, and everything it moves */
+
+.mk .match {
+  position: relative;
+  max-width: 520px;
+  margin-left: auto;
+}
+
+.mk .slip {
+  position: relative;
+  background: #151615;
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 0.9rem 1rem 0.8rem;
+}
+
+.mk .slip.sms {
+  border-left: 3px solid #3ab54a;
+  transform: translateY(14px);
+  opacity: 0;
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.mk .match.go .slip.sms {
+  opacity: 1;
+  transform: none;
+}
+
+.mk .slip .from {
+  display: block;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  color: #3ab54a;
+  margin-bottom: 0.35rem;
+}
+
+.mk .slip p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--white);
+  max-width: none;
+}
+
+.mk .slip time {
+  position: absolute;
+  right: 1rem;
+  top: 0.9rem;
+  font-size: 0.75rem;
+  color: var(--mute);
+}
+
+.mk .match .wire {
+  width: 1px;
+  height: 2.25rem;
+  margin: 0 0 0 2.5rem;
+  background: rgba(242, 242, 240, 0.35);
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform 500ms ease 500ms;
+}
+
+.mk .match.go .wire {
+  transform: none;
+}
+
+.mk .lands {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.mk .lands li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9375rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.mk .match.go .lands li:nth-child(1) { transition-delay: 1.0s; }
+.mk .match.go .lands li:nth-child(2) { transition-delay: 1.35s; }
+.mk .match.go .lands li:nth-child(3) { transition-delay: 1.7s; }
+.mk .match.go .lands li:nth-child(4) { transition-delay: 2.05s; }
+
+.mk .match.go .lands li {
+  opacity: 1;
+  transform: none;
+}
+
+.mk .lands .k {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.mk .lands .w {
+  color: var(--mute);
+}
+
+.mk .lands .v {
+  color: var(--accent);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mk .lands .v s {
+  color: var(--mute);
+  margin-right: 0.4em;
+}
+
+.mk .lands li:last-child .v {
+  white-space: normal;
+  max-width: 14rem;
+}
+
+.mk .match .stamp {
+  display: block;
+  text-align: right;
+  margin-top: 0.7rem;
+  font-size: 0.75rem;
+  color: var(--mute);
+  opacity: 0;
+  transition: opacity 500ms ease 2.4s;
+}
+
+.mk .match.go .stamp {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk .slip.sms, .mk .lands li, .mk .match .stamp { opacity: 1; transform: none; transition: none; }
+  .mk .match .wire { transform: none; transition: none; }
+}
+
+@media (max-width: 900px) {
+  .mk .expect {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+  .mk .diff {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .mk .match {
+    margin-left: 0;
+  }
+  .mk .lands li {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
+  .mk .lands .v {
+    grid-column: 2;
+    text-align: left;
+  }
+}

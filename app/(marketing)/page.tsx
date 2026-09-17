@@ -4,6 +4,7 @@ import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } 
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
+import { Match } from "./match"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -215,12 +216,69 @@ export default function HomePage() {
           </div>
         </section>
 
-        {SYSTEMS.map((s, i) => (
+        <section className="panel sys smis" id="smis">
+          <div className="wrap">
+            <div className="text">
+              <div className="label num">01 &nbsp;·&nbsp; Tutagora SMIS</div>
+              <h2>Everything an SMIS does. Then the part none of them do.</h2>
+              <p>
+                Admissions, learner files, attendance, fee invoices, timetables, exams, report
+                cards, transport, the library, the clinic, and the dashboards to watch them all.
+                You get every one of them on the first day. What you are buying is what happens
+                next.
+              </p>
+            </div>
+            <div className="expect">
+              <div className="label">You expect</div>
+              <ul className="chips">
+                {[
+                  "Admissions",
+                  "Learner files",
+                  "Guardians",
+                  "Attendance",
+                  "Fee structures and invoices",
+                  "M-Pesa and card payments",
+                  "Timetables",
+                  "Exams and report cards",
+                  "Transport",
+                  "Library",
+                  "Clinic",
+                  "Discipline",
+                  "Dashboards",
+                ].map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+              <p className="got">All of it. First day.</p>
+            </div>
+            <div className="diff">
+              <div className="diff-text">
+                <div className="label">You did not expect</div>
+                <h3>A payment that knows where it belongs.</h3>
+                <p>
+                  At 07:42 a parent pays on M-Pesa. By 07:43 the invoice is settled, the books
+                  are posted, the director&rsquo;s collection figure has moved, and the parent
+                  has a receipt on WhatsApp. Nobody typed anything.
+                </p>
+                <p>
+                  That is the difference between a system that stores your school and one that
+                  knows it. Every record in Tutagora is joined to the others, so one fact lands
+                  everywhere it is true.
+                </p>
+              </div>
+              <div className="diff-art">
+                <Match />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {SYSTEMS.filter((s) => s.id !== "smis").map((s, i) => (
           <section className="panel sys" id={s.id} key={s.id}>
             <div className="wrap">
               <div className="text">
                 <div className="label num">
-                  {String(i + 1).padStart(2, "0")} &nbsp;·&nbsp; {s.name}
+                  {String(i + 2).padStart(2, "0")} &nbsp;·&nbsp; {s.name}
                 </div>
                 <h2>{s.title}</h2>
                 <p>{s.lede}</p>

@@ -30,3 +30,14 @@
     io.observe(root);
   });
 })();
+
+// The payment that knows where it belongs: play once when it scrolls into view.
+(function(){
+  var els = document.querySelectorAll(".match");
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window)) { els.forEach(function(e){ e.classList.add("go"); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add("go"); io.unobserve(en.target); } });
+  }, { threshold: 0.35 });
+  els.forEach(function(e){ io.observe(e); });
+})();
