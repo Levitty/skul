@@ -2,7 +2,6 @@ import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mark, BRAND } from "./logo"
-import { RecordMap } from "./record-map"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
 
@@ -291,18 +290,6 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
-        </section>
-
-        <section className="onto wrap" id="ontology">
-          <div className="label">One ontology</div>
-          <h2>One model of the whole school. Every record knows every other.</h2>
-          <p>
-            A learner belongs to a class, which has a teacher, who teaches a subject, which is
-            examined in a term, which is invoiced, which is paid on a phone. More than a hundred
-            related tables in one schema, every row locked to its school. Nothing is copied.
-            Nothing disagrees.
-          </p>
-          <RecordMap />
         </section>
 
         <section className="vision" id="vision">
