@@ -40,6 +40,8 @@ KEYWORDS = "school management system Kenya, school management software Kenya, sc
 def links(html):
     html = re.sub(r'<div class="mk[^"]*">', '<div class="mk">', html, 1)
     html = html.replace('href="/class"', 'href="/class/"')
+    # the capture ran with the page's own scripts live; the static scripts start afresh
+    html = html.replace(' data-live="1"', '')
     if app:
         html = html.replace('href="/login"', f'href="{app}/"').replace('href="/signup"', f'href="{app}/"')
     else:
@@ -124,7 +126,9 @@ os.makedirs(os.path.join(out, "class"))
 for name, data in (
     ("site.css", site_css),
     ("board.js", open(os.path.join(HERE, "board.js")).read()),
-    ("home.js", open(os.path.join(HERE, "home.js")).read()),
+    ("home.js", open(os.path.join(HERE, "home.js")).read() + "\n// Ask the school\n(function(){\n"
+        + open(os.path.join(MK, "ask-logic.js")).read().replace("export function mountAsk", "function mountAsk")
+        + "\ndocument.querySelectorAll('.ask').forEach(mountAsk);\n})();\n"),
     ("class.js", class_js),
 ):
     ASSET[name] = fingerprint(name, data)

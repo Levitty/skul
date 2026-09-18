@@ -138,6 +138,13 @@ class Sketch {
     const esc = String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;");
     this.out.push(`<text x="${f(x)}" y="${f(y)}" font-family="var(--hand)" font-size="${size}" font-weight="${w}" fill="${c}" stroke="none" opacity="${o}" text-anchor="${anchor}">${esc}</text>`);
   }
+  // Everything drawn inside fn lands in one addressable <g>.
+  group(attrs, fn) {
+    const start = this.out.length;
+    fn();
+    const inner = this.out.splice(start);
+    this.out.push(`<g ${attrs}>${inner.join("")}</g>`);
+  }
   svg(seed) {
     return (
       `<svg viewBox="0 0 ${this.w} ${this.h}" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#e6e6e2" stroke-linecap="round" stroke-linejoin="round">` +
@@ -551,7 +558,125 @@ function ontoLayer(n) {
   return s.svg(10 + n);
 }
 
-const sv = { smis: register(), hr: duster(), learning: pencil(), classroom: classroom(), balloon: balloon(), record: recordLines(), onto1: ontoLayer(1), onto2: ontoLayer(2), onto3: ontoLayer(3), onto4: ontoLayer(4), onto5: ontoLayer(5), onto6: ontoLayer(6) };
+// ---------- 8. Ask the school: the record answers a director's question ----------
+// The whole school stands on the board as a faint map. A question lights only
+// the records it needs, in the order the answer walks them: a link in orange,
+// then the record it reaches, in chalk.
+const A = {
+  learner:    [500, 272],
+  guardian:   [180, 92],
+  klass:      [500, 78],
+  teacher:    [820, 92],
+  route:      [140, 272],
+  invoice:    [860, 272],
+  attendance: [180, 458],
+  report:     [500, 470],
+  payment:    [690, 458],
+  books:      [915, 458],
+};
+const AW = {
+  learner: [0, 0], guardian: [190, 58], klass: [170, 58], teacher: [180, 58], route: [170, 58],
+  invoice: [170, 58], attendance: [190, 58], report: [190, 58], payment: [170, 58], books: [150, 58],
+};
+const AT = {
+  guardian: "Guardian", klass: "Class", teacher: "Teacher", route: "Bus route", invoice: "Invoice",
+  attendance: "Attendance", report: "Report card", payment: "Payment", books: "The books",
+};
+function aNode(s, key, { o = 0.9, c, tag = true } = {}) {
+  const [x, y] = A[key];
+  const g = tag ? `data-n="${key}"` : "";
+  s.group(g, () => {
+    if (key === "learner") {
+      s.ellipse(x, y, 108, 44, { turns: 1.06, w: 2.2, o, jitter: 1, c: c || ORANGE });
+      s.text(x, y + 8, "The learner", { size: 27, c: c || ORANGE, o });
+      return;
+    }
+    const [w, h] = AW[key];
+    s.poly([[x - w / 2, y - h / 2], [x + w / 2, y - h / 2], [x + w / 2, y + h / 2], [x - w / 2, y + h / 2]], { w: 1.6, o, jitter: 1, c });
+    s.text(x, y + 8, AT[key], { size: 24, c: c || "#f2f2f0", o });
+  });
+}
+// From the edge of one record to the edge of the next.
+function aEdge(key, towards) {
+  const [x, y] = A[key], [tx, ty] = A[towards];
+  const dx = tx - x, dy = ty - y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+  if (key === "learner") {
+    // point on the ellipse in that direction
+    const t = Math.atan2(uy * 108, ux * 44);
+    return [x + Math.cos(t) * 118, y + Math.sin(t) * 52];
+  }
+  const [w, h] = AW[key];
+  const k = Math.min((w / 2 + 12) / Math.abs(ux || 1e-6), (h / 2 + 12) / Math.abs(uy || 1e-6));
+  return [x + ux * k, y + uy * k];
+}
+function aLink(s, a, b, label, { o = 0.85, c, tag = true, w = 1.6 } = {}) {
+  const p0 = aEdge(a, b), p1 = aEdge(b, a);
+  const g = tag ? `data-l="${a}-${b}"` : "";
+  s.group(g, () => {
+    s.stroke([p0, p1], { w, o, jitter: 1.3, overshoot: 3, c });
+    if (label) {
+      const dx = p1[0] - p0[0], dy = p1[1] - p0[1], len = Math.hypot(dx, dy);
+      const nx = -dy / len, ny = dx / len;
+      const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2;
+      // label sits on the upper side of the line, whichever way it runs
+      const side = ny < 0 ? 1 : -1;
+      // clear of the line by more when the line is steep, since the label is wide
+      const off = 14 + Math.abs(nx) * label.length * 4.4;
+      s.text(mx + nx * off * side, my + ny * off * side + 6, label, { size: 18, o: 0.7, c: c || "#f2f2f0" });
+    }
+  });
+}
+const ASK_LINKS = [
+  ["learner", "guardian"], ["learner", "klass"], ["klass", "teacher"], ["learner", "route"], ["learner", "invoice"],
+  ["invoice", "payment"], ["payment", "books"], ["learner", "report"], ["learner", "attendance"], ["teacher", "report"],
+];
+function askGhost() {
+  const s = new Sketch(211, 1000, 540);
+  for (const [a, b] of ASK_LINKS) aLink(s, a, b, "", { o: 0.22, tag: false, w: 1.2 });
+  for (const k of Object.keys(A)) aNode(s, k, { o: k === "learner" ? 0.32 : 0.26, c: "#e6e6e2", tag: false });
+  return s.svg(21);
+}
+// Each question: the words, the walk (a record, or a record reached from
+// another over a labelled link), and the answer written under the drawing.
+const ASK = [
+  {
+    q: "Which families owe fees and have a child on the bus?",
+    walk: [["learner"], ["invoice", "learner", "billed"], ["route", "learner", "rides"], ["guardian", "learner", "on WhatsApp"]],
+    a: "Nine families, on routes 2 and 4. Each gets its own reminder at 08:14, with a Pay button.",
+  },
+  {
+    q: "Does Grade 7 pay for itself?",
+    walk: [["klass"], ["learner", "klass", "22 enrolled"], ["invoice", "learner", "billed"], ["payment", "invoice", "settled"], ["books", "payment", "posted"], ["teacher", "klass", "3 teachers"]],
+    a: "Not this term. Twenty-two learners, three teachers. Below cost for the second term running.",
+  },
+  {
+    q: "Who is carrying the most lessons?",
+    walk: [["teacher"], ["klass", "teacher", "28 lessons, 4 covers"], ["learner", "klass", "Grade 6 East"]],
+    a: "Mrs Achieng, Languages. Twenty-eight lessons and four covers this week, two above the load you set.",
+  },
+  {
+    q: "What happened to the 07:42 payment?",
+    walk: [["payment"], ["invoice", "payment", "matched 07:43"], ["learner", "invoice", "Amani W."], ["guardian", "learner", "receipt"], ["books", "payment", "posted"]],
+    a: "Matched to Amani W., Term 3, at 07:43. Posted to the books. Her mother has the receipt on WhatsApp.",
+  },
+  {
+    q: "Who was absent on Tuesday with no note?",
+    walk: [["attendance"], ["learner", "attendance", "Tuesday"], ["klass", "learner", "Grade 4 East"], ["guardian", "learner", "asked 08:10"]],
+    a: "Four learners in Grade 4 East. Three homes have replied on WhatsApp since. One has not been reached, and the head knows.",
+  },
+];
+function askLayer(i) {
+  const s = new Sketch(231 + i, 1000, 540);
+  for (const step of ASK[i].walk) {
+    const [key, from, label] = step;
+    if (from) aLink(s, from, key, label, { c: ORANGE, o: 0.9, w: 2.2 });
+    aNode(s, key, { o: 0.95 });
+  }
+  return s.svg(31 + i);
+}
+
+const sv = { smis: register(), hr: duster(), learning: pencil(), classroom: classroom(), balloon: balloon(), record: recordLines(), onto1: ontoLayer(1), onto2: ontoLayer(2), onto3: ontoLayer(3), onto4: ontoLayer(4), onto5: ontoLayer(5), onto6: ontoLayer(6), askGhost: askGhost() };
+ASK.forEach((_, i) => (sv["ask" + i] = askLayer(i)));
 const tsx = `"use client"
 
 // Generated pencil drawings. Do not edit the SVG strings by hand: regenerate
@@ -567,6 +692,12 @@ const CLASSROOM = ${JSON.stringify(sv.classroom)}
 const BALLOON = ${JSON.stringify(sv.balloon)}
 const RECORD = ${JSON.stringify(sv.record)}
 const ONTO = [${[1,2,3,4,5,6].map(i=>JSON.stringify(sv["onto"+i])).join(",\n")}]
+
+// Ask the school: the faint map of every record, and one drawing per question.
+export const ASK_GHOST = ${JSON.stringify(sv.askGhost)}
+export const ASK: { q: string; a: string; svg: string }[] = [
+${ASK.map((x, i) => `  { q: ${JSON.stringify(x.q)}, a: ${JSON.stringify(x.a)}, svg: ${JSON.stringify(sv["ask" + i])} },`).join("\n")}
+]
 
 function draw(root: HTMLElement, seconds: number) {
   const paths = Array.from(root.querySelectorAll<SVGPathElement>("path"))

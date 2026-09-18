@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Board } from "./board"
-import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon, SketchOnto } from "./sketches"
+import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
+import { Ask } from "./ask"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
@@ -240,16 +241,7 @@ export default function HomePage() {
                   happens next.
                 </p>
               </div>
-              <div className="onto-board" aria-hidden="true">
-                <Board />
-                <div className="chalk-figure">
-                  {[1, 2, 3, 4, 5, 6].map((n) => (
-                    <div className="chalk-layer" key={n}>
-                      <SketchOnto layer={n} delay={(n - 1) * 900} />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <Ask />
             </div>
             <div className="diff">
               <div className="diff-text">
