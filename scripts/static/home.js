@@ -59,3 +59,23 @@
   function jump(){ var m = /^#work-(\d)$/.exec(location.hash); if (!m) return; var c = cards[Number(m[1]) - 1]; if (c) t.scrollTo({ left: c.offsetLeft - t.offsetLeft, behavior: "smooth" }); }
   window.addEventListener("hashchange", jump); jump();
 })();
+
+// The blind: the block before the light row holds still while the row covers it.
+(function(){
+  var pin = document.querySelector(".pin"); if (!pin) return;
+  var inner = pin.firstElementChild, cover = pin.nextElementSibling;
+  function size(){ pin.style.setProperty("--pin-h", pin.offsetHeight + "px"); }
+  if ("ResizeObserver" in window) new ResizeObserver(size).observe(pin); size();
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches, raf = 0;
+  function onScroll(){
+    if (still || !inner || !cover) return;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(function(){
+      var r = cover.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (window.innerHeight - r.top) / window.innerHeight));
+      inner.style.transform = p > 0 ? "translateY(" + (p * 48) + "px) scale(" + (1 - p * 0.03) + ")" : "";
+      inner.style.opacity = p > 0 ? String(1 - p * 0.45) : "";
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+})();

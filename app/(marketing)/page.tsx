@@ -6,6 +6,7 @@ import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
 import { Match } from "./match"
 import { Work } from "./work"
+import { Pin } from "./pin"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -176,6 +177,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <div className="pin-wrap">
+        <Pin>
         <section className="thesis wrap" id="systems">
           <div className="label">Not a dashboard</div>
           <h2>A school is one living thing. We built the software to match.</h2>
@@ -219,8 +222,9 @@ export default function HomePage() {
             </a>
           </div>
         </section>
-
+        </Pin>
         <Work />
+        </div>
 
         <section className="panel sys smis" id="smis">
           <div className="wrap">
