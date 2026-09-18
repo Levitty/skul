@@ -1,13 +1,12 @@
 import Link from "next/link"
 import { Board } from "./board"
-import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
+import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon, SketchOnto } from "./sketches"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
 import { Match } from "./match"
 import { Work } from "./work"
 import { Pin } from "./pin"
-import { Graph } from "./graph"
 import { Phone, In, Out, Replies } from "./phone"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
@@ -241,8 +240,15 @@ export default function HomePage() {
                   happens next.
                 </p>
               </div>
-              <div className="graph-art" aria-hidden="true">
-                <Graph />
+              <div className="onto-board" aria-hidden="true">
+                <Board />
+                <div className="chalk-figure">
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <div className="chalk-layer" key={n}>
+                      <SketchOnto layer={n} delay={(n - 1) * 900} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="diff">

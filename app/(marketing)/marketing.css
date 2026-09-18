@@ -3423,3 +3423,48 @@
   grid-column: auto;
   align-self: center;
 }
+
+/* ---------- SMIS: the ontology in chalk, beside the headline ---------- */
+
+.mk .onto-board {
+  position: relative;
+  overflow: hidden;
+  background: #0c0d0c;
+  border: 1px solid var(--line-2);
+  outline: 6px solid #141414;
+  padding: 1.5rem 1.25rem;
+  isolation: isolate;
+}
+
+.mk .onto-board .board {
+  z-index: 0;
+}
+
+.mk .onto-board .chalk-figure {
+  position: relative;
+  z-index: 1;
+  max-width: none;
+  margin: 0;
+}
+
+.mk .panel.smis .top .onto-board {
+  grid-column: auto;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .mk .onto-board {
+    margin: 0 calc(-1 * var(--gutter) + 6px);
+    padding: 1rem 0.75rem;
+  }
+  .mk .onto-board .chalk-figure text {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 900px) {
+  .mk .onto-board .chalk-figure {
+    width: 92%;
+    margin: 0 auto;
+  }
+}

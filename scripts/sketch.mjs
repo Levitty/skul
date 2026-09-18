@@ -689,7 +689,7 @@ function Sketch({
     io.observe(root)
     return () => io.disconnect()
   }, [seconds, delay, onDraw, play])
-  return <div ref={ref} className="sketch" role="img" aria-label={title} dangerouslySetInnerHTML={html} />
+  return <div ref={ref} className="sketch" role="img" aria-label={title} data-seconds={seconds} data-delay={delay} dangerouslySetInnerHTML={html} />
 }
 
 export const SketchSmis = () => <Sketch svg={SMIS} seconds={3.2} title="Pencil drawing of an open class register" />
@@ -701,8 +701,8 @@ export const SketchBalloon = () => (
 export const SketchRecord = ({ onDraw }: { onDraw?: () => void }) => (
   <Sketch svg={RECORD} seconds={4.2} title="Chalk lines from one learner to the records that know her" onDraw={onDraw} />
 )
-export const SketchOnto = ({ layer, play, instant }: { layer: number; play?: boolean; instant?: boolean }) => (
-  <Sketch svg={ONTO[layer - 1]} seconds={1.6} title="" play={play} instant={instant} />
+export const SketchOnto = ({ layer, play, instant, delay }: { layer: number; play?: boolean; instant?: boolean; delay?: number }) => (
+  <Sketch svg={ONTO[layer - 1]} seconds={1.6} title="" play={play} instant={instant} delay={delay} />
 )
 export const SketchClassroom = () => (
   <Sketch svg={CLASSROOM} seconds={7} title="Pencil drawing of a teacher at a chalkboard, instructing a class seated at desks, with light from a window" />
