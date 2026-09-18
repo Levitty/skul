@@ -7,6 +7,8 @@ import { FAQ, jsonLd } from "./seo"
 import { Match } from "./match"
 import { Work } from "./work"
 import { Pin } from "./pin"
+import { Graph } from "./graph"
+import { Phone, In, Out, Replies } from "./phone"
 
 // The hero headline. Swap in the official Tutagora slogan here; nothing else
 // on the page needs to change. Words are split so they can enter one by one.
@@ -228,38 +230,20 @@ export default function HomePage() {
 
         <section className="panel sys smis" id="smis">
           <div className="wrap">
-            <div className="text">
-              <div className="label num">01 &nbsp;·&nbsp; Tutagora SMIS</div>
-              <h2>Everything an SMIS does. Then the part none of them do.</h2>
-              <p>
-                Admissions, learner files, attendance, fee invoices, timetables, exams, report
-                cards, transport, the library, the clinic, and the dashboards to watch them all.
-                You get every one of them on the first day. What you are buying is what happens
-                next.
-              </p>
-            </div>
-            <div className="expect">
-              <div className="label">You expect</div>
-              <ul className="chips">
-                {[
-                  "Admissions",
-                  "Learner files",
-                  "Guardians",
-                  "Attendance",
-                  "Fee structures and invoices",
-                  "M-Pesa and card payments",
-                  "Timetables",
-                  "Exams and report cards",
-                  "Transport",
-                  "Library",
-                  "Clinic",
-                  "Discipline",
-                  "Dashboards",
-                ].map((c) => (
-                  <li key={c}>{c}</li>
-                ))}
-              </ul>
-              <p className="got">All of it. First day.</p>
+            <div className="top">
+              <div className="text">
+                <div className="label">Tutagora SMIS</div>
+                <h2>Everything an SMIS does. Then the part none of them do.</h2>
+                <p>
+                  Admissions, learner files, attendance, fee invoices, timetables, exams, report
+                  cards, transport, the library, the clinic, and the dashboards to watch them
+                  all. You get every one of them on the first day. What you are buying is what
+                  happens next.
+                </p>
+              </div>
+              <div className="graph-art" aria-hidden="true">
+                <Graph />
+              </div>
             </div>
             <div className="diff">
               <div className="diff-text">
@@ -286,55 +270,48 @@ export default function HomePage() {
         <section className="panel advisor" id="advisor">
           <div className="wrap">
             <div className="text">
-              <div className="label">04 &nbsp;·&nbsp; Tutagora Advisor</div>
+              <div className="label">Tutagora Advisor</div>
               <h2>It does not show you the school. It tells you.</h2>
               <p>
                 A dashboard waits to be read. The Advisor reads the record itself, on the
                 school&rsquo;s own clock, the term, and says what it found in plain language on
-                WhatsApp. Ask it a question and it answers from the same single truth. It drafts
-                the reminder, the checklist, the staffing plan for next term. It sends nothing
-                and pays nothing. The AI drafts. People decide.
+                WhatsApp. Ask it a question and it answers from the same single truth.
               </p>
-            </div>
-            <div className="art wide">
-              <ul className="insights">
+              <p>
+                It drafts the reminder, the checklist, the staffing plan for next term. It sends
+                nothing and pays nothing. <strong>The AI drafts. People decide.</strong>
+              </p>
+              <ul className="watch">
                 <li>
-                  <span className="k num">4.7</span>
-                  <span>
-                    <strong>Cash runway, in months.</strong> Income actually collected against
-                    expenses actually paid, projected forward.
-                  </span>
+                  <b>Every Monday, 07:00.</b> Collection, runway, attendance, load and anything that does not add up, before the first bell.
                 </li>
                 <li>
-                  <span className="k num">−12%</span>
-                  <span>
-                    <strong>Grade 7 does not pay for itself.</strong> Fee income per class
-                    against the direct cost of teaching it.
-                  </span>
+                  <b>Any question, any day.</b> Answered from the record, with the figures it used.
                 </li>
                 <li>
-                  <span className="k num">2</span>
-                  <span>
-                    <strong>Teachers above load.</strong> Lessons per teacher and cover taken,
-                    by department, seen before a good teacher is quietly lost.
-                  </span>
-                </li>
-                <li>
-                  <span className="k num">3</span>
-                  <span>
-                    <strong>Things that do not add up.</strong> Fuel logged against a bus that
-                    did not run. Stock out without a requisition. A register fuller than the fee
-                    roll.
-                  </span>
-                </li>
-                <li>
-                  <span className="k num">07:00</span>
-                  <span>
-                    <strong>Monday briefing on WhatsApp.</strong> Fees, attendance, stuck
-                    applications and pending decisions, before the first bell.
-                  </span>
+                  <b>Every proposal logged.</b> What it read, what it drafted, who decided.
                 </li>
               </ul>
+            </div>
+            <div className="art talk">
+              <Phone time="10:17" day="Wednesday" name="Tutagora" sub="business account" label="The director asks the Advisor why Grade 7 is below cost, and it answers with figures and three options to draft. Example.">
+                <Out at="10:17">
+                  <p>why is grade 7 below cost</p>
+                </Out>
+                <In at="10:17">
+                  <p className="num">Grade 7 has 31 learners, against 38 last year. Fees collected this term: KES 1.42m. Its direct cost, two teachers and the bus: KES 1.61m. That is 12% below cost, for the second term running.</p>
+                </In>
+                <In at="10:18">
+                  <p>Three things would close it: seven more learners, the bus route shared with Grade 8, or the two streams merged after Term 3. I can draft the numbers for each.</p>
+                </In>
+                <Replies items={["Draft all three", "Show me the families", "Not now"]} />
+                <Out at="10:19">
+                  <p>Draft all three</p>
+                </Out>
+                <In at="10:19">
+                  <p>Done. Three one-page notes are in your documents. Nothing has been sent to anyone.</p>
+                </In>
+              </Phone>
             </div>
           </div>
         </section>

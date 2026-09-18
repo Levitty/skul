@@ -3296,3 +3296,130 @@
     position: static;
   }
 }
+
+/* ---------- SMIS: headline beside the constellation ---------- */
+
+.mk .panel.smis .top {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: 3rem 5rem;
+  align-items: center;
+}
+
+.mk .graph-art {
+  width: 100%;
+}
+
+.mk .graph {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.mk .g-edges line {
+  stroke: rgba(242, 242, 240, 0.2);
+  stroke-width: 1;
+}
+
+.mk .g-node circle {
+  fill: #0b0b0b;
+  stroke: rgba(242, 242, 240, 0.75);
+  stroke-width: 1.2;
+}
+
+.mk .g-node.is-learner circle {
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+
+.mk .g-name {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  fill: var(--white);
+  letter-spacing: 0.01em;
+}
+
+.mk .g-node.is-learner .g-name {
+  fill: var(--accent);
+  font-size: 12.5px;
+}
+
+.mk .g-sub {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  fill: var(--mute);
+  letter-spacing: 0.02em;
+}
+
+.mk .g-pulses circle {
+  fill: var(--accent);
+}
+
+.mk .g-pulses .g-dim {
+  fill: rgba(242, 242, 240, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk .g-pulses {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .mk .panel.smis .top {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .mk .g-name {
+    font-size: 13px;
+  }
+  .mk .g-sub {
+    font-size: 11px;
+  }
+}
+
+/* ---------- Advisor: a conversation ---------- */
+
+.mk .watch {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.mk .watch li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--mute);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 34rem;
+}
+
+.mk .watch b {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.mk .panel.advisor .art.talk {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mk .panel.advisor .art.talk .ph {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .mk .panel.advisor .art.talk {
+    justify-content: flex-start;
+  }
+}
+
+.mk .panel.smis .top .text,
+.mk .panel.smis .top .graph-art {
+  grid-column: auto;
+  align-self: center;
+}
