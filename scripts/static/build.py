@@ -128,7 +128,10 @@ for name, data in (
     ("board.js", open(os.path.join(HERE, "board.js")).read()),
     ("home.js", open(os.path.join(HERE, "home.js")).read() + "\n// Ask the school\n(function(){\n"
         + open(os.path.join(MK, "ask-logic.js")).read().replace("export function mountAsk", "function mountAsk")
-        + "\ndocument.querySelectorAll('.ask').forEach(mountAsk);\n})();\n"),
+        + "\ndocument.querySelectorAll('.ask').forEach(mountAsk);\n})();\n"
+        + "\n// The mess\n(function(){\n"
+        + open(os.path.join(MK, "mess-logic.js")).read().replace("export function mountMess", "function mountMess")
+        + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n"),
     ("class.js", class_js),
 ):
     ASSET[name] = fingerprint(name, data)

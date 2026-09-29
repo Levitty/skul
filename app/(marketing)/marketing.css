@@ -3285,7 +3285,8 @@
   will-change: transform, opacity;
 }
 
-.mk .pin-wrap .work {
+.mk .pin-wrap .work,
+.mk .pin-wrap .mess {
   position: relative;
   z-index: 2;
   box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.06);
@@ -3654,5 +3655,477 @@
   }
   .mk .ask-q button {
     font-size: 0.95rem;
+  }
+}
+
+/* ---------- the mess: a school that never spoke to itself ---------- */
+
+.mk .mess {
+  --m-ink: #111;
+  --m-mute: #6f6f6b;
+  --m-line: rgba(0, 0, 0, 0.1);
+  --m-paper: #fff;
+  background: #f4f4f1;
+  color: var(--m-ink);
+  padding: clamp(4rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
+  overflow: hidden;
+}
+
+.mk .mess .mhead {
+  text-align: center;
+  max-width: 46ch;
+  margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+}
+
+.mk .mess h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  color: var(--m-ink);
+}
+
+.mk .mess .mhead p {
+  margin: 1.1rem auto 0;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  color: var(--m-mute);
+  max-width: 40ch;
+}
+
+.mk .mess-fit {
+  position: relative;
+  width: min(1200px, 100% - 2 * var(--gutter));
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.mk .mess-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1200px;
+  height: 780px;
+  transform-origin: 0 0;
+}
+
+.mk .mess .mlines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.32);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+}
+
+.mk .mess .mlines path {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 1800ms ease 500ms;
+}
+
+.mk .mess.in .mlines path {
+  stroke-dashoffset: 0;
+  stroke-dasharray: 3 6;
+  transition: stroke-dasharray 0ms 2300ms, stroke-dashoffset 1800ms ease 500ms;
+}
+
+.mk .mess .mlines text {
+  fill: var(--m-mute);
+  stroke: none;
+  font-family: var(--hand), cursive;
+  font-size: 30px;
+  opacity: 0;
+  transition: opacity 400ms ease 2200ms;
+}
+
+.mk .mess.in .mlines text {
+  opacity: 1;
+}
+
+.mk .mess .q-it {
+  position: absolute;
+  font-size: 13px;
+  line-height: 1.35;
+  rotate: var(--r, 0deg);
+  opacity: 0;
+  translate: 0 14px;
+  transition: opacity 600ms ease, translate 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mk .mess.in .q-it {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.mk .mess .q-hand {
+  font-family: var(--hand), cursive;
+  font-size: 1.2em;
+  color: #2a2f6b;
+}
+
+.mk .mess .q-paper {
+  background: var(--m-paper);
+  border-radius: 3px;
+  box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 0.85rem 1rem 0.9rem;
+}
+
+.mk .mess .q-ph {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--m-ink);
+  margin-bottom: 0.45rem;
+}
+
+.mk .mess .q-sub {
+  font-size: 11px;
+  color: var(--m-mute);
+  margin: -0.3rem 0 0.4rem;
+}
+
+.mk .mess .q-rr {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  padding: 0.28rem 0;
+  border-bottom: 1px solid #c9d7ea;
+}
+
+.mk .mess .q-ledger .q-rr {
+  grid-template-columns: 1.4fr 0.8fr 0.8fr;
+}
+
+.mk .mess .q-ledger .q-rr .num {
+  text-align: right;
+}
+
+.mk .mess .q-rr.q-h {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-mute);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+}
+
+.mk .mess .q-reg .q-mk {
+  letter-spacing: 0.18em;
+  color: #2a2f6b;
+}
+
+.mk .mess .q-reg {
+  background-image: linear-gradient(90deg, transparent 0, transparent 22px, rgba(220, 60, 60, 0.35) 22px, rgba(220, 60, 60, 0.35) 23px, transparent 23px);
+}
+
+.mk .mess .q-scrawl {
+  position: absolute;
+  right: 12px;
+  bottom: -14px;
+  rotate: -6deg;
+  color: #c0392b;
+  font-size: 1.35em;
+}
+
+.mk .mess .q-sms {
+  background: #fff;
+  border: 1px solid var(--m-line);
+  border-radius: 14px;
+  padding: 0.7rem 0.9rem 0.6rem;
+  box-shadow: 0 18px 30px -22px rgba(0, 0, 0, 0.35);
+}
+
+.mk .mess .q-sms .q-from {
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #1a7f37;
+  margin-bottom: 0.2rem;
+}
+
+.mk .mess .q-sms p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #222;
+}
+
+.mk .mess .q-sms .q-when {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: var(--m-mute);
+  margin-top: 0.3rem;
+}
+
+.mk .mess .q-sms .q-note {
+  position: absolute;
+  left: -14px;
+  bottom: -26px;
+  rotate: -5deg;
+  color: #c0392b;
+  font-size: 1.5em;
+}
+
+.mk .mess .q-sheet {
+  background: #fff;
+  border: 1px solid #b7c7b9;
+  box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.35);
+  font-size: 11.5px;
+}
+
+.mk .mess .q-sheet .q-tab {
+  background: #1e6e42;
+  color: #fff;
+  font-size: 11px;
+  padding: 0.35rem 0.6rem;
+}
+
+.mk .mess table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.mk .mess .q-sheet td,
+.mk .mess .q-sheet th {
+  border: 1px solid #d8ddd8;
+  padding: 0.2rem 0.4rem;
+  text-align: left;
+  font-weight: 400;
+}
+
+.mk .mess .q-sheet th,
+.mk .mess .q-sheet td:first-child {
+  background: #f1f3f1;
+  color: var(--m-mute);
+  text-align: center;
+  width: 1.6em;
+}
+
+.mk .mess .q-sheet th {
+  width: auto;
+}
+
+.mk .mess .q-wa .q-who {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.35rem;
+  font-size: 12px;
+}
+
+.mk .mess .q-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #d9cfc4, #b9a898);
+  flex: none;
+}
+
+.mk .mess .q-av.q-b { background: linear-gradient(160deg, #cfd9d3, #98aca2); }
+.mk .mess .q-av.q-c { background: linear-gradient(160deg, #d6d0e0, #a89cbd); }
+.mk .mess .q-av.q-d { background: linear-gradient(160deg, #e6d6c6, #c9a98a); }
+
+.mk .mess .q-wa .q-bub {
+  background: #e7ffdb;
+  border-radius: 12px 12px 12px 3px;
+  padding: 0.55rem 0.7rem 0.4rem;
+  font-size: 13px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.mk .mess .q-wa .q-bub time {
+  display: block;
+  text-align: right;
+  font-size: 10.5px;
+  color: #5b7a5b;
+  margin-top: 0.2rem;
+}
+
+.mk .mess .q-bus .q-rr {
+  font-size: 12px;
+  border-bottom-color: var(--m-line);
+}
+
+.mk .mess .q-bus .q-mute {
+  color: var(--m-mute);
+}
+
+.mk .mess .q-pin {
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff7b7b, #b3261e);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.mk .mess .q-pay td {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--m-line);
+  font-size: 12px;
+}
+
+.mk .mess .q-pay td:last-child {
+  text-align: right;
+}
+
+.mk .mess .q-pay .q-warn {
+  color: #b3261e;
+}
+
+.mk .mess .q-memo .q-lh {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--m-mute);
+  border-bottom: 2px solid var(--m-ink);
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.mk .mess .q-memo p {
+  margin: 0;
+  font-size: 12.5px;
+}
+
+.mk .mess .q-memo .q-sig {
+  display: block;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.mk .mess .q-sticky {
+  background: #fff3a3;
+  padding: 0.8rem 0.85rem;
+  font-size: 1.35em;
+  line-height: 1.1;
+  color: #2a2f6b;
+  box-shadow: 0 16px 24px -16px rgba(0, 0, 0, 0.45);
+}
+
+.mk .mess .q-mail {
+  background: #fff;
+  border: 1px solid var(--m-line);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 18px 30px -22px rgba(0, 0, 0, 0.35);
+}
+
+.mk .mess .q-mail b {
+  display: block;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.mk .mess .q-mail small {
+  color: var(--m-mute);
+  font-size: 11.5px;
+}
+
+.mk .mess .q-mail .q-cnt {
+  position: absolute;
+  right: -10px;
+  top: -12px;
+  background: #d93025;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.mk .mess .q-ask {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.45rem 1rem 0.45rem 0.45rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.mk .mess .q-ask small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--m-mute);
+}
+
+.mk .mess .mfoot {
+  text-align: center;
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  color: var(--m-ink);
+  max-width: 40ch;
+}
+
+@media (max-width: 700px) {
+  .mk .mess-fit {
+    width: auto;
+    margin: 0 var(--gutter);
+  }
+  .mk .mess-stage {
+    position: relative;
+    width: auto;
+    height: auto;
+    transform: none !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem 1rem;
+    align-items: start;
+    padding: 1rem 0.4rem;
+  }
+  .mk .mess .mlines {
+    display: none;
+  }
+  .mk .mess .q-it {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    min-width: 0;
+  }
+  .mk .mess .q-ask {
+    grid-column: 1 / -1;
+    justify-self: center;
+    white-space: normal;
+  }
+  .mk .mess .q-sms .q-note {
+    left: auto;
+    right: 8px;
+  }
+  .mk .mess .mfoot {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .mk .mess .q-it {
+    font-size: 11.5px;
+  }
+  .mk .mess .q-rr {
+    gap: 0.4rem;
+  }
+  .mk .mess .q-rr .q-hand:first-child,
+  .mk .mess .q-bus .q-rr span:first-child {
+    white-space: nowrap;
+  }
+  .mk .mess .q-ledger .q-rr {
+    grid-template-columns: 1.3fr 0.9fr 0.9fr;
+  }
+  .mk .mess .q-sheet td,
+  .mk .mess .q-sheet th {
+    padding: 0.15rem 0.25rem;
+    white-space: nowrap;
   }
 }

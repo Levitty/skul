@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Ask } from "./ask"
+import { Mess } from "./mess"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
@@ -225,7 +226,7 @@ export default function HomePage() {
           </div>
         </section>
         </Pin>
-        <Work />
+        <Mess />
         </div>
 
         <section className="panel sys smis" id="smis">
@@ -264,6 +265,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <Work />
 
         <section className="panel advisor" id="advisor">
           <div className="wrap">
