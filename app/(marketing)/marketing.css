@@ -4699,3 +4699,49 @@
     translate: none;
   }
 }
+
+/* ---------- Advisor: the phone at a hand's size, not a poster ---------- */
+
+.mk .panel.advisor .art.talk .ph {
+  zoom: 0.76;
+}
+
+@media (max-width: 900px) {
+  .mk .panel.advisor .art.talk .ph {
+    zoom: 0.92;
+  }
+}
+
+/* ---------- Vision, in the light ---------- */
+
+.mk .vision {
+  --v-ink: #111;
+  --v-mute: #6f6f6b;
+  background: #f5f5f2;
+  color: var(--v-ink);
+  border-top: 0;
+  padding-top: clamp(4rem, 8vw, 7rem);
+}
+
+.mk .vision h2 {
+  color: var(--v-ink);
+}
+
+.mk .vision p,
+.mk .vision p:last-child {
+  color: var(--v-ink);
+}
+
+.mk .vision-art {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.3);
+}
+
+.mk .vision-art .sketch svg {
+  stroke: #1c1c1a;
+}
+
+.mk .vision-art .sketch svg path[stroke="#f4a21d"] {
+  stroke: #d98a06;
+}
