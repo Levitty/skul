@@ -37,7 +37,7 @@ export function Mess() {
           </svg>
 
           {/* 1 · the register */}
-          <div className="q-it q-paper q-reg" style={{ left: 40, top: 40, width: 300, ["--r" as string]: "-2deg" }}>
+          <div className="q-it q-paper q-reg">
             <div className="q-ph">Grade 6 East · Attendance · Term 2</div>
             {[
               ["Amani W.", "✓✓✓A✓"],
@@ -55,7 +55,7 @@ export function Mess() {
           </div>
 
           {/* 2 · the fee book */}
-          <div className="q-it q-paper q-ledger" style={{ left: 420, top: 24, width: 320, ["--r" as string]: "1.5deg" }}>
+          <div className="q-it q-paper q-ledger">
             <div className="q-ph">Fees register 2026 · Term 2</div>
             <div className="q-rr q-h"><span>Name</span><span>Paid</span><span>Bal.</span></div>
             {[
@@ -75,7 +75,7 @@ export function Mess() {
           </div>
 
           {/* 3 · M-Pesa */}
-          <div className="q-it q-sms" style={{ left: 800, top: 70, width: 300, ["--r" as string]: "2deg" }}>
+          <div className="q-it q-sms">
             <div className="q-from">MPESA</div>
             <p className="num">RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to RIVERSIDE ACADEMY on 17/9/26 at 7:42 AM.</p>
             <span className="q-when num">07:42</span>
@@ -83,7 +83,7 @@ export function Mess() {
           </div>
 
           {/* 4 · the marks spreadsheet */}
-          <div className="q-it q-sheet" style={{ left: 60, top: 330, width: 350, ["--r" as string]: "1deg" }}>
+          <div className="q-it q-sheet">
             <div className="q-tab">Marks_Term2_FINAL_v3.xlsx</div>
             <table>
               <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
@@ -99,13 +99,13 @@ export function Mess() {
           </div>
 
           {/* 5 · the parent on WhatsApp */}
-          <div className="q-it q-wa" style={{ left: 450, top: 330, width: 300, ["--r" as string]: "-1deg" }}>
+          <div className="q-it q-wa">
             <div className="q-who"><span className="q-av" /><b>Mama Amani</b></div>
             <div className="q-bub">Good morning madam, I have paid 10,200 for Amani. Please confirm 🙏<time className="num">07:58 ✓✓</time></div>
           </div>
 
           {/* 6 · the bus list */}
-          <div className="q-it q-paper q-bus" style={{ left: 800, top: 260, width: 250, ["--r" as string]: "-2.5deg" }}>
+          <div className="q-it q-paper q-bus">
             <i className="q-pin" />
             <div className="q-ph">Route 4 · Kileleshwa</div>
             <div className="q-sub">Matron: Mary · Driver: Kip</div>
@@ -115,7 +115,7 @@ export function Mess() {
           </div>
 
           {/* 7 · payroll */}
-          <div className="q-it q-paper q-pay" style={{ left: 840, top: 500, width: 330, ["--r" as string]: "1.5deg" }}>
+          <div className="q-it q-paper q-pay">
             <div className="q-ph">Payroll · September</div>
             <table className="num">
               <tbody>
@@ -128,7 +128,7 @@ export function Mess() {
           </div>
 
           {/* 8 · the memo */}
-          <div className="q-it q-paper q-memo" style={{ left: 110, top: 560, width: 290, ["--r" as string]: "-1.5deg" }}>
+          <div className="q-it q-paper q-memo">
             <div className="q-lh">RIVERSIDE ACADEMY</div>
             <div className="q-ph">Memo · To all class teachers</div>
             <p>Submit the fee balances for your class to the bursar by Friday, 12 noon. Use the new form.</p>
@@ -136,25 +136,25 @@ export function Mess() {
           </div>
 
           {/* 9 · the sticky note */}
-          <div className="q-it q-sticky q-hand" style={{ left: 480, top: 560, width: 160, ["--r" as string]: "4deg" }}>
+          <div className="q-it q-sticky q-hand">
             Amani W. — inhaler at the office!! tell the bus
           </div>
 
           {/* 10 · the inbox */}
-          <div className="q-it q-mail" style={{ left: 680, top: 650, width: 260, ["--r" as string]: "0deg" }}>
+          <div className="q-it q-mail">
             <span className="q-cnt num">47</span>
             <b>Re: Re: Re: arrears list Term 2</b>
             <small>Grace · attached the wrong sheet, see below</small>
           </div>
 
           {/* the people asking */}
-          <div className="q-it q-ask" style={{ left: 250, top: 250, ["--r" as string]: "0deg" }}>
+          <div className="q-it q-ask q-a1">
             <span className="q-av q-b" /><span><small>Bursar</small>Who paid 10,200 at 07:42?</span>
           </div>
-          <div className="q-it q-ask" style={{ left: 640, top: 470, ["--r" as string]: "0deg" }}>
+          <div className="q-it q-ask q-a2">
             <span className="q-av q-c" /><span><small>Director</small>What is Grade 7 costing us?</span>
           </div>
-          <div className="q-it q-ask" style={{ left: 940, top: 410, ["--r" as string]: "0deg" }}>
+          <div className="q-it q-ask q-a3">
             <span className="q-av q-d" /><span><small>Class teacher</small>Has Amani&rsquo;s mum paid?</span>
           </div>
         </div>

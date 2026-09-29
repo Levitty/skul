@@ -3660,6 +3660,22 @@
 
 /* ---------- the mess: a school that never spoke to itself ---------- */
 
+/* positions on the 1200 x 780 stage */
+.mk .mess .q-reg { left: 40px; top: 40px; width:300px; --r: -2deg; }
+.mk .mess .q-ledger { left: 420px; top: 24px; width:320px; --r: 1.5deg; }
+.mk .mess .q-sms { left: 800px; top: 70px; width:300px; --r: 2deg; }
+.mk .mess .q-sheet { left: 60px; top: 330px; width:350px; --r: 1deg; }
+.mk .mess .q-wa { left: 450px; top: 330px; width:300px; --r: -1deg; }
+.mk .mess .q-bus { left: 800px; top: 260px; width:250px; --r: -2.5deg; }
+.mk .mess .q-pay { left: 840px; top: 500px; width:330px; --r: 1.5deg; }
+.mk .mess .q-memo { left: 110px; top: 560px; width:290px; --r: -1.5deg; }
+.mk .mess .q-sticky { left: 480px; top: 560px; width:160px; --r: 4deg; }
+.mk .mess .q-mail { left: 680px; top: 650px; width:260px; --r: 0deg; }
+.mk .mess .q-a1 { left: 250px; top: 250px;  --r: 0deg; }
+.mk .mess .q-a2 { left: 640px; top: 470px;  --r: 0deg; }
+.mk .mess .q-a3 { left: 940px; top: 410px;  --r: 0deg; }
+
+
 .mk .mess {
   --m-ink: #111;
   --m-mute: #6f6f6b;
@@ -4089,10 +4105,10 @@
     display: none;
   }
   .mk .mess .q-it {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    width: auto !important;
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
     min-width: 0;
   }
   .mk .mess .q-ask {
