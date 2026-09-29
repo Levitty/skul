@@ -23,9 +23,11 @@ const FEES = [
 ]
 
 const LOG = [
-  "New payment on M-Pesa: KES 10,200 from 0722 ··· 416, 07:42.",
-  "Matched to Amani Wanjiru, Grade 6 East, Term 2 invoice. Balance KES 0.",
-  "Posted to the books. Receipt sent to her mother on WhatsApp, 07:43.",
+  "07:42 · M-Pesa payment matched to Amani W., Term 2. Balance KES 0. Receipt sent to her mother.",
+  "16:10 · Mrs Achieng entered CAT 2 marks for Grade 6 East. 32 report cards ready.",
+  "16:30 · Kevin K. absent a second day. His mother replied: at the clinic, back Thursday.",
+  "17:05 · Mr Mutua's contract ends in three weeks. Renewal drafted for the head to sign.",
+  "18:04 · Report cards sent to parents on WhatsApp. Monday's brief updated for the director.",
 ]
 
 export function Mess() {
@@ -38,11 +40,11 @@ export function Mess() {
           <div className="mhead">
             <div className="mh-a">
               <h2>A school that never spoke to itself.</h2>
-              <p>This is what confirming one payment looks like across nine places.</p>
+              <p>This is what one Tuesday looks like across nine places that do not know each other.</p>
             </div>
             <div className="mh-b" aria-hidden="true">
               <h2>Now, one record.</h2>
-              <p>Tutagora was built to be the one place the school keeps itself. The same payment, and everything it touches.</p>
+              <p>Fees, marks, attendance, staff and the books in one place. The same Tuesday, kept by the record.</p>
             </div>
           </div>
         </div>
@@ -107,6 +109,7 @@ export function Mess() {
               </div>
 
               <div className="q-it q-sticky q-hand">Amani W. — inhaler at the office!! tell the bus</div>
+              <div className="q-it q-sticky q-sticky2 q-hand">Mutua contract ends Oct?? renew? ask HR</div>
 
               <div className="q-it q-paper q-bus">
                 <i className="q-pin" />
@@ -189,15 +192,15 @@ export function Mess() {
               </div>
 
               <div className="q-it q-ask q-a1"><span className="q-av q-b" /><span><small>Bursar</small>Who paid 10,200 at 07:42?</span></div>
-              <div className="q-it q-ask q-a2"><span className="q-av q-c" /><span><small>Director</small>What is Grade 7 costing us?</span></div>
-              <div className="q-it q-ask q-a3"><span className="q-av q-d" /><span><small>Class teacher</small>Has Amani&rsquo;s mum paid?</span></div>
+              <div className="q-it q-ask q-a2"><span className="q-av q-c" /><span><small>Director</small>Who is carrying the most lessons?</span></div>
+              <div className="q-it q-ask q-a3"><span className="q-av q-d" /><span><small>Class teacher</small>Who has Kevin&rsquo;s mum&rsquo;s number?</span></div>
             </div>
 
             {/* ---------- the order ---------- */}
             <div className="m-order" role="img" aria-label="The same term as one record: the learner, her invoice, her guardian, the bus, attendance, the report card and the books, all changed by one payment">
               <div className="mh-b m-only" aria-hidden="true">
                 <h2>Now, one record.</h2>
-                <p>Tutagora was built to be the one place the school keeps itself. The same payment, and everything it touches.</p>
+                <p>Fees, marks, attendance, staff and the books in one place. The same Tuesday, kept by the record.</p>
               </div>
 
               <div className="o-col o-left">
@@ -213,7 +216,7 @@ export function Mess() {
                 <div className="o-panel o-attend">
                   <div className="o-k">Attendance · Week 6</div>
                   <div className="o-big num">94%</div>
-                  <div className="o-s">Grade 6 East · 2 absent Tuesday, both homes reached</div>
+                  <div className="o-s">Grade 6 East · Kevin K. absent, mother reached 16:30</div>
                 </div>
                 <div className="o-panel o-report">
                   <div className="o-k">Report card · Term 2</div>
@@ -224,22 +227,21 @@ export function Mess() {
               </div>
 
               <div className="o-col o-mid">
-                <div className="o-panel o-bus">
-                  <div className="o-k">Bus route 4 · Kileleshwa</div>
-                  <div className="o-list"><span>Amani W. <i>Gate 3</i></span><span>Neema A. <i>Shell</i></span><span>Otieno J. <i>Gate 3</i></span><span>Kevin K. <i>Ring Rd</i></span></div>
+                <div className="o-panel o-class">
+                  <div className="o-k">Class · Grade 6 East</div>
+                  <div className="o-list"><span>32 learners</span><span>Mrs Achieng <i>class teacher</i></span><span>28 lessons a week <i>4 covers</i></span><span>Bus route 4 <i>11 riders</i></span></div>
                 </div>
                 <div className="o-panel o-centre">
-                  <div className="o-k">New payment on M-Pesa</div>
+                  <div className="o-k">Tuesday, on the record</div>
                   <ol className="o-log">
                     {LOG.map((l, i) => (
                       <li key={i} data-t={l}><span /></li>
                     ))}
                   </ol>
                 </div>
-                <i className="o-wire" aria-hidden="true" />
-                <div className="o-panel o-mpesa">
-                  <span className="o-ico">M</span>
-                  <span className="num">RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to RIVERSIDE ACADEMY on 17/9/26 at 7:42 AM.</span>
+                <div className="o-panel o-guardian">
+                  <div className="o-k">Guardian · WhatsApp</div>
+                  <div className="o-bub">Received, thank you. KES 10,200 for Amani, Term 2. Balance KES 0.<time className="num">07:43 ✓✓</time></div>
                 </div>
               </div>
 
@@ -251,15 +253,18 @@ export function Mess() {
                   <div className="o-row"><span>Transport</span><b className="num">1,500</b></div>
                   <div className="o-row o-tot"><span>Balance</span><b className="num"><s>10,200</s> 0</b></div>
                 </div>
-                <div className="o-panel o-guardian">
-                  <div className="o-k">Guardian · WhatsApp</div>
-                  <div className="o-bub">Received, thank you. KES 10,200 for Amani, Term 2. Balance KES 0.<time className="num">07:43 ✓✓</time></div>
+                <div className="o-panel o-staff">
+                  <div className="o-k">Staff · Mr Mutua P.</div>
+                  <div className="o-t">Teacher · Mathematics</div>
+                  <div className="o-row"><span>Contract</span><b>Ends 21 Oct · renewal drafted</b></div>
+                  <div className="o-row"><span>Leave</span><b>4 days left</b></div>
+                  <div className="o-row"><span>Payroll</span><b className="o-ok">Ready · 28th</b></div>
                 </div>
                 <div className="o-panel o-books">
                   <div className="o-k">The books</div>
                   <div className="o-row"><span>Fees income</span><b className="num o-ok">+10,200</b></div>
                   <div className="o-row"><span>Term 2 collected</span><b className="num"><s>71%</s> 72%</b></div>
-                  <div className="o-row"><span>Payroll · 28th</span><b>Ready</b></div>
+                  <div className="o-row"><span>Staff cost</span><b className="num">58% of income</b></div>
                 </div>
               </div>
             </div>

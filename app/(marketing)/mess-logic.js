@@ -35,7 +35,7 @@ export function mountMess(root) {
   function typeTo(p) {
     lines.forEach(function (li, i) {
       var t = li.getAttribute("data-t") || "";
-      var k = ramp(p, 0.7 + i * 0.09, 0.78 + i * 0.09);
+      var k = ramp(p, 0.64 + i * 0.072, 0.7 + i * 0.072);
       li.firstElementChild.textContent = t.slice(0, Math.round(t.length * k));
       li.classList.toggle("on", k > 0);
       li.classList.toggle("done", k >= 1);
