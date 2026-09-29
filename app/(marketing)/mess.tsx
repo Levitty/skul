@@ -98,7 +98,7 @@ export function Mess() {
 
               <div className="q-it q-photo">
                 <div className="q-slip">
-                  <b>Riverside Academy</b>
+                  <b>Tutagora Academy</b>
                   <small>Official receipt · No. 04417</small>
                   <div className="q-sl"><span>Received from</span><i className="q-hand">Mama Amani</i></div>
                   <div className="q-sl"><span>Amount</span><i className="q-hand num">10,200/=</i></div>
@@ -124,9 +124,9 @@ export function Mess() {
                 <div className="q-scr">
                   <div className="q-bar"><span className="num">07:43</span><span className="q-sig">●●●● ▮</span></div>
                   <div className="q-hd"><span className="q-ico">M</span>MPESA</div>
-                  <div className="q-msg num">RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to RIVERSIDE ACADEMY on 17/9/26 at 7:42 AM. New M-PESA balance is Ksh3,410.00.<time>07:42</time></div>
-                  <div className="q-msg num">RJ7L0P3WD8 Confirmed. Ksh6,000.00 sent to RIVERSIDE ACADEMY on 17/9/26 at 8:10 AM.<time>08:10</time></div>
-                  <div className="q-msg num">RJ7M4K1QZ2 Confirmed. Ksh15,000.00 sent to RIVERSIDE ACADEMY on 17/9/26 at 8:31 AM.<time>08:31</time></div>
+                  <div className="q-msg num">RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to TUTAGORA ACADEMY on 17/9/26 at 7:42 AM. New M-PESA balance is Ksh3,410.00.<time>07:42</time></div>
+                  <div className="q-msg num">RJ7L0P3WD8 Confirmed. Ksh6,000.00 sent to TUTAGORA ACADEMY on 17/9/26 at 8:10 AM.<time>08:10</time></div>
+                  <div className="q-msg num">RJ7M4K1QZ2 Confirmed. Ksh15,000.00 sent to TUTAGORA ACADEMY on 17/9/26 at 8:31 AM.<time>08:31</time></div>
                 </div>
                 <span className="q-note q-hand">which child?</span>
               </div>
@@ -167,7 +167,7 @@ export function Mess() {
               </div>
 
               <div className="q-it q-paper q-memo">
-                <div className="q-lh">RIVERSIDE ACADEMY</div>
+                <div className="q-lh">TUTAGORA ACADEMY</div>
                 <div className="q-ph">Memo · To all class teachers</div>
                 <p>Submit the fee balances for your class to the bursar by Friday, 12 noon. Use the new form, not the old one.</p>
                 <span className="q-sig2 q-hand">— Bursar</span>

@@ -320,7 +320,7 @@ export function ClassRoom() {
           <form className="door-form" onSubmit={(e) => e.preventDefault()}>
             <label>
               <span className="label">School</span>
-              <input id="school" type="text" value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Riverside Academy" autoComplete="organization" />
+              <input id="school" type="text" value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Tutagora Academy" autoComplete="organization" />
             </label>
             <label>
               <span className="label">Learners, roughly</span>

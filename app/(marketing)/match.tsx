@@ -32,7 +32,7 @@ export function Match() {
       <div className="slip sms">
         <span className="from">MPESA</span>
         <p className="num">
-          RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to RIVERSIDE ACADEMY for account STU-0416 on
+          RJ7K2M8QX1 Confirmed. Ksh10,200.00 sent to TUTAGORA ACADEMY for account STU-0416 on
           17/9/26 at 7:42 AM. New M-PESA balance is Ksh3,410.00.
         </p>
         <time className="num">07:42</time>

@@ -201,7 +201,7 @@ export function Work() {
                 <div className="top"><span className="t">T</span><span>Tutagora</span><span className="when num">Mon 07:00</span></div>
                 <div className="chat">
                   <div className="bub">
-                    <p>Good morning. Riverside this week.</p>
+                    <p>Good morning. Tutagora Academy this week.</p>
                     <p className="num">Fees: 71% of Term 2 collected. 38 families outstanding, 9 with no payment yet.</p>
                     <p className="num">Runway at this rate: 4.7 months. Grade 7 below cost for a second term.</p>
                     <p className="num">Attendance 94%. Two teachers above load in Languages.</p>
