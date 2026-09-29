@@ -39,7 +39,7 @@ KEYWORDS = "school management system Kenya, school management software Kenya, sc
 
 def links(html):
     html = re.sub(r'<div class="mk[^"]*">', '<div class="mk">', html, 1)
-    html = html.replace('href="/class"', 'href="/class/"')
+    html = html.replace('href="/class"', 'href="/class/"').replace('href="/class#', 'href="/class/#')
     # the capture ran with the page's own scripts live; the static scripts start afresh
     html = html.replace(' data-live="1"', '')
     if app:

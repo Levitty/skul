@@ -1,13 +1,10 @@
 import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
-import { Ask } from "./ask"
 import { Mess } from "./mess"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
-import { Match } from "./match"
-import { Work } from "./work"
 import { Pin } from "./pin"
 import { Phone, In, Out, Replies } from "./phone"
 
@@ -42,7 +39,7 @@ const ArtAdvisor = () => (
 const SYSTEMS = [
   {
     id: "smis",
-    to: "#smis",
+    to: "#mess",
     art: <SketchSmis />,
     name: "Tutagora SMIS",
     tagline: "Every learner, known completely.",
@@ -71,7 +68,7 @@ const SYSTEMS = [
   },
   {
     id: "hr",
-    to: "#work-4",
+    to: "/class#period-8",
     art: <SketchHr />,
     name: "Tutagora HR",
     tagline: "Every person who works here, first-class.",
@@ -96,7 +93,7 @@ const SYSTEMS = [
   },
   {
     id: "learning",
-    to: "#work-3",
+    to: "/class#period-3",
     art: <SketchLearning />,
     name: "Tutagora Learning",
     tagline: "What is taught becomes what is known.",
@@ -228,45 +225,6 @@ export default function HomePage() {
         </Pin>
         <Mess />
         </div>
-
-        <section className="panel sys smis" id="smis">
-          <div className="wrap">
-            <div className="top">
-              <div className="text">
-                <div className="label">Tutagora SMIS</div>
-                <h2>Everything an SMIS does. Then the part none of them do.</h2>
-                <p>
-                  Admissions, learner files, attendance, fee invoices, timetables, exams, report
-                  cards, transport, the library, the clinic, and the dashboards to watch them
-                  all. You get every one of them on the first day. What you are buying is what
-                  happens next.
-                </p>
-              </div>
-              <Ask />
-            </div>
-            <div className="diff">
-              <div className="diff-text">
-                <div className="label">You did not expect</div>
-                <h3>A payment that knows where it belongs.</h3>
-                <p>
-                  At 07:42 a parent pays on M-Pesa. By 07:43 the invoice is settled, the books
-                  are posted, the director&rsquo;s collection figure has moved, and the parent
-                  has a receipt on WhatsApp. Nobody typed anything.
-                </p>
-                <p>
-                  That is the difference between a system that stores your school and one that
-                  knows it. Every record in Tutagora is joined to the others, so one fact lands
-                  everywhere it is true.
-                </p>
-              </div>
-              <div className="diff-art">
-                <Match />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <Work />
 
         <section className="panel advisor" id="advisor">
           <div className="wrap">
@@ -418,17 +376,17 @@ export default function HomePage() {
           </span>
           <ul>
             <li>
-              <a className="quiet" href="#smis">
+              <a className="quiet" href="#mess">
                 SMIS
               </a>
             </li>
             <li>
-              <a className="quiet" href="#work-4">
+              <a className="quiet" href="/class#period-8">
                 HR
               </a>
             </li>
             <li>
-              <a className="quiet" href="#work-3">
+              <a className="quiet" href="/class#period-3">
                 Learning
               </a>
             </li>
