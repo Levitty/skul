@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mess } from "./mess"
+import { WaButton, Band, FloatWa } from "./cta"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
@@ -147,9 +148,7 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a className="quiet" href={waLink(ENQUIRY)} target="_blank" rel="noopener">
-                    Talk to us
-                  </a>
+                  <WaButton small>Talk to us</WaButton>
                 </li>
               </ul>
             </nav>
@@ -171,9 +170,12 @@ export default function HomePage() {
               One record for the whole school. Built for Kenya. Fees on M-Pesa, parents on
               WhatsApp, and a truth that adds up.
             </p>
-            <Link href="/class" className="arrow">
-              Take the class <Arrow />
-            </Link>
+            <div className="hero-act">
+              <WaButton>Talk to us on WhatsApp</WaButton>
+              <Link href="/class" className="arrow">
+                Take the class <Arrow />
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -225,6 +227,7 @@ export default function HomePage() {
         </Pin>
         <Mess />
         </div>
+        <Band light title="See it with your own school." sub="Send one message. We come to you with the record, or show you on a call." text="Hello Tutagora. I would like to see the record with my own school's details." />
 
         <section className="panel advisor" id="advisor">
           <div className="wrap">
@@ -251,6 +254,9 @@ export default function HomePage() {
                   <b>Every proposal logged.</b> What it read, what it drafted, who decided.
                 </li>
               </ul>
+              <div className="sec-act">
+                <WaButton text="Hello Tutagora. I would like a demo of the Advisor for my school.">Ask for a demo</WaButton>
+              </div>
             </div>
             <div className="art talk">
               <Phone time="10:17" day="Wednesday" name="Tutagora" sub="business account" label="The director asks the Advisor why Grade 7 is below cost, and it answers with figures and three options to draft. Example.">
@@ -329,6 +335,10 @@ export default function HomePage() {
               teacher and a learner. Everything else exists to serve them.
             </p>
             <p>Not a dashboard to admire. A school that knows itself.</p>
+            <div className="sec-act">
+              <WaButton text="Hello Tutagora. I read the vision and would like to talk about my school.">Come and talk to us</WaButton>
+              <a className="quiet" href={mailLink("Enquiry about Tutagora", ENQUIRY)}>or email {CONTACT.email}</a>
+            </div>
           </div>
         </section>
 
@@ -357,9 +367,7 @@ export default function HomePage() {
               on a call. One message is enough.
             </p>
             <div className="actions">
-              <a href={waLink(ENQUIRY)} className="arrow" target="_blank" rel="noopener">
-                Talk to us on WhatsApp <Arrow />
-              </a>
+              <WaButton>Talk to us on WhatsApp</WaButton>
               <a className="quiet" href={mailLink("Enquiry about Tutagora", ENQUIRY)}>
                 Email {CONTACT.email}
               </a>
@@ -368,6 +376,7 @@ export default function HomePage() {
         </section>
       </main>
 
+      <FloatWa />
       <footer>
         <div className="wrap">
           <span className="brand">

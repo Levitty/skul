@@ -14,6 +14,7 @@ import { Mark } from "./logo"
 import { SketchOnto } from "./sketches"
 import { Phone, In, Out, Replies } from "./phone"
 import { CONTACT, waLink, mailLink } from "./contact"
+import { WaButton, FloatWa } from "./cta"
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -288,7 +289,7 @@ export function ClassRoom() {
         <nav aria-label="Primary">
           <ul>
             <li><Link className="quiet" href="/">Front page</Link></li>
-            <li><a className="quiet" href={waLink("Hello Tutagora. I am in the class and would like to talk about using Tutagora at my school.")} target="_blank" rel="noopener">Talk to us</a></li>
+            <li><WaButton small text="Hello Tutagora. I am in the class and would like to talk about using Tutagora at my school.">Talk to us</WaButton></li>
           </ul>
         </nav>
       </header>
@@ -327,9 +328,12 @@ export function ClassRoom() {
               <input id="learners" type="text" inputMode="numeric" value={learnersIn} onChange={(e) => setLearnersIn(e.target.value)} />
             </label>
           </form>
-          <a className="arrow" href="#period-1">
-            Take your seat <Arrow />
-          </a>
+          <div className="hero-act">
+            <a className="arrow" href="#period-1">
+              Take your seat <Arrow />
+            </a>
+            <WaButton text="Hello Tutagora. I would rather talk than take the class. Please call me about my school.">Or just talk to us</WaButton>
+          </div>
         </section>
 
         {/* ---------- the lesson: one board, cards over it ---------- */}
@@ -680,19 +684,16 @@ export function ClassRoom() {
                 learners from the spreadsheet you already have. From then on the record does the
                 work. Send one message and we will come and show you.
               </p>
-              <div className="actions">
-                <a
-                  href={waLink(
+              <div className="actions cta-end">
+                <WaButton
+                  text={
                     school.trim()
                       ? `Hello Tutagora. I am from ${school.trim()}, about ${num(m.learners)} learners. I would like to talk about using Tutagora.`
                       : "Hello Tutagora. I have taken the class and would like to talk about using Tutagora at my school."
-                  )}
-                  className="arrow"
-                  target="_blank"
-                  rel="noopener"
+                  }
                 >
-                  Talk to us on WhatsApp <Arrow />
-                </a>
+                  Talk to us on WhatsApp
+                </WaButton>
                 <a className="quiet" href={mailLink(`Enquiry from ${school.trim() || "a school"}`)}>
                   Email {CONTACT.email}
                 </a>
@@ -702,6 +703,7 @@ export function ClassRoom() {
         </div>
       </main>
 
+      <FloatWa text="Hello Tutagora. I am in the class and would like to talk about using Tutagora at my school." />
       <footer>
         <div className="wrap">
           <span className="brand">

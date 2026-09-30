@@ -118,7 +118,11 @@ body{margin:0;background:#0b0b0b;color:#f2f2f0}
 home = links(open(os.path.join(cap, "mk.html")).read())
 klass = links(open(os.path.join(cap, "mk-class.html")).read())
 boards = open(os.path.join(cap, "boards.json")).read()
-class_js = open(os.path.join(HERE, "class.js")).read().replace("__BOARDS__", boards)
+
+CTA_JS = ("\n// The floating WhatsApp button\n(function(){\n"
+    + open(os.path.join(MK, "cta-logic.js")).read().replace("export function mountFloat", "function mountFloat")
+    + "\ndocument.querySelectorAll('.wa-float').forEach(mountFloat);\n})();\n")
+class_js = open(os.path.join(HERE, "class.js")).read().replace("__BOARDS__", boards) + CTA_JS
 
 shutil.rmtree(out, ignore_errors=True)
 os.makedirs(os.path.join(out, "assets", "fonts"))
@@ -131,7 +135,7 @@ for name, data in (
         + "\ndocument.querySelectorAll('.ask').forEach(mountAsk);\n})();\n"
         + "\n// The mess\n(function(){\n"
         + open(os.path.join(MK, "mess-logic.js")).read().replace("export function mountMess", "function mountMess")
-        + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n"),
+        + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n" + CTA_JS),
     ("class.js", class_js),
 ):
     ASSET[name] = fingerprint(name, data)

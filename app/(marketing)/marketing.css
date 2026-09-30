@@ -4745,3 +4745,181 @@
 .mk .vision-art .sketch svg path[stroke="#f4a21d"] {
   stroke: #d98a06;
 }
+
+/* ---------- ways to reach us ---------- */
+
+.mk .btn-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  background: #25d366;
+  color: #062b12;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.85rem 1.25rem 0.85rem 1.05rem;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px -12px rgba(37, 211, 102, 0.6);
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.mk .btn-wa:hover {
+  background: #1ebe5a;
+  transform: translateY(-1px);
+}
+
+.mk .btn-wa svg {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+
+.mk .btn-wa.sm {
+  font-size: 0.875rem;
+  padding: 0.55rem 0.95rem 0.55rem 0.8rem;
+  box-shadow: none;
+}
+
+.mk .hero-act,
+.mk .sec-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+.mk .sec-act {
+  margin-top: 2rem;
+}
+
+.mk .vision .sec-act .quiet {
+  color: #6f6f6b;
+}
+
+.mk .vision .sec-act .quiet:hover {
+  color: #111;
+}
+
+.mk .cta-band {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  position: relative;
+  z-index: 3;
+  background: var(--ink);
+}
+
+.mk .cta-band .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 3rem;
+}
+
+.mk .cta-band h3 {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.mk .cta-band p {
+  margin: 0.4rem 0 0;
+  color: var(--mute);
+  max-width: 44ch;
+}
+
+.mk .cta-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+
+.mk .cta-band.light {
+  background: #ecece8;
+  color: #111;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.mk .cta-band.light p {
+  color: #6f6f6b;
+}
+
+.mk .cta-band.light .quiet {
+  color: #6f6f6b;
+}
+
+.mk .cta-band.light .quiet:hover {
+  color: #111;
+}
+
+.mk .wa-float {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #25d366;
+  color: #062b12;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.8rem 1.1rem 0.8rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  translate: 0 14px;
+  pointer-events: none;
+  transition: opacity 260ms ease, translate 260ms ease;
+}
+
+.mk .wa-float.show {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+.mk .wa-float svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+@media (max-width: 700px) {
+  .mk .btn-wa {
+    font-size: 0.95rem;
+  }
+  .mk .nav .btn-wa.sm span {
+    display: none;
+  }
+  .mk .nav .btn-wa.sm {
+    padding: 0.5rem;
+  }
+  .mk .nav .btn-wa.sm svg {
+    width: 1.3em;
+    height: 1.3em;
+  }
+  .mk .wa-float {
+    right: 14px;
+    bottom: 14px;
+  }
+  .mk .wa-float span {
+    display: none;
+  }
+  .mk .wa-float {
+    padding: 0.85rem;
+  }
+  .mk .wa-float svg {
+    width: 1.5em;
+    height: 1.5em;
+  }
+  .mk .cta-band .wrap {
+    display: grid;
+  }
+}
