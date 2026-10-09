@@ -119,6 +119,9 @@ home = links(open(os.path.join(cap, "mk.html")).read())
 klass = links(open(os.path.join(cap, "mk-class.html")).read())
 boards = open(os.path.join(cap, "boards.json")).read()
 
+FORM_JS = ("\n// The enquiry form\n(function(){\n"
+    + open(os.path.join(MK, "form-logic.js")).read().replace("export function mountForm", "function mountForm")
+    + "\ndocument.querySelectorAll('form.enq').forEach(mountForm);\n})();\n")
 CTA_JS = ("\n// The floating WhatsApp button\n(function(){\n"
     + open(os.path.join(MK, "cta-logic.js")).read().replace("export function mountFloat", "function mountFloat")
     + "\ndocument.querySelectorAll('.wa-float').forEach(mountFloat);\n})();\n")
@@ -135,13 +138,16 @@ for name, data in (
         + "\ndocument.querySelectorAll('.ask').forEach(mountAsk);\n})();\n"
         + "\n// The mess\n(function(){\n"
         + open(os.path.join(MK, "mess-logic.js")).read().replace("export function mountMess", "function mountMess")
-        + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n" + CTA_JS),
+        + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n" + CTA_JS + FORM_JS),
     ("class.js", class_js),
 ):
     ASSET[name] = fingerprint(name, data)
     open(os.path.join(out, "assets", ASSET[name]), "w").write(data)
 for f in ("Geist-Variable.woff2", "Caveat-Variable.woff2"):
     shutil.copy(os.path.join(MK, "fonts", f), os.path.join(out, "assets", "fonts", f))
+php = open(os.path.join(HERE, "contact.php")).read()
+php = php.replace("__EMAIL__", email or PLACEHOLDER_MAIL).replace("__SITE__", SITE).replace("__DOMAIN__", SITE.split("//", 1)[-1])
+open(os.path.join(out, "contact.php"), "w").write(php)
 for f in ("icon.svg", "apple-icon.svg", "og.png"):
     shutil.copy(os.path.join(ROOT, "public", f), os.path.join(out, f))
 today = __import__("datetime").date.today().isoformat()

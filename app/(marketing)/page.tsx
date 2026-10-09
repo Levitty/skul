@@ -3,6 +3,7 @@ import { Board } from "./board"
 import { SketchSmis, SketchHr, SketchLearning, SketchClassroom, SketchBalloon } from "./sketches"
 import { Mess } from "./mess"
 import { WaButton, Band, FloatWa } from "./cta"
+import { ContactForm } from "./contact-form"
 import { Mark, BRAND } from "./logo"
 import { CONTACT, waLink, mailLink, ENQUIRY } from "./contact"
 import { FAQ, jsonLd } from "./seo"
@@ -359,19 +360,22 @@ export default function HomePage() {
           <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }} />
         ))}
 
-        <section className="close">
+        <section className="close" id="contact">
           <div className="wrap">
-            <h2>Bring your school into one record.</h2>
-            <p className="close-sub">
-              Tell us about your school and we will come and show you the record, in person or
-              on a call. One message is enough.
-            </p>
-            <div className="actions">
-              <WaButton>Talk to us on WhatsApp</WaButton>
-              <a className="quiet" href={mailLink("Enquiry about Tutagora", ENQUIRY)}>
-                Email {CONTACT.email}
-              </a>
+            <div className="close-text">
+              <h2>Bring your school into one record.</h2>
+              <p className="close-sub">
+                Tell us about your school and we will come and show you the record, in person or
+                on a call. Fill in the form, or send one message.
+              </p>
+              <div className="actions">
+                <WaButton>Talk to us on WhatsApp</WaButton>
+                <a className="quiet" href={mailLink("Enquiry about Tutagora", ENQUIRY)}>
+                  Email {CONTACT.email}
+                </a>
+              </div>
             </div>
+            <ContactForm />
           </div>
         </section>
       </main>
@@ -402,6 +406,11 @@ export default function HomePage() {
             <li>
               <a className="quiet" href="#advisor">
                 Advisor
+              </a>
+            </li>
+            <li>
+              <a className="quiet" href="#contact">
+                Contact form
               </a>
             </li>
             <li>
