@@ -33,6 +33,8 @@ SITE = os.environ.get("SITE_URL", "https://tutagora.com").rstrip("/")
 TITLE = "Tutagora · School management software for Kenyan schools"
 DESC = "School management system for private schools in Kenya. Fees on M-Pesa, parents on WhatsApp, HR and payroll, report cards and the books, on one record for the whole school."
 CLASS_TITLE = "The class · How Tutagora runs a school as one record"
+CONTACT_TITLE = "Talk to Tutagora · School management software for Kenyan schools"
+CONTACT_DESC = "Tell us about your school and we will come and show you the record, in person or on a call. Fees on M-Pesa, parents on WhatsApp, HR and payroll, on one record."
 CLASS_DESC = "Nine short periods on how a school runs as one record: the learner at the centre, fees collected on M-Pesa, parents reached on WhatsApp, staff and payroll, and a Monday briefing for the director."
 KEYWORDS = "school management system Kenya, school management software Kenya, school fees management software, M-Pesa school fees, school ERP Kenya, parent communication WhatsApp school, school HR and payroll software, report card software Kenya, private school software Nairobi"
 
@@ -40,6 +42,7 @@ KEYWORDS = "school management system Kenya, school management software Kenya, sc
 def links(html):
     html = re.sub(r'<div class="mk[^"]*">', '<div class="mk">', html, 1)
     html = html.replace('href="/class"', 'href="/class/"').replace('href="/class#', 'href="/class/#')
+    html = html.replace('href="/contact"', 'href="/contact/"')
     # the capture ran with the page's own scripts live; the static scripts start afresh
     html = html.replace(' data-live="1"', '')
     if app:
@@ -117,6 +120,7 @@ body{margin:0;background:#0b0b0b;color:#f2f2f0}
 
 home = links(open(os.path.join(cap, "mk.html")).read())
 klass = links(open(os.path.join(cap, "mk-class.html")).read())
+contact = links(open(os.path.join(cap, "mk-contact.html")).read())
 boards = open(os.path.join(cap, "boards.json")).read()
 
 FORM_JS = ("\n// The enquiry form\n(function(){\n"
@@ -130,6 +134,7 @@ class_js = open(os.path.join(HERE, "class.js")).read().replace("__BOARDS__", boa
 shutil.rmtree(out, ignore_errors=True)
 os.makedirs(os.path.join(out, "assets", "fonts"))
 os.makedirs(os.path.join(out, "class"))
+os.makedirs(os.path.join(out, "contact"))
 for name, data in (
     ("site.css", site_css),
     ("board.js", open(os.path.join(HERE, "board.js")).read()),
@@ -140,6 +145,7 @@ for name, data in (
         + open(os.path.join(MK, "mess-logic.js")).read().replace("export function mountMess", "function mountMess")
         + "\ndocument.querySelectorAll('.mess').forEach(mountMess);\n})();\n" + CTA_JS + FORM_JS),
     ("class.js", class_js),
+    ("contact.js", CTA_JS + FORM_JS),
 ):
     ASSET[name] = fingerprint(name, data)
     open(os.path.join(out, "assets", ASSET[name]), "w").write(data)
@@ -155,11 +161,13 @@ open(os.path.join(out, "sitemap.xml"), "w").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     f'<url><loc>{SITE}/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>\n'
     f'<url><loc>{SITE}/class/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>\n'
+    f'<url><loc>{SITE}/contact/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>\n'
     "</urlset>\n"
 )
 open(os.path.join(out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
 open(os.path.join(out, "index.html"), "w").write(page(TITLE, DESC, "/", home, ["board.js", "home.js"]))
 open(os.path.join(out, "class", "index.html"), "w").write(page(CLASS_TITLE, CLASS_DESC, "/class/", klass, ["board.js", "class.js"]))
+open(os.path.join(out, "contact", "index.html"), "w").write(page(CONTACT_TITLE, CONTACT_DESC, "/contact/", contact, ["contact.js"]))
 
 zip_path = out.rstrip("/") + ".zip"
 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:

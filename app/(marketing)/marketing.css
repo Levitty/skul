@@ -5122,3 +5122,42 @@
     max-width: none;
   }
 }
+
+/* ---------- the contact page on its own ---------- */
+
+.mk .contact-page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mk .contact-page main {
+  flex: 1;
+}
+
+.mk .contact-page .close {
+  border-top: 0;
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.mk .contact-page .close h2 {
+  font-size: clamp(2.2rem, 4.6vw, 4.2rem);
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .mk .contact-page .close {
+    padding-top: 1.5rem;
+  }
+  .mk .contact-page .close-sub {
+    font-size: 1rem;
+  }
+  .mk .contact-page .close .actions {
+    order: 3;
+    margin-top: 0.5rem;
+  }
+  .mk .contact-page .close .wrap {
+    gap: 1.5rem;
+  }
+}

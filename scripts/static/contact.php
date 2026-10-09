@@ -48,6 +48,7 @@ $phone = clean("phone", 40);
 $email = clean("email", 160);
 $want = clean("want", 120);
 $message = clean("message", 2000);
+$source = clean("source", 60);
 
 if ($name === "" || $school === "" || $phone === "") {
     respond(false, "missing");
@@ -56,14 +57,15 @@ if ($email !== "" && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $email = "";
 }
 
-$subject = "Enquiry: " . $school . ($learners !== "" ? " (" . $learners . " learners)" : "") . " · " . $name;
+$subject = "Enquiry: " . $school . ($learners !== "" ? " (" . $learners . " learners)" : "") . " · " . $name . ($source !== "" ? " · via " . $source : "");
 $body = "New enquiry from " . SITE . "\n\n"
     . "Name:      " . $name . ($role !== "" ? " (" . $role . ")" : "") . "\n"
     . "School:    " . $school . "\n"
     . "Learners:  " . ($learners !== "" ? $learners : "not given") . "\n"
     . "Phone:     " . $phone . "\n"
     . "Email:     " . ($email !== "" ? $email : "not given") . "\n"
-    . "Wants:     " . $want . "\n\n"
+    . "Wants:     " . $want . "\n"
+    . "Via:       " . ($source !== "" ? $source : "direct") . "\n\n"
     . ($message !== "" ? $message . "\n\n" : "")
     . "Reply on WhatsApp: https://wa.me/" . preg_replace("/\D+/", "", preg_replace("/^0/", "254", $phone)) . "\n"
     . "Received " . date("D j M Y H:i") . " from " . ($_SERVER["REMOTE_ADDR"] ?? "?") . "\n";

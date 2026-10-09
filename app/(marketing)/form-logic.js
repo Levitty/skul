@@ -24,10 +24,17 @@ export function mountForm(form) {
     if (email) lines.push("Email: " + email);
     if (want) lines.push("Would like: " + want);
     if (msg) lines.push(msg);
+    if (src && src.value) lines.push("(via " + src.value + ")");
     return lines.join("\n");
   }
   function refreshWa() {
     if (waLink && wa) waLink.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(message());
+  }
+  // Where they came from: ?src=instagram on the link, else the referring site.
+  var src = form.querySelector('[name="source"]');
+  if (src) {
+    var m = /[?&](?:src|utm_source)=([^&]+)/.exec(window.location.search);
+    src.value = m ? decodeURIComponent(m[1]).slice(0, 60) : (document.referrer ? document.referrer.replace(/^https?:\/\//, "").split("/")[0].slice(0, 60) : "");
   }
   form.addEventListener("input", refreshWa);
   refreshWa();

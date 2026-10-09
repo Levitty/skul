@@ -15,6 +15,7 @@ export function ContactForm() {
   return (
     <form className="enq" ref={ref} action="/contact.php" method="post" data-wa={CONTACT.whatsapp} noValidate>
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="enq-hp" aria-hidden="true" />
+      <input type="hidden" name="source" value="" />
       <div className="enq-grid">
         <label>
           <span>Your name</span>
