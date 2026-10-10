@@ -57,7 +57,7 @@ export function mountForm(form) {
     form.classList.remove("failed");
     var data = new FormData(form);
     var done = false;
-    var timer = window.setTimeout(function () { if (!done) fail(); }, 12000);
+    var timer = window.setTimeout(function () { if (!done) fail(); }, 25000);
     function fail() {
       done = true;
       window.clearTimeout(timer);
