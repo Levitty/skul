@@ -156,6 +156,9 @@ for name in ("contact.php", "contact-lib.php", "enquiries.php"):
     php = open(os.path.join(HERE, name)).read()
     php = php.replace("__EMAIL__", email or PLACEHOLDER_MAIL).replace("__SITE__", SITE).replace("__DOMAIN__", SITE.split("//", 1)[-1])
     open(os.path.join(out, name), "w").write(php)
+# The short address, school.tutagora.com/enquiries, leads to the inbox too.
+os.makedirs(os.path.join(out, "enquiries"), exist_ok=True)
+shutil.copy(os.path.join(HERE, "enquiries-redirect.php"), os.path.join(out, "enquiries", "index.php"))
 for f in ("icon.svg", "apple-icon.svg", "og.png"):
     shutil.copy(os.path.join(ROOT, "public", f), os.path.join(out, f))
 today = __import__("datetime").date.today().isoformat()
@@ -166,7 +169,7 @@ open(os.path.join(out, "sitemap.xml"), "w").write(
     f'<url><loc>{SITE}/contact/</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>\n'
     "</urlset>\n"
 )
-open(os.path.join(out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /enquiries.php\n\nSitemap: {SITE}/sitemap.xml\n")
+open(os.path.join(out, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /enquiries.php\nDisallow: /enquiries/\n\nSitemap: {SITE}/sitemap.xml\n")
 open(os.path.join(out, "index.html"), "w").write(page(TITLE, DESC, "/", home, ["board.js", "home.js"]))
 open(os.path.join(out, "class", "index.html"), "w").write(page(CLASS_TITLE, CLASS_DESC, "/class/", klass, ["board.js", "class.js"]))
 open(os.path.join(out, "contact", "index.html"), "w").write(page(CONTACT_TITLE, CONTACT_DESC, "/contact/", contact, ["contact.js"]))
